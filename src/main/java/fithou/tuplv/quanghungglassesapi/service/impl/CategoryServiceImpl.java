@@ -7,10 +7,14 @@ import fithou.tuplv.quanghungglassesapi.mapper.CategoryMapper;
 import fithou.tuplv.quanghungglassesapi.repository.CategoryRepository;
 import fithou.tuplv.quanghungglassesapi.service.CategoryService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
@@ -21,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     final CategoryRepository categoryRepository;
     final CategoryMapper categoryMapper;
+    private final ModelMapper modelMapper;
 
     @Override
     public Page<CategoryResponse> findAll(Pageable pageable) {
@@ -28,9 +33,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Page<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable) {
+        return categoryRepository.findByNameContainingAndStatus(name, status, pageable)
+                .map(categoryMapper::convertToResponse);
+    }
+
+    @Override
     public Page<CategoryResponse> findByNameContaining(String name, Pageable pageable) {
         return categoryRepository.findByNameContaining(name, pageable)
                 .map(categoryMapper::convertToResponse);
+    }
+
+    @Override
+    public List<CategoryResponse> findByStatus(Boolean status) {
+        return categoryRepository.findByStatus(status)
+                .stream()
+                .map(categoryMapper::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -66,9 +66,9 @@ public class QuangHungGlassesApiApplication {
                 categoryService.create(new CategoryRequest(null, "Tròng kính", "trong-kinh", "Tròng kính", true));
             if (!categoryService.existsByName("Phụ kiện"))
                 categoryService.create(new CategoryRequest(null, "Phụ kiện", "phu-kien", "Phụ kiện", true));
-            for (int i = 0; i < 100; i++) {
-                categoryService.create(new CategoryRequest(null, "Category " + i, "Category " + i, "Category " + i, true));
-            }
+//            for (int i = 0; i < 100; i++) {
+//                categoryService.create(new CategoryRequest(null, "Category " + i, "Category " + i, "Category " + i, true));
+//            }
             // endregion
             // region Material
             if (!materialService.existsByName("Nhựa cứng"))

@@ -20,4 +20,6 @@ public class PaginationDTO<T> {
     private int pageNumber; // Số trang hiện tại
     private int firstElementOnPage; // Số thứ tự phần tử đầu tiên trên trang hiện tại
     private int lastElementOnPage; // Số thứ tự phần tử cuối cùng trên trang hiện tại
+    private String sortBy; // Sắp xếp theo
+    private String sortDirection; // Hướng sắp xếp
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.Map;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
@@ -27,6 +28,7 @@ public class CategoryRestController {
 
     @GetMapping({"/", ""})
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
+                                    @RequestParam(value = "status", defaultValue = "", required = false) Boolean status,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
                                     @RequestParam(value = "sort-direction", defaultValue = SORT_DESC, required = false) String sortDir,
@@ -34,6 +36,10 @@ public class CategoryRestController {
         pageNumber = (pageNumber <= 0) ? 0 : (pageNumber - 1); // Nếu page <= 0 thì trả về page đầu tiên
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        if (status != null) {
+            return ResponseEntity.ok().body(paginationMapper.mapToPaginationDTO(categoryService.findByNameContainingAndStatus(name, status, pageable)));
+        }
 
         if (StringUtils.hasText(name))
             return ResponseEntity.ok().body(paginationMapper.mapToPaginationDTO(categoryService.findByNameContaining(name, pageable)));
@@ -84,8 +90,8 @@ public class CategoryRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<?> countByStatus(@RequestParam Boolean status) {
-        return ResponseEntity.ok().body(categoryService.countByStatus(status));
+    @GetMapping("/find-status")
+    public ResponseEntity<?> findByStatus(@RequestParam Boolean status) {
+        return ResponseEntity.ok().body(Map.of("countByStatus", categoryService.countByStatus(status)));
     }
 }
