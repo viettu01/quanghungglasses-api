@@ -9,6 +9,7 @@ import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.CategoryRepository;
 import fithou.tuplv.quanghungglassesapi.service.CategoryService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     final CategoryRepository categoryRepository;
@@ -84,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
             try {
                 categoryRepository.deleteById(id);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }
