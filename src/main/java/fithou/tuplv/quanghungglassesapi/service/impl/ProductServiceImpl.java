@@ -1,18 +1,18 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Product;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.ProductMapper;
 import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductRepository;
 import fithou.tuplv.quanghungglassesapi.service.ProductService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,14 +26,16 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     final ProductMapper productMapper;
-    final ModelMapper modelMapper;
+    final PaginationMapper paginationMapper;
     final ProductRepository productRepository;
     final ProductDetailsRepository productDetailsRepository;
     final StorageService storageService;
 
     @Override
-    public Page<ProductResponse> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable).map(productMapper::convertToResponse);
+    public PaginationDTO<ProductResponse> findAll(Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                productRepository.findAll(pageable).map(productMapper::convertToResponse)
+        );
     }
 
     @Override
@@ -43,8 +45,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponse> filter(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable) {
-        return productRepository.findByCategoryIdAndMaterialIdAndOriginIdAndShapeIdAndBrandIdAndPriceBetween(categoryId, materialId, originId, shapeId, brandId, priceMin, priceMax, pageable).map(productMapper::convertToResponse);
+    public PaginationDTO<ProductResponse> filter(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                productRepository
+                        .findByCategoryIdAndMaterialIdAndOriginIdAndShapeIdAndBrandIdAndPriceBetween(categoryId, materialId, originId, shapeId, brandId, priceMin, priceMax, pageable)
+                        .map(productMapper::convertToResponse)
+        );
     }
 
     @Override

@@ -1,14 +1,14 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.CategoryRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CategoryResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Category;
 import fithou.tuplv.quanghungglassesapi.mapper.CategoryMapper;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.CategoryRepository;
 import fithou.tuplv.quanghungglassesapi.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,24 +24,26 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 public class CategoryServiceImpl implements CategoryService {
 
     final CategoryRepository categoryRepository;
+    final PaginationMapper paginationMapper;
     final CategoryMapper categoryMapper;
-    private final ModelMapper modelMapper;
 
     @Override
-    public Page<CategoryResponse> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable).map(categoryMapper::convertToResponse);
+    public PaginationDTO<CategoryResponse> findAll(Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(categoryRepository.findAll(pageable).map(categoryMapper::convertToResponse));
     }
 
     @Override
-    public Page<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable) {
-        return categoryRepository.findByNameContainingAndStatus(name, status, pageable)
-                .map(categoryMapper::convertToResponse);
+    public PaginationDTO<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                categoryRepository.findByNameContainingAndStatus(name, status, pageable).map(categoryMapper::convertToResponse)
+        );
     }
 
     @Override
-    public Page<CategoryResponse> findByNameContaining(String name, Pageable pageable) {
-        return categoryRepository.findByNameContaining(name, pageable)
-                .map(categoryMapper::convertToResponse);
+    public PaginationDTO<CategoryResponse> findByNameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                categoryRepository.findByNameContaining(name, pageable).map(categoryMapper::convertToResponse)
+        );
     }
 
     @Override

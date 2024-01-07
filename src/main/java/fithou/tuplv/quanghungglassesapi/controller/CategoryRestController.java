@@ -1,7 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.controller;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.CategoryRequest;
-import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +23,6 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @AllArgsConstructor
 public class CategoryRestController {
     final CategoryService categoryService;
-    final PaginationMapper paginationMapper;
 
     @GetMapping({"/", ""})
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
@@ -37,14 +35,13 @@ public class CategoryRestController {
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        if (status != null) {
-            return ResponseEntity.ok().body(paginationMapper.mapToPaginationDTO(categoryService.findByNameContainingAndStatus(name, status, pageable)));
-        }
+        if (status != null)
+            return ResponseEntity.ok().body(categoryService.findByNameContainingAndStatus(name, status, pageable));
 
         if (StringUtils.hasText(name))
-            return ResponseEntity.ok().body(paginationMapper.mapToPaginationDTO(categoryService.findByNameContaining(name, pageable)));
+            return ResponseEntity.ok().body(categoryService.findByNameContaining(name, pageable));
 
-        return ResponseEntity.ok().body(paginationMapper.mapToPaginationDTO(categoryService.findAll(pageable)));
+        return ResponseEntity.ok().body(categoryService.findAll(pageable));
     }
 
     @GetMapping("/{slug}")

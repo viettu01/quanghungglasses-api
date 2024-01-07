@@ -1,7 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.controller;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
-import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.Map;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
@@ -24,7 +22,6 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @AllArgsConstructor
 public class ProductRestController {
     final ProductService productService;
-    final PaginationMapper paginationMapper;
 
     @GetMapping({"/", ""})
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
@@ -39,7 +36,7 @@ public class ProductRestController {
 //        if (StringUtils.hasText(name))
 //            return ResponseEntity.ok().body(paginationMapper.mapToPaginationDTO(productService.findByNameContaining(name, pageable)));
 
-        return ResponseEntity.ok().body(paginationMapper.mapToPaginationDTO(productService.findAll(pageable)));
+        return ResponseEntity.ok().body(productService.findAll(pageable));
     }
 
     @GetMapping("/{slug}")

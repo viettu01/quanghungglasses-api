@@ -1,18 +1,18 @@
 package fithou.tuplv.quanghungglassesapi.service;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.CategoryRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CategoryResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface CategoryService {
-    Page<CategoryResponse> findAll(Pageable pageable);
+    PaginationDTO<CategoryResponse> findAll(Pageable pageable);
 
-    Page<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
+    PaginationDTO<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
 
-    Page<CategoryResponse> findByNameContaining(String name, Pageable pageable);
+    PaginationDTO<CategoryResponse> findByNameContaining(String name, Pageable pageable);
 
     List<CategoryResponse> findByStatus(Boolean status);
 
