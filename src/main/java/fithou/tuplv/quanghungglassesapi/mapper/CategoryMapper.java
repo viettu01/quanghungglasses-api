@@ -13,7 +13,9 @@ public class CategoryMapper {
     final ModelMapper modelMapper;
 
     public CategoryResponse convertToResponse(Category categoryEntity) {
-        return modelMapper.map(categoryEntity, CategoryResponse.class);
+        CategoryResponse categoryResponse = modelMapper.map(categoryEntity, CategoryResponse.class);
+        categoryResponse.setTotalProduct(categoryEntity.getProducts().size());
+        return categoryResponse;
     }
 
     public Category convertToEntity(CategoryRequest categoryRequest) {

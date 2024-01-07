@@ -27,4 +27,6 @@ public interface CategoryService {
     boolean existsByName(String name);
 
     Long countByStatus(Boolean status);
+
+    Long countAll();
 }

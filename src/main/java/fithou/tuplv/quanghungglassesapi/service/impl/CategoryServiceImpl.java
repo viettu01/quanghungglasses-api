@@ -100,4 +100,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Long countByStatus(Boolean status) {
         return categoryRepository.countByStatus(status);
     }
+
+    @Override
+    public Long countAll() {
+        return categoryRepository.count();
+    }
 }

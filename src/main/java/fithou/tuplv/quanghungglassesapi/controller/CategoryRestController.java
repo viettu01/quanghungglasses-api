@@ -87,8 +87,16 @@ public class CategoryRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/find-status")
-    public ResponseEntity<?> findByStatus(@RequestParam Boolean status) {
-        return ResponseEntity.ok().body(Map.of("countByStatus", categoryService.countByStatus(status)));
+    @GetMapping("/count")
+    public ResponseEntity<?> countByStatus(@RequestParam Boolean status) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", status.toString());
+        map.put("totalElements", categoryService.countByStatus(status).toString());
+        return ResponseEntity.ok().body(map);
+    }
+
+    @GetMapping("/count-all")
+    public ResponseEntity<?> countAll() {
+        return ResponseEntity.ok().body(Map.of("totalElements", categoryService.countAll()));
     }
 }
