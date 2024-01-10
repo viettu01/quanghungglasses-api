@@ -9,6 +9,7 @@ import fithou.tuplv.quanghungglassesapi.repository.CartDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CartRepository;
 import fithou.tuplv.quanghungglassesapi.service.CartService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService {
     final CartRepository cartRepository;
     final CartDetailsRepository cartDetailsRepository;
@@ -51,7 +53,7 @@ public class CartServiceImpl implements CartService {
             try {
                 cartDetailsRepository.deleteById(id);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }
