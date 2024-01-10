@@ -3,7 +3,7 @@ package fithou.tuplv.quanghungglassesapi.mapper;
 import fithou.tuplv.quanghungglassesapi.dto.request.AddressRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.AddressResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Address;
-import fithou.tuplv.quanghungglassesapi.repository.UserRepository;
+import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class AddressMapper {
     final ModelMapper modelMapper;
-    final UserRepository userRepository;
+    final CustomerRepository customerRepository;
 
     public AddressResponse convertToResponse(Address address) {
         return modelMapper.map(address, AddressResponse.class);
@@ -20,7 +20,7 @@ public class AddressMapper {
 
     public Address convertToEntity(AddressRequest addressRequest) {
         Address address = modelMapper.map(addressRequest, Address.class);
-        address.setUser(userRepository.findById(addressRequest.getUserId()).orElse(null));
+        address.setCustomer(customerRepository.findById(addressRequest.getCustomerId()).orElse(null));
         return address;
     }
 }

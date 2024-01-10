@@ -30,6 +30,10 @@ public class Sale extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private Date endDate;
 
+    @ManyToOne
+    @JoinColumn(name = "staff_id", nullable = false)
+    private Staff staff;
+
     @OneToMany(mappedBy = "sale")
     private List<ProductSale> productSales;
 }

@@ -21,8 +21,8 @@ public class Cart extends BaseEntity implements Serializable {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     @OneToMany(mappedBy = "cart")
     private List<CartDetails> cartDetails = new ArrayList<>();

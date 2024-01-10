@@ -23,8 +23,8 @@ public class Receipt extends BaseEntity implements Serializable {
     private Boolean status; // trạng thái (0: chưa thanh toán, 1: đã thanh toán)
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "staff_id", nullable = false)
+    private Staff staff;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id", nullable = false)

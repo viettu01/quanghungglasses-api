@@ -37,7 +37,7 @@ public class QuangHungGlassesApiApplication {
     }
 
     @Bean
-    CommandLineRunner run(RoleService roleService, UserService userService, CategoryService categoryService,
+    CommandLineRunner run(RoleService roleService, AccountService accountService, CategoryService categoryService,
                           MaterialService materialService, OriginService originService, ShapeService shapeService,
                           BrandService brandService, SupplierService supplierService) {
         return args -> {
@@ -53,9 +53,9 @@ public class QuangHungGlassesApiApplication {
             if (!roleService.existsByName(ROLE_USER))
                 roleService.save(new RoleRequest(ROLE_USER, ROLE_USER));
             // endregion
-            // region User
-            if (!userService.existsByEmail(ADMIN_EMAIL))
-                userService.save(new UserRequest(ADMIN_EMAIL, ADMIN_PASSWORD, "admin", null, Collections.singletonList(ROLE_ADMIN)));
+            // region Staff ADMIN
+            if (!accountService.existsByUsername(ADMIN_USERNAME))
+                accountService.create(new AccountRequest(ADMIN_USERNAME, ADMIN_PASSWORD, true, Collections.singletonList(ROLE_ADMIN)));
             // endregion
             // region Category
             if (!categoryService.existsByName("Kính thời trang"))

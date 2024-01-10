@@ -5,7 +5,8 @@ import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.LoginResponse;
 import fithou.tuplv.quanghungglassesapi.security.CustomUserDetails;
 import fithou.tuplv.quanghungglassesapi.security.jwt.JwtTokenProvider;
-import fithou.tuplv.quanghungglassesapi.service.UserService;
+import fithou.tuplv.quanghungglassesapi.service.AccountService;
+import fithou.tuplv.quanghungglassesapi.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,20 +29,21 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_USER_NOT_FO
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class AuthRestController {
-    final AuthenticationManager authenticationManager;
+    final AccountService accountService;
+    final CustomerService customerService;
     final JwtTokenProvider tokenProvider;
-    final UserService userService;
+    final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            if (!userService.existsByEmail(loginRequest.getEmail())) {
+            if (!accountService.existsByUsername(loginRequest.getUsername())) {
                 return ResponseEntity.badRequest().body(ERROR_USER_NOT_FOUND);
             }
 
             // Xác thực từ username và password.
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
 
             // Nếu thông tin hợp lệ -> Set thông tin authentication vào Security Context
@@ -67,6 +69,6 @@ public class AuthRestController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        return ResponseEntity.ok().body(userService.register(registerRequest));
+        return ResponseEntity.ok().body(customerService.register(registerRequest));
     }
 }

@@ -7,6 +7,7 @@ public class Constants {
     public static final String ROLE_WAREHOUSE = "ROLE_WAREHOUSE";
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ADMIN_EMAIL = "adminquanghung@gmail.com";
+    public static final String ADMIN_USERNAME = "adminquanghung";
     public static final String ADMIN_PASSWORD = "123";
 
     public static final String ERROR_USER_NOT_FOUND = "Người dùng không tồn tại";
@@ -35,6 +36,8 @@ public class Constants {
 
     public static final String DIR_FILE_BANNER = "banners";
     public static final String DIR_FILE_PRODUCT = "products";
+    public static final String DIR_FILE_STAFF = "staffs";
+    public static final String DIR_FILE_CUSTOMER = "customers";
 
     public static final String SORT_ASC = "asc";
     public static final String SORT_DESC = "desc";

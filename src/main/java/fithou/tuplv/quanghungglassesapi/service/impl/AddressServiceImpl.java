@@ -4,7 +4,7 @@ import fithou.tuplv.quanghungglassesapi.dto.request.AddressRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.AddressResponse;
 import fithou.tuplv.quanghungglassesapi.mapper.AddressMapper;
 import fithou.tuplv.quanghungglassesapi.repository.AddressRepository;
-import fithou.tuplv.quanghungglassesapi.repository.UserRepository;
+import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.service.AddressService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,14 +23,14 @@ public class AddressServiceImpl implements AddressService {
 
     final AddressMapper addressMapper;
     final AddressRepository addressRepository;
-    final UserRepository userRepository;
+    final CustomerRepository customerRepository;
 
     @Override
     public List<AddressResponse> findByUserId(Long userId) {
-        if (!userRepository.existsById(userId))
+        if (!customerRepository.existsById(userId))
             throw new RuntimeException(ERROR_USER_NOT_FOUND);
 
-        return addressRepository.findByUserId(userId)
+        return addressRepository.findByCustomerId(userId)
                 .stream()
                 .map(addressMapper::convertToResponse)
                 .collect(Collectors.toList());
@@ -38,7 +38,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressResponse create(AddressRequest addressRequest) {
-        if (!userRepository.existsById(addressRequest.getUserId()))
+        if (!customerRepository.existsById(addressRequest.getCustomerId()))
             throw new RuntimeException(ERROR_USER_NOT_FOUND);
 
         return addressMapper.convertToResponse(addressRepository.save(addressMapper.convertToEntity(addressRequest)));
@@ -49,7 +49,7 @@ public class AddressServiceImpl implements AddressService {
         if (!addressRepository.existsById(addressRequest.getId()))
             throw new RuntimeException(ERROR_ADDRESS_NOT_FOUND);
 
-        if (!userRepository.existsById(addressRequest.getUserId()))
+        if (!customerRepository.existsById(addressRequest.getCustomerId()))
             throw new RuntimeException(ERROR_USER_NOT_FOUND);
 
         return addressMapper.convertToResponse(addressRepository.save(addressMapper.convertToEntity(addressRequest)));

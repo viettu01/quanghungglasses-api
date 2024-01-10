@@ -18,6 +18,9 @@ public class Address extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 30, nullable = false)
+    private String fullname;
+
     @Column(length = 10, nullable = false)
     private String phone;
 
@@ -34,6 +37,6 @@ public class Address extends BaseEntity implements Serializable {
     private String address;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 }

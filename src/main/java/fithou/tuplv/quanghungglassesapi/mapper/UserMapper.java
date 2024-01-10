@@ -1,11 +1,16 @@
 package fithou.tuplv.quanghungglassesapi.mapper;
 
+import fithou.tuplv.quanghungglassesapi.dto.request.AccountRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.CustomerRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.UserRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.RegisterResponse;
-import fithou.tuplv.quanghungglassesapi.dto.response.RoleResponse;
-import fithou.tuplv.quanghungglassesapi.dto.response.UserResponse;
-import fithou.tuplv.quanghungglassesapi.entity.User;
+import fithou.tuplv.quanghungglassesapi.dto.request.StaffRequest;
+import fithou.tuplv.quanghungglassesapi.dto.response.AccountResponse;
+import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
+import fithou.tuplv.quanghungglassesapi.dto.response.StaffResponse;
+import fithou.tuplv.quanghungglassesapi.entity.Account;
+import fithou.tuplv.quanghungglassesapi.entity.Customer;
+import fithou.tuplv.quanghungglassesapi.entity.Staff;
+import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,35 +25,46 @@ import java.util.stream.Collectors;
 public class UserMapper {
     final ModelMapper modelMapper;
     final RoleRepository roleRepository;
+    final AccountRepository accountRepository;
     final PasswordEncoder passwordEncoder;
 
-    public UserResponse convertToResponse(User user) {
-        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-        user.getRoles().forEach(role -> userResponse.getRoles().add(modelMapper.map(role, RoleResponse.class)));
-        return modelMapper.map(user, UserResponse.class);
-    }
-
-    public User convertToEntity(RegisterRequest registerRequest) {
-        User user = modelMapper.map(registerRequest, User.class);
-        user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")));
-        user.setStatus(true);
-        return user;
-    }
-
-    public User convertToEntity(UserRequest userRequest) {
-        User userEntity = modelMapper.map(userRequest, User.class);
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userEntity.setRoles(userRequest.getRoleName().stream()
+    public Account convertToEntity(AccountRequest accountRequest) {
+        Account account = modelMapper.map(accountRequest, Account.class);
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setRoles(accountRequest.getRoleName().stream()
                 .map(roleRepository::findByName)
                 .collect(Collectors.toList())
         );
-        userEntity.setStatus(true);
-        return userEntity;
+        return account;
     }
 
-    public RegisterResponse convertToRegisterResponse(User user) {
-        RegisterResponse registerResponse = modelMapper.map(user, RegisterResponse.class);
-        registerResponse.setRole(user.getRoles().get(0).getName());
-        return registerResponse;
+    public Account convertToEntity(RegisterRequest registerRequest) {
+        Account account = modelMapper.map(registerRequest, Account.class);
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")));
+        account.setStatus(true);
+        return account;
+    }
+
+    public AccountResponse convertToResponse(Account account) {
+        return modelMapper.map(account, AccountResponse.class);
+    }
+
+    public Staff convertToEntity(StaffRequest staffRequest) {
+        Staff staff = modelMapper.map(staffRequest, Staff.class);
+        staff.setAccount(accountRepository.findById(staffRequest.getAccountId()).orElse(null));
+        return staff;
+    }
+
+    public StaffResponse convertToResponse(Staff staff) {
+        return modelMapper.map(staff, StaffResponse.class);
+    }
+
+    public Customer convertToEntity(CustomerRequest customerRequest) {
+        return modelMapper.map(customerRequest, Customer.class);
+    }
+
+    public CustomerResponse convertToResponse(Customer customer) {
+        return modelMapper.map(customer, CustomerResponse.class);
     }
 }

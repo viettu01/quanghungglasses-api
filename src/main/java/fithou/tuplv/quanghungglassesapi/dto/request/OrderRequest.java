@@ -20,6 +20,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequest implements Serializable {
+    @NotBlank(message = "Họ tên không được để trống")
+    @Length(max = 30, message = "Họ tên không được quá 30 ký tự")
+    private String fullname;
+
     @NotBlank(message = "Địa chỉ không được để trống")
     @Length(max = 200, message = "Địa chỉ không được quá 200 ký tự")
     private String address;
@@ -46,6 +50,8 @@ public class OrderRequest implements Serializable {
 
     @NotNull(message = "Mã người dùng không được để trống")
     private Long userId;
+
+    private Long staffId;
 
     @NotEmpty(message = "Danh sách sản phẩm không được để trống")
     private List<OrderDetailsRequest> orderDetails = new ArrayList<>();

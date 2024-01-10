@@ -6,9 +6,10 @@ import fithou.tuplv.quanghungglassesapi.dto.response.OrderDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.OrderResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Order;
 import fithou.tuplv.quanghungglassesapi.entity.OrderDetails;
+import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.repository.OrderRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
-import fithou.tuplv.quanghungglassesapi.repository.UserRepository;
+import fithou.tuplv.quanghungglassesapi.repository.StaffRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -19,20 +20,21 @@ public class OrderMapper {
     final ModelMapper modelMapper;
     final ProductDetailsRepository productDetailsRepository;
     final OrderRepository orderRepository;
-    final UserRepository userRepository;
+    final StaffRepository staffRepository;
+    final CustomerRepository customerRepository;
 
     // OrderMapper
     public OrderResponse convertToResponse(Order order) {
         OrderResponse orderResponse = modelMapper.map(order, OrderResponse.class);
-        orderResponse.setFullname(order.getUser().getFullname());
-        orderResponse.setEmail(order.getUser().getEmail());
+        orderResponse.setEmail(order.getCustomer().getEmail());
         order.getOrderDetails().forEach(orderDetails -> orderResponse.getOrderDetails().add(convertToResponse(orderDetails)));
         return orderResponse;
     }
 
     public Order convertToEntity(OrderRequest orderRequest) {
         Order order = modelMapper.map(orderRequest, Order.class);
-        order.setUser(userRepository.findById(orderRequest.getUserId()).orElse(null));
+        order.setCustomer(customerRepository.findById(orderRequest.getUserId()).orElse(null));
+        order.setStaff(staffRepository.findById(orderRequest.getStaffId()).orElse(null));
         orderRequest.getOrderDetails().forEach(orderDetailsRequest -> order.getOrderDetails().add(convertToEntity(orderDetailsRequest)));
         return order;
     }

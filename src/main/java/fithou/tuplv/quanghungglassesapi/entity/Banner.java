@@ -28,6 +28,6 @@ public class Banner extends BaseEntity implements Serializable {
     private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "staff_id", nullable = false)
+    private Staff staff;
 }

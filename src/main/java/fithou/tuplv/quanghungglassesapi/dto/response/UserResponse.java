@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,10 +16,9 @@ public class UserResponse implements Serializable {
     private Long id;
     private String fullname;
     private String phone;
+    private String email;
     private String gender;
     private Date birthday;
-    private String email;
     private String avatar;
-    private boolean status;
-    private List<RoleResponse> roles = new ArrayList<>();
+    private Boolean status;
 }

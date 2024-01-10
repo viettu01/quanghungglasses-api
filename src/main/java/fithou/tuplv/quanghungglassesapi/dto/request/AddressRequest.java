@@ -18,6 +18,10 @@ import java.io.Serializable;
 public class AddressRequest implements Serializable {
     private Long id;
 
+    @NotBlank(message = "Họ tên không được để trống")
+    @Length(max = 30, message = "Họ tên không được quá 30 ký tự")
+    private String fullname;
+
     @NotBlank(message = "Số điện thoại không hợp lệ")
     @Length(max = 10, message = "Số điện thoại phải là 10 số")
     @Pattern(regexp = "^0[0-9]{9}$", message = "Số điện thoại không hợp lệ")
@@ -40,5 +44,5 @@ public class AddressRequest implements Serializable {
     private String address;
 
     @NotNull(message = "Mã người dùng không được để trống")
-    private Long userId;
+    private Long customerId;
 }

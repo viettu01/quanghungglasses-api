@@ -1,6 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.security;
 
-import fithou.tuplv.quanghungglassesapi.entity.User;
+import fithou.tuplv.quanghungglassesapi.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,27 +15,27 @@ import java.util.List;
 @Setter
 public class CustomUserDetails implements UserDetails {
 
-    private User user;
+    private Account account;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
+    public CustomUserDetails(Account account) {
+        this.account = account;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(roleEntity -> authorities.add(new SimpleGrantedAuthority(roleEntity.getName())));
+        account.getRoles().forEach(roleEntity -> authorities.add(new SimpleGrantedAuthority(roleEntity.getName())));
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return account.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return account.getUsername();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.getStatus();
+        return account.getStatus();
     }
 
     @Override

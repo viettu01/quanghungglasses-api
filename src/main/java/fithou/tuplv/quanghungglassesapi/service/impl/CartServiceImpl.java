@@ -24,7 +24,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponse getCartByUserEmail(String email) {
-        return cartMapper.convertToResponse(cartRepository.findByUserEmail(email));
+        return cartMapper.convertToResponse(cartRepository.findByCustomerEmail(email));
     }
 
     @Override

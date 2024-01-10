@@ -3,7 +3,7 @@ package fithou.tuplv.quanghungglassesapi.security;
 import fithou.tuplv.quanghungglassesapi.security.jwt.JwtAuthenticationFilter;
 import fithou.tuplv.quanghungglassesapi.security.jwt.JwtEntryPoint;
 import fithou.tuplv.quanghungglassesapi.service.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,17 +20,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // Cho phép sử dụng PreAuthorize
+@AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     final UserServiceImpl userService;
     final JwtEntryPoint jwtEntryPoint;
     final PasswordEncoder passwordEncoder;
-
-    public WebSecurityConfig(UserServiceImpl userService, JwtEntryPoint jwtEntryPoint, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.jwtEntryPoint = jwtEntryPoint;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

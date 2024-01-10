@@ -9,9 +9,9 @@ import fithou.tuplv.quanghungglassesapi.entity.CartDetails;
 import fithou.tuplv.quanghungglassesapi.entity.ProductSale;
 import fithou.tuplv.quanghungglassesapi.entity.Sale;
 import fithou.tuplv.quanghungglassesapi.repository.CartRepository;
+import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductSaleRepository;
 import fithou.tuplv.quanghungglassesapi.repository.SaleRepository;
-import fithou.tuplv.quanghungglassesapi.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CartMapper {
     final ModelMapper modelMapper;
-    final UserRepository userRepository;
+    final CustomerRepository customerRepository;
     final CartRepository cartRepository;
     final SaleRepository saleRepository;
     final ProductSaleRepository productSaleRepository;
@@ -37,7 +37,7 @@ public class CartMapper {
 
     public Cart convertToEntity(CartRequest cartRequest) {
         Cart cart = modelMapper.map(cartRequest, Cart.class);
-        cart.setUser(userRepository.findById(cartRequest.getUserId()).orElse(null));
+        cart.setCustomer(customerRepository.findById(cartRequest.getCustomerId()).orElse(null));
         return cart;
     }
 

@@ -13,6 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class AddressResponse implements Serializable {
     private Long id;
+    private String fullname;
     private String phone;
     private String city;
     private String district;

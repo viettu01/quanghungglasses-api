@@ -6,13 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartRequest implements Serializable {
-    @NotNull(message = "Mã người dùng không được để trống")
-    private Long customerId;
+public class CustomerRequest extends UserRequest {
+    @NotNull(message = "Tài khoản không được để trống")
+    private Long accountId;
 }

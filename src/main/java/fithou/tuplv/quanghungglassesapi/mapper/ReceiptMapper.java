@@ -19,22 +19,22 @@ public class ReceiptMapper {
     final ReceiptDetailsRepository receiptDetailsRepository;
     final ReceiptRepository receiptRepository;
     final SupplierRepository supplierRepository;
-    final UserRepository userRepository;
+    final StaffRepository staffRepository;
     final ProductDetailsRepository productDetailsRepository;
 
     // ReceiptMapper
     public ReceiptResponse convertToResponse(Receipt receipt) {
         ReceiptResponse receiptResponse = modelMapper.map(receipt, ReceiptResponse.class);
-        receipt.setUser(userRepository.findById(receipt.getUser().getId()).orElse(null));
-        receipt.getReceiptDetails().forEach(receiptDetails -> receiptResponse.getReceiptDetails().add(convertToResponse(receiptDetails)));
+        receipt.setStaff(staffRepository.findById(receipt.getStaff().getId()).orElse(null));
+//        receipt.getReceiptDetails().forEach(receiptDetails -> receiptResponse.getReceiptDetails().add(convertToResponse(receiptDetails)));
         return receiptResponse;
     }
 
     public Receipt convertToEntity(ReceiptRequest receiptRequest) {
         Receipt receipt = modelMapper.map(receiptRequest, Receipt.class);
-        receipt.setUser(userRepository.findById(receiptRequest.getUserId()).orElse(null));
+        receipt.setStaff(staffRepository.findById(receiptRequest.getUserId()).orElse(null));
         receipt.setSupplier(supplierRepository.findById(receiptRequest.getSupplierId()).orElse(null));
-        receiptRequest.getReceiptDetails().forEach(receiptDetailsRequest -> receipt.getReceiptDetails().add(convertToEntity(receiptDetailsRequest)));
+//        receiptRequest.getReceiptDetails().forEach(receiptDetailsRequest -> receipt.getReceiptDetails().add(convertToEntity(receiptDetailsRequest)));
         return receipt;
     }
 
