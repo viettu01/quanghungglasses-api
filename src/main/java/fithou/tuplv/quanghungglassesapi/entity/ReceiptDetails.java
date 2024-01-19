@@ -18,7 +18,10 @@ public class ReceiptDetails {
     private Long id;
 
     @Column(nullable = false)
-    private Integer quantity; // số lượng nhập hàng
+    private Integer requestedQuantity; // số lượng yêu cầu
+
+    @Column(nullable = false)
+    private Integer actualQuantity; // số lượng thực nhập
 
     @Column(nullable = false)
     private Double price; // giá nhập hàng

@@ -31,6 +31,9 @@ public class Order {
     @Column(nullable = false)
     private String phone; // số điện thoại người nhận hàng
 
+    @Column(length = 100)
+    private String eyeglassPrescription; // Đơn kính
+
     @Column(nullable = false)
     @CreatedDate
     private Date createdDate; // ngày đặt hàng

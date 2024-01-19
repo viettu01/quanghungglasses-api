@@ -11,7 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReceiptDetailsResponse {
     private Long id;
-    private Integer quantity;
+    private Integer requestedQuantity; // số lượng yêu cầu
+    private Integer actualQuantity; // số lượng thực nhập
     private Double price;
     private String productName;
     private String productColor;

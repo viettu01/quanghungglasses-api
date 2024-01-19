@@ -26,7 +26,7 @@ public class OrderMapper {
     // OrderMapper
     public OrderResponse convertToResponse(Order order) {
         OrderResponse orderResponse = modelMapper.map(order, OrderResponse.class);
-        orderResponse.setEmail(order.getCustomer().getEmail());
+        orderResponse.setEmail(order.getCustomer().getAccount().getEmail());
         order.getOrderDetails().forEach(orderDetails -> orderResponse.getOrderDetails().add(convertToResponse(orderDetails)));
         return orderResponse;
     }

@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountResponse {
-    private String username;
+    private String email;
     private Boolean status;
     private List<RoleResponse> roles;
 }

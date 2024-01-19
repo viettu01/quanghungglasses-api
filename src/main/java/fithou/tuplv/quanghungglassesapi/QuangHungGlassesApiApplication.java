@@ -54,8 +54,8 @@ public class QuangHungGlassesApiApplication {
                 roleService.save(new RoleRequest(ROLE_USER, ROLE_USER));
             // endregion
             // region Staff ADMIN
-            if (!accountService.existsByUsername(ADMIN_USERNAME))
-                accountService.create(new AccountRequest(ADMIN_USERNAME, ADMIN_PASSWORD, true, Collections.singletonList(ROLE_ADMIN)));
+            if (!accountService.existsByUsername(ADMIN_EMAIL))
+                accountService.create(new AccountRequest(ADMIN_EMAIL, ADMIN_PASSWORD, true, Collections.singletonList(ROLE_ADMIN)));
             // endregion
             // region Category
             if (!categoryService.existsByName("Kính thời trang"))

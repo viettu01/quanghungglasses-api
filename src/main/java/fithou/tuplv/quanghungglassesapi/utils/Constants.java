@@ -16,6 +16,7 @@ public class Constants {
     public static final String ERROR_BANNER_NOT_FOUND = "Banner không tồn tại";
     public static final String ERROR_CATEGORY_NOT_FOUND = "Danh mục không tồn tại";
     public static final String ERROR_CATEGORY_NAME_ALREADY_EXISTS = "Tên danh mục đã tồn tại";
+    public static final String ERROR_CATEGORY_HAS_PRODUCTS = "Danh mục đang có sản phẩm";
     public static final String ERROR_SLUG_ALREADY_EXISTS = "Slug đã tồn tại";
     public static final String ERROR_MATERIAL_NOT_FOUND = "Chất liệu không tồn tại";
     public static final String ERROR_MATERIAL_ALREADY_EXISTS = "Chất liệu đã tồn tại";

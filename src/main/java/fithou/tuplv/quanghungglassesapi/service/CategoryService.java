@@ -24,6 +24,8 @@ public interface CategoryService {
 
     void deleteByIds(Long[] ids);
 
+    void deleteById(Long id);
+
     boolean existsByName(String name);
 
     Long countByStatus(Boolean status);

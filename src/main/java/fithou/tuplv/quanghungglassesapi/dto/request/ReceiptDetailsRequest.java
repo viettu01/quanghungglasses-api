@@ -16,9 +16,13 @@ import java.io.Serializable;
 public class ReceiptDetailsRequest implements Serializable {
     private Long id;
 
-    @NotNull(message = "Số lượng nhập hàng không được để trống")
+    @NotNull(message = "Số lượng yêu cầu không được để trống")
     @DecimalMin(value = "0", inclusive = false, message = "Số lượng phải lớn hơn 0")
-    private Integer quantity;
+    private Integer requestedQuantity; // số lượng yêu cầu
+
+    @NotNull(message = "Số lượng thực nhập không được để trống")
+    @DecimalMin(value = "0", inclusive = false, message = "Số lượng phải lớn hơn 0")
+    private Integer actualQuantity; // số lượng thực nhập
 
     @NotNull(message = "Giá nhập hàng không được để trống")
     @DecimalMin(value = "0", inclusive = false, message = "Giá phải lớn hơn 0")

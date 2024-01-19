@@ -24,9 +24,6 @@ public abstract class User extends BaseEntity {
     @Column(length = 10, unique = true)
     private String phone;
 
-    @Column(length = 50, unique = true)
-    private String email;
-
     @Column(length = 5)
     private String gender;
 

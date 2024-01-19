@@ -81,10 +81,14 @@ public class CategoryRestController {
         }
     }
 
-    @DeleteMapping({"/", ""})
-    public ResponseEntity<?> delete(@RequestBody Long[] ids) {
-        categoryService.deleteByIds(ids);
-        return ResponseEntity.ok().build();
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            categoryService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/count")

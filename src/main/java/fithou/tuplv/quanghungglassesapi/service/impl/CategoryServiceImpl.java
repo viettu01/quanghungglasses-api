@@ -92,6 +92,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_CATEGORY_NOT_FOUND));
+        if (!category.getProducts().isEmpty())
+            throw new RuntimeException(ERROR_CATEGORY_HAS_PRODUCTS);
+
+        categoryRepository.deleteById(id);
+    }
+
+    @Override
     public boolean existsByName(String name) {
         return categoryRepository.existsByName(name);
     }
