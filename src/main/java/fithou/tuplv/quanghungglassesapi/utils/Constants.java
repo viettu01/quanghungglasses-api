@@ -44,4 +44,7 @@ public class Constants {
     public static final String SORT_DESC = "desc";
     public static final String DEFAULT_PAGE_SIZE = "10"; // số lượng bản ghi mặc định trên 1 trang
     public static final String DEFAULT_PAGE_NUMBER = "0"; // số trang mặc định
+
+    public static final String STORE_NAME = "Quang Hưng Glasses";
+    public static final String FROM_EMAIL = "tupham1120@gmail.com";
 }

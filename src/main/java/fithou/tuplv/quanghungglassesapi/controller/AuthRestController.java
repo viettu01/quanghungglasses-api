@@ -2,11 +2,13 @@ package fithou.tuplv.quanghungglassesapi.controller;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.LoginRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
+import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.LoginResponse;
 import fithou.tuplv.quanghungglassesapi.security.CustomUserDetails;
 import fithou.tuplv.quanghungglassesapi.security.jwt.JwtTokenProvider;
 import fithou.tuplv.quanghungglassesapi.service.AccountService;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
+import fithou.tuplv.quanghungglassesapi.service.EmailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_USER_NOT_FO
 public class AuthRestController {
     final AccountService accountService;
     final CustomerService customerService;
+    final EmailService emailService;
     final JwtTokenProvider tokenProvider;
     final AuthenticationManager authenticationManager;
 
@@ -69,6 +72,12 @@ public class AuthRestController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        return ResponseEntity.ok().body(customerService.register(registerRequest));
+        try {
+            CustomerResponse customerResponse = customerService.register(registerRequest);
+            emailService.sendVerificationCode(customerResponse);
+            return ResponseEntity.ok().body(customerResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Email không hợp lệ");
+        }
     }
 }

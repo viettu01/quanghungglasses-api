@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -14,5 +15,8 @@ import java.util.List;
 public class AccountResponse {
     private String email;
     private Boolean status;
+    private String verificationCode;
+    private Boolean isVerifiedEmail;
+    private Date verificationCodeExpiredAt;
     private List<RoleResponse> roles;
 }

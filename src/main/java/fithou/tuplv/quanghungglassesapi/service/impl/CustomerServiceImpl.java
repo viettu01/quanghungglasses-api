@@ -11,11 +11,13 @@ import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 
 @Service
 @Transactional
@@ -48,7 +50,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse register(RegisterRequest registerRequest) {
-        Account account = accountRepository.save(userMapper.convertToEntity(registerRequest));
+        Account account = userMapper.convertToEntity(registerRequest);
+        account.setIsVerifiedEmail(false);
+        account.setVerificationCode(RandomStringUtils.randomNumeric(6));
+        account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
+        accountRepository.save(account);
         Customer customer = modelMapper.map(registerRequest, Customer.class);
         customer.setAccount(account);
         return userMapper.convertToResponse(customerRepository.save(customer));

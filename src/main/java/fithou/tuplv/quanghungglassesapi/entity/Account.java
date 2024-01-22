@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name = "account")
@@ -27,6 +28,15 @@ public class Account extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private Boolean status; // true: bình thường, false: bị khóa
+
+    @Column(length = 6)
+    private String verificationCode;
+
+    @Column
+    private Boolean isVerifiedEmail;
+
+    @Column
+    private Date verificationCodeExpiredAt;
 
     @ManyToMany(fetch = FetchType.EAGER) // EAGER: load hết dữ liệu liên quan
     @JoinTable(
