@@ -1,6 +1,9 @@
 package fithou.tuplv.quanghungglassesapi;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.*;
+import fithou.tuplv.quanghungglassesapi.entity.Account;
+import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
+import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import fithou.tuplv.quanghungglassesapi.service.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -37,7 +40,7 @@ public class QuangHungGlassesApiApplication {
     }
 
     @Bean
-    CommandLineRunner run(RoleService roleService, AccountService accountService, CategoryService categoryService,
+    CommandLineRunner run(RoleService roleService, RoleRepository roleRepository, AccountRepository accountRepository, CategoryService categoryService,
                           MaterialService materialService, OriginService originService, ShapeService shapeService,
                           BrandService brandService, SupplierService supplierService) {
         return args -> {
@@ -54,8 +57,15 @@ public class QuangHungGlassesApiApplication {
                 roleService.save(new RoleRequest(ROLE_USER, ROLE_USER));
             // endregion
             // region Staff ADMIN
-            if (!accountService.existsByUsername(ADMIN_EMAIL))
-                accountService.create(new AccountRequest(ADMIN_EMAIL, ADMIN_PASSWORD, true, Collections.singletonList(ROLE_ADMIN)));
+            if (!accountRepository.existsByEmail(ADMIN_EMAIL)) {
+                Account account = new Account();
+                account.setEmail(ADMIN_EMAIL);
+                account.setPassword(passwordEncoder().encode(ADMIN_PASSWORD));
+                account.setRoles(Collections.singletonList(roleRepository.findByName((ROLE_ADMIN))));
+                account.setStatus(true);
+                account.setIsVerifiedEmail(true);
+                accountRepository.save(account);
+            }
             // endregion
             // region Category
             if (!categoryService.existsByName("Kính thời trang"))

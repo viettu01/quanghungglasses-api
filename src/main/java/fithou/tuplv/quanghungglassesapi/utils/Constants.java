@@ -13,19 +13,34 @@ public class Constants {
     public static final String ERROR_USER_NOT_FOUND = "Người dùng không tồn tại";
     public static final String ERROR_ADDRESS_NOT_FOUND = "Địa chỉ không tồn tại";
     public static final String ERROR_PHONE_ALREADY_EXISTS = "Số điện thoại đã tồn tại";
+    public static final String ERROR_EMAIL_ALREADY_EXISTS = "Email đã tồn tại";
+    public static final String ERROR_EMAIL_NOT_FOUND = "Email không tồn tại";
+    public static final String ERROR_VERIFICATION_CODE_INVALID = "Mã xác minh không hợp lệ";
+    public static final String ERROR_VERIFICATION_CODE_EXPIRED = "Mã xác minh đã hết hạn";
+    public static final String SUCCESS_REGISTER = "Đăng ký thành công";
+    public static final String SUCCESS_VERIFY_EMAIL = "Xác minh email thành công";
+    public static final String SUCCESS_RESEND_VERIFICATION_CODE = "Đã gửi lại mã xác minh";
+
     public static final String ERROR_BANNER_NOT_FOUND = "Banner không tồn tại";
+
     public static final String ERROR_CATEGORY_NOT_FOUND = "Danh mục không tồn tại";
     public static final String ERROR_CATEGORY_NAME_ALREADY_EXISTS = "Tên danh mục đã tồn tại";
     public static final String ERROR_CATEGORY_HAS_PRODUCTS = "Danh mục đang có sản phẩm";
+
     public static final String ERROR_SLUG_ALREADY_EXISTS = "Slug đã tồn tại";
+
     public static final String ERROR_MATERIAL_NOT_FOUND = "Chất liệu không tồn tại";
     public static final String ERROR_MATERIAL_ALREADY_EXISTS = "Chất liệu đã tồn tại";
+
     public static final String ERROR_ORIGIN_NOT_FOUND = "Xuất xứ không tồn tại";
     public static final String ERROR_ORIGIN_ALREADY_EXISTS = "Xuất xứ đã tồn tại";
+
     public static final String ERROR_SHAPE_NOT_FOUND = "Hình dạng không tồn tại";
     public static final String ERROR_SHAPE_ALREADY_EXISTS = "Hình dạng đã tồn tại";
+
     public static final String ERROR_BRAND_NOT_FOUND = "Thương hiệu không tồn tại";
     public static final String ERROR_BRAND_ALREADY_EXISTS = "Thương hiệu đã tồn tại";
+
     public static final String ERROR_SUPPLIER_NOT_FOUND = "Nhà cung cấp không tồn tại";
     public static final String ERROR_SUPPLIER_NAME_ALREADY_EXISTS = "Tên nhà cung cấp đã tồn tại";
 

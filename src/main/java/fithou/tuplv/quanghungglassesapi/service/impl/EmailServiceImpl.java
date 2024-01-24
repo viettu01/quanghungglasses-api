@@ -26,14 +26,14 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendVerificationCode(CustomerResponse customer) throws MessagingException, UnsupportedEncodingException {
+    public void sendVerificationCode(CustomerResponse customerResponse) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        String verificationCode = customer.getAccount().getVerificationCode();
+        String verificationCode = customerResponse.getAccount().getVerificationCode();
         String subject = "Xác minh địa chỉ email của bạn";
-        String content = "Xin chào " + customer.getFullname() + ",<br>"
-                + "Bạn đã yêu cầu xác minh email " + customer.getAccount().getEmail() + ":<br>"
+        String content = "Xin chào " + customerResponse.getFullname() + ",<br>"
+                + "Bạn đã yêu cầu xác minh email " + customerResponse.getAccount().getEmail() + ":<br>"
                 + "Để tiếp tục, vui lòng nhập mã xác minh:<br>"
                 + "<h3>" + verificationCode + "</h3>"
                 + "Đường dẫn này sẽ hết hạn trong 5 phút.<br>"
@@ -43,7 +43,7 @@ public class EmailServiceImpl implements EmailService {
                 + STORE_NAME;
 
         helper.setFrom(FROM_EMAIL, STORE_NAME);
-        helper.setTo(customer.getAccount().getEmail());
+        helper.setTo(customerResponse.getAccount().getEmail());
         helper.setSubject(subject);
         helper.setText(content, true);
 

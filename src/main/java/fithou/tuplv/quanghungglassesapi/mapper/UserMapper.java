@@ -13,11 +13,13 @@ import fithou.tuplv.quanghungglassesapi.entity.Staff;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
@@ -43,6 +45,9 @@ public class UserMapper {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")));
         account.setStatus(true);
+        account.setIsVerifiedEmail(false);
+        account.setVerificationCode(RandomStringUtils.randomNumeric(6));
+        account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
         return account;
     }
 

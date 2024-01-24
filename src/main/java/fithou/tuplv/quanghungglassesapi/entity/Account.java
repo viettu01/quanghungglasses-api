@@ -32,8 +32,8 @@ public class Account extends BaseEntity implements Serializable {
     @Column(length = 6)
     private String verificationCode;
 
-    @Column
-    private Boolean isVerifiedEmail;
+    @Column(nullable = false)
+    private Boolean isVerifiedEmail; // true: đã xác minh, false: chưa xác minh
 
     @Column
     private Date verificationCodeExpiredAt;

@@ -3,6 +3,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.CustomerRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.VerifyEmailRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
 import fithou.tuplv.quanghungglassesapi.entity.Customer;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -34,13 +37,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse create(CustomerRequest staffRequest) {
+    public CustomerResponse create(CustomerRequest customerRequest) {
         return null;
     }
 
     @Override
-    public CustomerResponse update(CustomerRequest staffRequest) {
-        return null;
+    public CustomerResponse update(CustomerRequest customerRequest) {
+        Customer customer = customerRepository.findByAccountEmail(customerRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS));
+
+        return userMapper.convertToResponse(customerRepository.save(customer));
     }
 
     @Override
@@ -50,13 +56,42 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse register(RegisterRequest registerRequest) {
+        if (accountRepository.existsByEmail(registerRequest.getEmail()))
+            throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
+
         Account account = userMapper.convertToEntity(registerRequest);
-        account.setIsVerifiedEmail(false);
-        account.setVerificationCode(RandomStringUtils.randomNumeric(6));
-        account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
         accountRepository.save(account);
         Customer customer = modelMapper.map(registerRequest, Customer.class);
         customer.setAccount(account);
+//        customerRepository.save(customer);
         return userMapper.convertToResponse(customerRepository.save(customer));
+    }
+
+
+    @Override
+    public void verifyEmail(VerifyEmailRequest verifyEmailRequest) {
+        Account account = accountRepository.findByEmailAndVerificationCode(verifyEmailRequest.getEmail(), verifyEmailRequest.getVerificationCode())
+                .orElseThrow(() -> new RuntimeException(ERROR_VERIFICATION_CODE_INVALID));
+
+        if (account.getVerificationCodeExpiredAt().before(new Date()))
+            throw new RuntimeException(ERROR_VERIFICATION_CODE_EXPIRED);
+
+        account.setIsVerifiedEmail(true);
+        account.setVerificationCodeExpiredAt(null);
+        account.setVerificationCode(null);
+        accountRepository.save(account);
+    }
+
+    @Override
+    public CustomerResponse resendVerificationCode(String email) {
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND));
+
+        account.setVerificationCode(RandomStringUtils.randomNumeric(6));
+        account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
+        accountRepository.save(account);
+
+        return userMapper.convertToResponse(customerRepository.findByAccountEmail(email)
+                .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND)));
     }
 }

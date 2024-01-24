@@ -32,8 +32,6 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_USER_NOT_FO
 @AllArgsConstructor
 public class AuthRestController {
     final AccountService accountService;
-    final CustomerService customerService;
-    final EmailService emailService;
     final JwtTokenProvider tokenProvider;
     final AuthenticationManager authenticationManager;
 
@@ -64,20 +62,9 @@ public class AuthRestController {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest, BindingResult result) {
-        if (result.hasErrors()) {
-            HashMap<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        try {
-            CustomerResponse customerResponse = customerService.register(registerRequest);
-            emailService.sendVerificationCode(customerResponse);
-            return ResponseEntity.ok().body(customerResponse);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Email không hợp lệ");
-        }
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        SecurityContextHolder.clearContext(); // Xóa thông tin authentication ra khỏi Security Context
+        return ResponseEntity.ok().build();
     }
 }
