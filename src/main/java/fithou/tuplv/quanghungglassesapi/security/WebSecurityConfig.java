@@ -6,6 +6,7 @@ import fithou.tuplv.quanghungglassesapi.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -40,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login", "/api/register", "/images/*").permitAll() // Cho phép tất cả mọi người truy cập vào địa chỉ này
 //                .antMatchers(HttpMethod.POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN")
 //
-//                .antMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_MANAGER")
+//                .antMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
 //                .antMatchers(HttpMethod.POST, "/api/category/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN")
 //                .antMatchers(HttpMethod.PUT, "/api/category/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_MANAGER")
 //                .antMatchers(HttpMethod.DELETE, "/api/category/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_MANAGER")

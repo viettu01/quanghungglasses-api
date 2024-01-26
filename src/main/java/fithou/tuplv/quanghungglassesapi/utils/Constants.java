@@ -2,6 +2,7 @@ package fithou.tuplv.quanghungglassesapi.utils;
 
 public class Constants {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_STAFF = "ROLE_STAFF";
     public static final String ROLE_MANAGER = "ROLE_MANAGER";
     public static final String ROLE_SALES = "ROLE_SALES";
     public static final String ROLE_WAREHOUSE = "ROLE_WAREHOUSE";

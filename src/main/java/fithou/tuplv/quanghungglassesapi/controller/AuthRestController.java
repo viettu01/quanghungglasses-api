@@ -1,14 +1,10 @@
 package fithou.tuplv.quanghungglassesapi.controller;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.LoginRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.LoginResponse;
 import fithou.tuplv.quanghungglassesapi.security.CustomUserDetails;
 import fithou.tuplv.quanghungglassesapi.security.jwt.JwtTokenProvider;
 import fithou.tuplv.quanghungglassesapi.service.AccountService;
-import fithou.tuplv.quanghungglassesapi.service.CustomerService;
-import fithou.tuplv.quanghungglassesapi.service.EmailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +14,13 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.HashMap;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_USER_NOT_FOUND;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "localhost:4200")
 @AllArgsConstructor
 public class AuthRestController {
     final AccountService accountService;
@@ -38,13 +30,12 @@ public class AuthRestController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            if (!accountService.existsByUsername(loginRequest.getUsername())) {
+            if (!accountService.existsByUsername(loginRequest.getEmail()))
                 return ResponseEntity.badRequest().body(ERROR_USER_NOT_FOUND);
-            }
 
             // Xác thực từ username và password.
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
             );
 
             // Nếu thông tin hợp lệ -> Set thông tin authentication vào Security Context
@@ -60,11 +51,5 @@ public class AuthRestController {
             // Người dùng nhập sai mật khẩu
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Sai mật khẩu");
         }
-    }
-
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout() {
-        SecurityContextHolder.clearContext(); // Xóa thông tin authentication ra khỏi Security Context
-        return ResponseEntity.ok().build();
     }
 }
