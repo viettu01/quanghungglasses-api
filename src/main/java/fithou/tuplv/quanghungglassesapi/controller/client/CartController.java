@@ -1,4 +1,4 @@
-package fithou.tuplv.quanghungglassesapi.controller;
+package fithou.tuplv.quanghungglassesapi.controller.client;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.CartDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.service.CartService;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cart")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
-public class CartRestController {
+public class CartController {
     final CartService cartService;
 
     @GetMapping("/{email}")

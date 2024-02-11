@@ -1,4 +1,4 @@
-package fithou.tuplv.quanghungglassesapi.controller;
+package fithou.tuplv.quanghungglassesapi.controller.client;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.AddressRequest;
 import fithou.tuplv.quanghungglassesapi.service.AddressService;
@@ -16,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/address")
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
-public class AddressRestController {
+public class AddressController {
     final AddressService addressService;
 
     @GetMapping({"/{userId}", "/{userId}/"})

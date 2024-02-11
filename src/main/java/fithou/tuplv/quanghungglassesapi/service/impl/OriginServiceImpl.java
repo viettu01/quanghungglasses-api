@@ -1,12 +1,15 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.OriginRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.OriginResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Origin;
 import fithou.tuplv.quanghungglassesapi.mapper.OriginMapper;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.OriginRepository;
 import fithou.tuplv.quanghungglassesapi.service.OriginService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +24,22 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_ORIGIN_NOT_
 @AllArgsConstructor
 public class OriginServiceImpl implements OriginService {
     final OriginRepository originRepository;
+    final PaginationMapper paginationMapper;
     final OriginMapper originMapper;
 
     @Override
     public List<OriginResponse> findAll() {
         return originRepository.findAll().stream().map(originMapper::convertToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationDTO<OriginResponse> findAll(Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(originRepository.findAll(pageable).map(originMapper::convertToResponse));
+    }
+
+    @Override
+    public PaginationDTO<OriginResponse> findByNameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(originRepository.findByNameContaining(name, pageable).map(originMapper::convertToResponse));
     }
 
     @Override

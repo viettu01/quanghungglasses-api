@@ -1,17 +1,19 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.BrandRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.BrandResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Brand;
 import fithou.tuplv.quanghungglassesapi.mapper.BrandMapper;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.BrandRepository;
 import fithou.tuplv.quanghungglassesapi.service.BrandService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_BRAND_ALREADY_EXISTS;
@@ -22,11 +24,22 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_BRAND_NOT_F
 @AllArgsConstructor
 public class BrandServiceImpl implements BrandService {
     final BrandRepository brandRepository;
+    final PaginationMapper paginationMapper;
     final BrandMapper brandMapper;
 
     @Override
     public List<BrandResponse> findAll() {
         return brandRepository.findAll().stream().map(brandMapper::convertToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationDTO<BrandResponse> findAll(Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(brandRepository.findAll(pageable).map(brandMapper::convertToResponse));
+    }
+
+    @Override
+    public PaginationDTO<BrandResponse> findByNameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(brandRepository.findByNameContaining(name, pageable).map(brandMapper::convertToResponse));
     }
 
     @Override

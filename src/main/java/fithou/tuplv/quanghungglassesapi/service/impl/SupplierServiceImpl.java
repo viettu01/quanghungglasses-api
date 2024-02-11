@@ -1,12 +1,15 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.SupplierRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.SupplierResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Supplier;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.SupplierMapper;
 import fithou.tuplv.quanghungglassesapi.repository.SupplierRepository;
 import fithou.tuplv.quanghungglassesapi.service.SupplierService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +23,22 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @AllArgsConstructor
 public class SupplierServiceImpl implements SupplierService {
     final SupplierRepository supplierRepository;
+    final PaginationMapper paginationMapper;
     final SupplierMapper supplierMapper;
 
     @Override
     public List<SupplierResponse> findAll() {
         return supplierRepository.findAll().stream().map(supplierMapper::convertToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationDTO<SupplierResponse> findAll(Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(supplierRepository.findAll(pageable).map(supplierMapper::convertToResponse));
+    }
+
+    @Override
+    public PaginationDTO<SupplierResponse> findByNameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(supplierRepository.findByNameContaining(name, pageable).map(supplierMapper::convertToResponse));
     }
 
     @Override

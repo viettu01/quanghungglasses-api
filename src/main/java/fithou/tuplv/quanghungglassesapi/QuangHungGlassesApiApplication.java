@@ -164,7 +164,7 @@ public class QuangHungGlassesApiApplication {
             if (!supplierService.existsByName("Anna Eyewear"))
                 supplierService.create(new SupplierRequest(null, "Anna Eyewear", "0966886634", "Số 75A ngõ 61 Lê Văn Lương, Hà Nội"));
             if (!supplierService.existsByName("Hiệu Kính Thành Luân"))
-                supplierService.create(new SupplierRequest(null, "Hiệu Kính Thành Luân", "038289742", "Số 58 Lương Văn Can, Hà Nội"));
+                supplierService.create(new SupplierRequest(null, "Hiệu Kính Thành Luân", "0382897422", "Số 58 Lương Văn Can, Hà Nội"));
             if (!supplierService.existsByName("Công Ty TNHH Kính Mắt Thiên Vũ"))
                 supplierService.create(new SupplierRequest(null, "Công Ty TNHH Kính Mắt Thiên Vũ", "0983675413", "151B Lê Duẩn, Hoàn Kiếm, Hà Nội"));
             if (!supplierService.existsByName("Vanila Shop"))

@@ -22,7 +22,7 @@ public class Supplier extends BaseEntity implements Serializable {
     @Column(length = 50, nullable = false, unique = true)
     private String name; // Tên nhà cung cấp
 
-    @Column(length = 10, unique = true)
+    @Column(length = 10, nullable = false, unique = true)
     private String phone; // Số điện thoại nhà cung cấp
 
     @Column(length = 200)

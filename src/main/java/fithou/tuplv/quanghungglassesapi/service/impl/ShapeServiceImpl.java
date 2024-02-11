@@ -1,12 +1,15 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.ShapeRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.ShapeResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Shape;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.ShapeMapper;
 import fithou.tuplv.quanghungglassesapi.repository.ShapeRepository;
 import fithou.tuplv.quanghungglassesapi.service.ShapeService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +24,22 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_SHAPE_NOT_F
 @AllArgsConstructor
 public class ShapeServiceImpl implements ShapeService {
     final ShapeRepository shapeRepository;
+    final PaginationMapper paginationMapper;
     final ShapeMapper shapeMapper;
 
     @Override
     public List<ShapeResponse> findAll() {
         return shapeRepository.findAll().stream().map(shapeMapper::convertToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationDTO<ShapeResponse> findAll(Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(shapeRepository.findAll(pageable).map(shapeMapper::convertToResponse));
+    }
+
+    @Override
+    public PaginationDTO<ShapeResponse> findByNameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(shapeRepository.findByNameContaining(name, pageable).map(shapeMapper::convertToResponse));
     }
 
     @Override

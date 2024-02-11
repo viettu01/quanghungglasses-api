@@ -30,6 +30,11 @@ public class CategoryServiceImpl implements CategoryService {
     final CategoryMapper categoryMapper;
 
     @Override
+    public List<CategoryResponse> findAll() {
+        return categoryRepository.findAll().stream().map(categoryMapper::convertToResponse).collect(Collectors.toList());
+    }
+
+    @Override
     public PaginationDTO<CategoryResponse> findAll(Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(categoryRepository.findAll(pageable).map(categoryMapper::convertToResponse));
     }

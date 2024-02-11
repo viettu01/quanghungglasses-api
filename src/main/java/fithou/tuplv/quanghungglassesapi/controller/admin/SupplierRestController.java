@@ -1,7 +1,7 @@
-package fithou.tuplv.quanghungglassesapi.controller;
+package fithou.tuplv.quanghungglassesapi.controller.admin;
 
-import fithou.tuplv.quanghungglassesapi.dto.request.CategoryRequest;
-import fithou.tuplv.quanghungglassesapi.service.CategoryService;
+import fithou.tuplv.quanghungglassesapi.dto.request.SupplierRequest;
+import fithou.tuplv.quanghungglassesapi.service.SupplierService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,20 +13,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.Map;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @RestController
-@RequestMapping("/api/category")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/admin/supplier")
+@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
-public class CategoryRestController {
-    final CategoryService categoryService;
+public class SupplierRestController {
+    final SupplierService supplierService;
 
     @GetMapping({"/", ""})
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
-                                    @RequestParam(value = "status", defaultValue = "", required = false) Boolean status,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
                                     @RequestParam(value = "sort-direction", defaultValue = SORT_DESC, required = false) String sortDir,
@@ -35,72 +33,43 @@ public class CategoryRestController {
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        if (status != null)
-            return ResponseEntity.ok().body(categoryService.findByNameContainingAndStatus(name, status, pageable));
-
         if (StringUtils.hasText(name))
-            return ResponseEntity.ok().body(categoryService.findByNameContaining(name, pageable));
+            return ResponseEntity.ok().body(supplierService.findByNameContaining(name, pageable));
 
-        return ResponseEntity.ok().body(categoryService.findAll(pageable));
-    }
-
-    @GetMapping("/{slug}")
-    public ResponseEntity<?> getBySlug(@PathVariable String slug) {
-        try {
-            return ResponseEntity.ok().body(categoryService.findBySlug(slug));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok().body(supplierService.findAll(pageable));
     }
 
     @PostMapping({"/", ""})
-    public ResponseEntity<?> create(@Valid @RequestBody CategoryRequest categoryRequest, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody SupplierRequest supplierRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
             result.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
         try {
-            return ResponseEntity.ok().body(categoryService.create(categoryRequest));
+            return ResponseEntity.ok().body(supplierService.create(supplierRequest));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping({"/", ""})
-    public ResponseEntity<?> update(@Valid @RequestBody CategoryRequest categoryRequest, BindingResult result) {
+    public ResponseEntity<?> update(@Valid @RequestBody SupplierRequest supplierRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
             result.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
         try {
-            return ResponseEntity.ok().body(categoryService.update(categoryRequest));
+            return ResponseEntity.ok().body(supplierService.update(supplierRequest));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @DeleteMapping({"/{id}"})
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        try {
-            categoryService.deleteById(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<?> countByStatus(@RequestParam Boolean status) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("status", status.toString());
-        map.put("totalElements", categoryService.countByStatus(status).toString());
-        return ResponseEntity.ok().body(map);
-    }
-
-    @GetMapping("/count-all")
-    public ResponseEntity<?> countAll() {
-        return ResponseEntity.ok().body(Map.of("totalElements", categoryService.countAll()));
+    @DeleteMapping({"/", ""})
+    public ResponseEntity<?> delete(@RequestBody Long[] ids) {
+        supplierService.deleteByIds(ids);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,13 +1,16 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
+import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.BannerRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.BannerResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Banner;
 import fithou.tuplv.quanghungglassesapi.mapper.BannerMapper;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.BannerRepository;
 import fithou.tuplv.quanghungglassesapi.service.BannerService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_BANNER_NOT_
 @AllArgsConstructor
 public class BannerServiceImpl implements BannerService {
     final BannerRepository bannerRepository;
+    final PaginationMapper paginationMapper;
     final BannerMapper bannerMapper;
     final StorageService storageService;
 
@@ -32,6 +36,16 @@ public class BannerServiceImpl implements BannerService {
                 .stream()
                 .map(bannerMapper::convertToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationDTO<BannerResponse> findAll(Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(bannerRepository.findAll(pageable).map(bannerMapper::convertToResponse));
+    }
+
+    @Override
+    public PaginationDTO<BannerResponse> findByNameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(bannerRepository.findByNameContaining(name, pageable).map(bannerMapper::convertToResponse));
     }
 
     @Override

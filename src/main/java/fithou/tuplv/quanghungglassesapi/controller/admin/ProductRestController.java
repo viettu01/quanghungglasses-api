@@ -1,4 +1,4 @@
-package fithou.tuplv.quanghungglassesapi.controller;
+package fithou.tuplv.quanghungglassesapi.controller.admin;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
 import fithou.tuplv.quanghungglassesapi.service.ProductService;
@@ -17,8 +17,8 @@ import java.util.HashMap;
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @RestController
-@RequestMapping("/api/product")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/admin/product")
+@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
 public class ProductRestController {
     final ProductService productService;

@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Getter
@@ -20,4 +21,6 @@ public class SupplierResponse implements Serializable {
     private String name;
     private String phone;
     private String address;
+    private Date createdDate;
+    private Date updatedDate;
 }

@@ -6,7 +6,6 @@ import fithou.tuplv.quanghungglassesapi.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,6 +16,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.ROLE_ADMIN;
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.ROLE_STAFF;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Không sử dụng session lưu lại trạng thái của người dùng
         http.authorizeRequests()
                 .antMatchers("/api/login", "/api/register", "/images/*").permitAll() // Cho phép tất cả mọi người truy cập vào địa chỉ này
+                .antMatchers("/api/admin/**").hasAnyAuthority(ROLE_ADMIN, ROLE_STAFF)
 //                .antMatchers(HttpMethod.POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN")
 //
 //                .antMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
