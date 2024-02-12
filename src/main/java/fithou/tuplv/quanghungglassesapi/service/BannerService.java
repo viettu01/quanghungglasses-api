@@ -18,5 +18,7 @@ public interface BannerService {
 
     BannerResponse update(BannerRequest bannerRequest);
 
+    void deleteById(Long id);
+
     void deleteByIds(Long[] ids);
 }

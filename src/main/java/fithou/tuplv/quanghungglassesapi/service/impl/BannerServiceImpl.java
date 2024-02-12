@@ -10,6 +10,7 @@ import fithou.tuplv.quanghungglassesapi.repository.BannerRepository;
 import fithou.tuplv.quanghungglassesapi.service.BannerService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.DIR_FILE_BANNER;
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_BANNER_NOT_FOUND;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -76,6 +78,13 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        Banner banner = bannerRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_BANNER_NOT_FOUND));
+        storageService.deleteFile(banner.getImage());
+        bannerRepository.deleteById(id);
+    }
+
+    @Override
     public void deleteByIds(Long[] ids) {
         for (Long id : ids) {
             try {
@@ -86,7 +95,7 @@ public class BannerServiceImpl implements BannerService {
                 } else
                     throw new RuntimeException(ERROR_BANNER_NOT_FOUND);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }

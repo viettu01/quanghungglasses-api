@@ -69,8 +69,12 @@ public class BannerRestController {
     }
 
     @DeleteMapping({"/", ""})
-    public ResponseEntity<?> delete(@RequestBody Long[] ids) {
-        bannerService.deleteByIds(ids);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> delete(@RequestBody Long id) {
+        try {
+            bannerService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
