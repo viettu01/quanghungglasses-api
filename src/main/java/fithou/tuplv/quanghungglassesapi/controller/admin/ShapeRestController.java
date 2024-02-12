@@ -68,9 +68,13 @@ public class ShapeRestController {
         }
     }
 
-    @DeleteMapping({"/", ""})
-    public ResponseEntity<?> delete(@RequestBody Long[] ids) {
-        shapeService.deleteByIds(ids);
-        return ResponseEntity.ok().build();
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            shapeService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

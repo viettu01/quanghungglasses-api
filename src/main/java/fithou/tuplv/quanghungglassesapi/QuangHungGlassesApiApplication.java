@@ -5,6 +5,7 @@ import fithou.tuplv.quanghungglassesapi.entity.Account;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import fithou.tuplv.quanghungglassesapi.service.*;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.Collections;
 
@@ -41,8 +43,8 @@ public class QuangHungGlassesApiApplication {
 
     @Bean
     CommandLineRunner run(RoleService roleService, RoleRepository roleRepository, AccountRepository accountRepository, CategoryService categoryService,
-                          MaterialService materialService, OriginService originService, ShapeService shapeService,
-                          BrandService brandService, SupplierService supplierService) {
+                          MaterialService materialService, OriginService originService, ShapeService shapeService, BrandService brandService,
+                          SupplierService supplierService, AccountService accountService, StaffService staffService) {
         return args -> {
             // region Role
             if (!roleService.existsByName(ROLE_ADMIN))
@@ -60,13 +62,20 @@ public class QuangHungGlassesApiApplication {
             // endregion
             // region Staff ADMIN
             if (!accountRepository.existsByEmail(ADMIN_EMAIL)) {
-                Account account = new Account();
-                account.setEmail(ADMIN_EMAIL);
-                account.setPassword(passwordEncoder().encode(ADMIN_PASSWORD));
-                account.setRoles(Collections.singletonList(roleRepository.findByName((ROLE_ADMIN))));
-                account.setStatus(true);
-                account.setIsVerifiedEmail(true);
-                accountRepository.save(account);
+                AccountRequest accountRequest = new AccountRequest();
+                accountRequest.setEmail(ADMIN_EMAIL);
+                accountRequest.setPassword(ADMIN_PASSWORD);
+                accountRequest.setStatus(true);
+                accountRequest.setRoleName(Collections.singletonList(ROLE_ADMIN));
+                accountRequest.setIsVerifiedEmail(true);
+                accountService.create(accountRequest);
+                StaffRequest staffRequest = new StaffRequest();
+                staffRequest.setFullname("Chủ cửa hàng");
+                staffRequest.setPhone("0096871026");
+                staffRequest.setGender("Nam");
+                staffRequest.setStatus(true);
+                staffRequest.setAccountId(1L);
+                staffService.create(staffRequest);
             }
             // endregion
             // region Category

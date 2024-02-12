@@ -26,6 +26,9 @@ public class Account extends BaseEntity implements Serializable {
     @Column(length = 100, nullable = false)
     private String password;
 
+    @Column(length = 100)
+    private String avatar;
+
     @Column(nullable = false)
     private Boolean status; // true: bình thường, false: bị khóa
 

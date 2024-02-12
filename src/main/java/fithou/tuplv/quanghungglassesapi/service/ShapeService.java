@@ -20,6 +20,8 @@ public interface ShapeService {
 
     ShapeResponse update(ShapeRequest shapeRequest);
 
+    void deleteById(Long id);
+
     void deleteByIds(Long[] ids);
 
     boolean existsByName(String name);

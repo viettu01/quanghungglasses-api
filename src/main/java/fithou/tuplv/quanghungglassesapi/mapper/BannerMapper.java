@@ -22,7 +22,7 @@ public class BannerMapper {
 
     public Banner convertToEntity(BannerRequest bannerRequest) {
         Banner banner = modelMapper.map(bannerRequest, Banner.class);
-        banner.setStaff(staffRepository.findById(bannerRequest.getStaffId()).orElse(null));
+        banner.setStaff(staffRepository.findByAccountEmail(bannerRequest.getStaffEmail()).orElse(null));
         return banner;
     }
 }

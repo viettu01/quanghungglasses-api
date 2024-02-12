@@ -67,9 +67,13 @@ public class BrandRestController {
         }
     }
 
-    @DeleteMapping({"/", ""})
-    public ResponseEntity<?> delete(@RequestBody Long[] ids) {
-        brandService.deleteByIds(ids);
-        return ResponseEntity.ok().build();
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            brandService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

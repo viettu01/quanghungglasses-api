@@ -9,6 +9,7 @@ import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.BrandRepository;
 import fithou.tuplv.quanghungglassesapi.service.BrandService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_BRAND_ALREADY_EXISTS;
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_BRAND_NOT_FOUND;
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -65,12 +66,20 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        Brand brand = brandRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_BRAND_NOT_FOUND));
+        if (!brand.getProducts().isEmpty())
+            throw new RuntimeException(ERROR_BRAND_HAS_PRODUCTS);
+        brandRepository.deleteById(id);
+    }
+
+    @Override
     public void deleteByIds(Long[] ids) {
         for (Long id : ids) {
             try {
                 brandRepository.deleteById(id);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }

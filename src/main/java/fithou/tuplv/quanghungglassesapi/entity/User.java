@@ -29,7 +29,4 @@ public abstract class User extends BaseEntity {
 
     @Column
     private Date birthday;
-
-    @Column(length = 100)
-    private String avatar;
 }

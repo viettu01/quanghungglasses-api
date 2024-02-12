@@ -67,9 +67,13 @@ public class OriginRestController {
         }
     }
 
-    @DeleteMapping({"/", ""})
-    public ResponseEntity<?> delete(@RequestBody Long[] ids) {
-        originService.deleteByIds(ids);
-        return ResponseEntity.ok().build();
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            originService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

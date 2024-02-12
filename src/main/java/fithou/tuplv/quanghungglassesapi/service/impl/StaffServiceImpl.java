@@ -3,7 +3,6 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.StaffRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.StaffResponse;
-import fithou.tuplv.quanghungglassesapi.entity.Staff;
 import fithou.tuplv.quanghungglassesapi.mapper.UserMapper;
 import fithou.tuplv.quanghungglassesapi.repository.StaffRepository;
 import fithou.tuplv.quanghungglassesapi.service.StaffService;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.DIR_FILE_STAFF;
 
 @Service
 @Transactional
@@ -31,12 +28,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public StaffResponse create(StaffRequest staffRequest) {
-        Staff staff = userMapper.convertToEntity(staffRequest);
-        if (!staffRequest.getAvatarFile().isEmpty()) {
-            String avatar = storageService.saveImageFile(DIR_FILE_STAFF, staffRequest.getAvatarFile());
-            staff.setAvatar(avatar);
-        }
-        return userMapper.convertToResponse(staffRepository.save(staff));
+        return userMapper.convertToResponse(staffRepository.save(userMapper.convertToEntity(staffRequest)));
     }
 
     @Override

@@ -9,6 +9,7 @@ import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.MaterialRepository;
 import fithou.tuplv.quanghungglassesapi.service.MaterialService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_MATERIAL_ALREADY_EXISTS;
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_MATERIAL_NOT_FOUND;
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -63,12 +64,20 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        Material material = materialRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_MATERIAL_NOT_FOUND));
+        if (!material.getProducts().isEmpty())
+            throw new RuntimeException(ERROR_MATERIAL_HAS_PRODUCTS);
+        materialRepository.deleteById(id);
+    }
+
+    @Override
     public void deleteByIds(Long[] ids) {
         for (Long id : ids) {
             try {
                 materialRepository.deleteById(id);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }

@@ -20,6 +20,8 @@ public interface MaterialService {
 
     MaterialResponse update(MaterialRequest materialRequest);
 
+    void deleteById(Long id);
+
     void deleteByIds(Long[] ids);
 
     boolean existsByName(String name);

@@ -32,18 +32,23 @@ public class Constants {
 
     public static final String ERROR_MATERIAL_NOT_FOUND = "Chất liệu không tồn tại";
     public static final String ERROR_MATERIAL_ALREADY_EXISTS = "Chất liệu đã tồn tại";
+    public static final String ERROR_MATERIAL_HAS_PRODUCTS = "Chất liệu đang có sản phẩm";
 
     public static final String ERROR_ORIGIN_NOT_FOUND = "Xuất xứ không tồn tại";
     public static final String ERROR_ORIGIN_ALREADY_EXISTS = "Xuất xứ đã tồn tại";
+    public static final String ERROR_ORIGIN_HAS_PRODUCTS = "Xuất xứ đang có sản phẩm";
 
     public static final String ERROR_SHAPE_NOT_FOUND = "Hình dạng không tồn tại";
     public static final String ERROR_SHAPE_ALREADY_EXISTS = "Hình dạng đã tồn tại";
+    public static final String ERROR_SHAPE_HAS_PRODUCTS = "Hình dạng đang có sản phẩm";
 
     public static final String ERROR_BRAND_NOT_FOUND = "Thương hiệu không tồn tại";
     public static final String ERROR_BRAND_ALREADY_EXISTS = "Thương hiệu đã tồn tại";
+    public static final String ERROR_BRAND_HAS_PRODUCTS = "Thương hiệu đang có sản phẩm";
 
     public static final String ERROR_SUPPLIER_NOT_FOUND = "Nhà cung cấp không tồn tại";
     public static final String ERROR_SUPPLIER_NAME_ALREADY_EXISTS = "Tên nhà cung cấp đã tồn tại";
+    public static final String ERROR_SUPPLIER_HAS_RECEIPT = "Nhà cung cấp đang có hóa đơn";
 
     public static final String ERROR_PRODUCT_NOT_FOUND = "Sản phẩm không tồn tại";
     public static final String ERROR_PRODUCT_NAME_ALREADY_EXISTS = "Tên sản phẩm đã tồn tại";

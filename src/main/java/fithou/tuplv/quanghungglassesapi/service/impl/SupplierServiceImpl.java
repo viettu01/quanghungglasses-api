@@ -9,6 +9,7 @@ import fithou.tuplv.quanghungglassesapi.mapper.SupplierMapper;
 import fithou.tuplv.quanghungglassesapi.repository.SupplierRepository;
 import fithou.tuplv.quanghungglassesapi.service.SupplierService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -66,12 +68,20 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        Supplier supplier = supplierRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_SUPPLIER_NOT_FOUND));
+        if (!supplier.getReceipts().isEmpty())
+            throw new RuntimeException(ERROR_SUPPLIER_HAS_RECEIPT);
+        supplierRepository.deleteById(id);
+    }
+
+    @Override
     public void deleteByIds(Long[] ids) {
         for (Long id : ids) {
             try {
                 supplierRepository.deleteById(id);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }

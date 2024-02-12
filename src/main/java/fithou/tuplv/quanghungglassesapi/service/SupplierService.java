@@ -20,6 +20,8 @@ public interface SupplierService {
 
     SupplierResponse update(SupplierRequest supplierRequest);
 
+    void deleteById(Long id);
+
     void deleteByIds(Long[] ids);
 
     boolean existsByName(String name);

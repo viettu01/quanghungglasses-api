@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,9 +28,14 @@ public class AccountRequest {
     @Length(min = 6, max = 20, message = "Mật khẩu phải từ 6 đến 20 ký tự")
     private String password;
 
+    private MultipartFile avatarFile;
+
     @NotNull(message = "Trạng thái không được để trống")
     private Boolean status;
 
     @NotEmpty(message = "Quyền không được để trống")
     private List<String> roleName = new ArrayList<>();
+
+    @NotNull(message = "Trạng thái xác thực email không được để trống")
+    private Boolean isVerifiedEmail;
 }

@@ -29,6 +29,6 @@ public class BannerRequest implements Serializable {
     @NotNull(message = "Trạng thái không được để trống")
     private Boolean status;
 
-    @NotNull(message = "Mã người dùng không được để trống")
-    private Long staffId;
+    @NotBlank(message = "Email không được để trống")
+    private String staffEmail;
 }

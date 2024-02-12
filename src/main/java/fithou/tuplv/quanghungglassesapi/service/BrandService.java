@@ -20,6 +20,8 @@ public interface BrandService {
 
     BrandResponse update(BrandRequest brandRequest);
 
+    void deleteById(Long id);
+
     void deleteByIds(Long[] ids);
 
     boolean existsByName(String name);

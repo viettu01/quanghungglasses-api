@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse update(CustomerRequest customerRequest) {
-        Customer customer = customerRepository.findByAccountEmail(customerRequest.getEmail())
+        Customer customer = customerRepository.findById(customerRequest.getId())
                 .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS));
 
         return userMapper.convertToResponse(customerRepository.save(customer));

@@ -9,6 +9,7 @@ import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.OriginRepository;
 import fithou.tuplv.quanghungglassesapi.service.OriginService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_ORIGIN_ALREADY_EXISTS;
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_ORIGIN_NOT_FOUND;
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -63,12 +64,20 @@ public class OriginServiceImpl implements OriginService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        Origin origin = originRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_ORIGIN_NOT_FOUND));
+        if (!origin.getProducts().isEmpty())
+            throw new RuntimeException(ERROR_ORIGIN_HAS_PRODUCTS);
+        originRepository.deleteById(id);
+    }
+
+    @Override
     public void deleteByIds(Long[] ids) {
         for (Long id : ids) {
             try {
                 originRepository.deleteById(id);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }
