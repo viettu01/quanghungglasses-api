@@ -14,6 +14,8 @@ public interface BannerService {
 
     PaginationDTO<BannerResponse> findByNameContaining(String name, Pageable pageable);
 
+    BannerResponse findById(Long id);
+
     BannerResponse create(BannerRequest bannerRequest);
 
     BannerResponse update(BannerRequest bannerRequest);

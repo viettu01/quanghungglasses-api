@@ -51,6 +51,11 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
+    public BannerResponse findById(Long id) {
+        return bannerMapper.convertToResponse(bannerRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_BANNER_NOT_FOUND)));
+    }
+
+    @Override
     public BannerResponse create(BannerRequest bannerRequest) {
         Banner banner = bannerMapper.convertToEntity(bannerRequest);
         if (!bannerRequest.getMultipartFileImage().isEmpty())

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -40,7 +41,16 @@ public class BannerRestController {
         return ResponseEntity.ok().body(bannerService.findAll(pageable));
     }
 
-    @PostMapping({"/", ""})
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(bannerService.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = {"/", ""}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> create(@Valid @ModelAttribute BannerRequest bannerRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -68,8 +78,8 @@ public class BannerRestController {
         }
     }
 
-    @DeleteMapping({"/", ""})
-    public ResponseEntity<?> delete(@RequestBody Long id) {
+    @DeleteMapping({"{id}"})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             bannerService.deleteById(id);
             return ResponseEntity.ok().build();
