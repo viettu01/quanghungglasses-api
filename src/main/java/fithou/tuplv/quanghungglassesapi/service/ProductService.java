@@ -8,6 +8,10 @@ import org.springframework.data.domain.Pageable;
 public interface ProductService {
     PaginationDTO<ProductResponse> findAll(Pageable pageable);
 
+    PaginationDTO<ProductResponse> findByNameContaining(String name, Pageable pageable);
+
+    PaginationDTO<ProductResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
+
     ProductResponse findBySlug(String slug);
 
     PaginationDTO<ProductResponse> filter(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable);
@@ -15,4 +19,8 @@ public interface ProductService {
     ProductResponse create(ProductRequest productRequest);
 
     ProductResponse update(ProductRequest productRequest);
+
+    Long countByStatus(Boolean status);
+
+    Long countAll();
 }

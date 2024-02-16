@@ -15,6 +15,7 @@ import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @Service
-//@Transactional
+@Transactional
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     final ProductMapper productMapper;
@@ -35,6 +36,20 @@ public class ProductServiceImpl implements ProductService {
     public PaginationDTO<ProductResponse> findAll(Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(
                 productRepository.findAll(pageable).map(productMapper::convertToResponse)
+        );
+    }
+
+    @Override
+    public PaginationDTO<ProductResponse> findByNameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                productRepository.findByNameContaining(name, pageable).map(productMapper::convertToResponse)
+        );
+    }
+
+    @Override
+    public PaginationDTO<ProductResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                productRepository.findByNameContainingAndStatus(name, status, pageable).map(productMapper::convertToResponse)
         );
     }
 
@@ -131,5 +146,15 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException(e.getMessage());
         }
         return productMapper.convertToResponse(productExists);
+    }
+
+    @Override
+    public Long countByStatus(Boolean status) {
+        return productRepository.countByStatus(status);
+    }
+
+    @Override
+    public Long countAll() {
+        return productRepository.count();
     }
 }

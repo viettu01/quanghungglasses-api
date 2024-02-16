@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -23,6 +24,8 @@ public class ProductResponse implements Serializable {
     private String description;
     private String slug;
     private boolean status;
+    private Date createdDate;
+    private Date updatedDate;
 
     private Long categoryId;
     private String categoryName;

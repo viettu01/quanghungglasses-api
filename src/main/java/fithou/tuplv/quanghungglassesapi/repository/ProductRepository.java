@@ -10,9 +10,15 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findBySlug(String slug);
 
+    Page<Product> findByNameContaining(String name, Pageable pageable);
+
+    Page<Product> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
+
     Page<Product> findByCategoryIdAndMaterialIdAndOriginIdAndShapeIdAndBrandIdAndPriceBetween(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable);
 
     boolean existsByName(String name);
 
     boolean existsBySlug(String slug);
+
+    Long countByStatus(Boolean status);
 }
