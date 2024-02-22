@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "product_details")
@@ -23,6 +22,9 @@ public class ProductDetails extends BaseEntity implements Serializable {
     @Column(length = 20, nullable = false)
     private String color;
 
+//    @Column(length = 100, nullable = false)
+//    private String image;
+
     @Column(nullable = false)
     private Integer quantity;
 
@@ -30,10 +32,10 @@ public class ProductDetails extends BaseEntity implements Serializable {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ElementCollection
-    @CollectionTable(name = "product_details_image", joinColumns = @JoinColumn(name = "product_details_id"))
-    @Column(name = "image", length = 100, nullable = false)
-    private List<String> images = new ArrayList<>();
+//    @ElementCollection
+//    @CollectionTable(name = "product_details_image", joinColumns = @JoinColumn(name = "product_details_id"))
+//    @Column(name = "image", length = 100, nullable = false)
+//    private List<String> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "productDetails")
     private List<ReceiptDetails> receiptDetails;
@@ -43,4 +45,7 @@ public class ProductDetails extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "productDetails")
     private List<OrderDetails> orderDetails;
+
+    @OneToMany(mappedBy = "productDetails")
+    private List<WarrantyDetails> warrantyDetails;
 }

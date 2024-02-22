@@ -63,6 +63,8 @@ public class ProductRequest implements Serializable {
     @NotNull(message = "Thương hiệu không được để trống")
     private Long brandId;
 
+    private List<MultipartFile> imageFiles = new ArrayList<>();
+
     @NotEmpty(message = "Danh sách chi tiết sản phẩm không được để trống")
     @Valid
     private List<ProductDetailsRequest> productDetails = new ArrayList<>();

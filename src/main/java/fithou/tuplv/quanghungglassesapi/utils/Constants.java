@@ -55,6 +55,7 @@ public class Constants {
     public static final String ERROR_PRODUCT_DETAILS_COLOR_ALREADY_EXISTS = "Màu sắc của sản phẩm đã tồn tại";
     public static final String ERROR_PRODUCT_THUMBNAIL_NOT_EMPTY = "Ảnh sản phẩm không được để trống";
     public static final String ERROR_PRODUCT_DETAILS_IMAGE_NOT_EMPTY = "Ảnh chi tiết sản phẩm không được để trống";
+    public static final String ERROR_PRODUCT_IMAGE_NOT_EMPTY = "Ảnh sản phẩm không được để trống";
 
     public static final String DIR_FILE_BANNER = "banners";
     public static final String DIR_FILE_PRODUCT = "products";

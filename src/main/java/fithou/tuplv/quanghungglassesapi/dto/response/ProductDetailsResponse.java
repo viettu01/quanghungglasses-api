@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +15,8 @@ import java.util.List;
 public class ProductDetailsResponse implements Serializable {
     private Long id;
     private String color;
+    private Integer quantity;
     private Date createdDate;
     private Date updatedDate;
-    private List<String> images;
+//    private String image;
 }

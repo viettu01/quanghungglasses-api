@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity(name = "product_sale")
+@Entity(name = "sale_details")
 @Getter
 @Setter
 @NoArgsConstructor

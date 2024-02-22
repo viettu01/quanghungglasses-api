@@ -6,28 +6,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-@Entity(name = "order_details")
+@Entity(name = "warranty_details")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetails {
+public class WarrantyDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Double price;
-
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
-
     @ManyToOne
     @JoinColumn(name = "product_details_id", nullable = false)
     private ProductDetails productDetails;
+
+    @Column(nullable = false)
+    private Integer warrantyType; // 0: Đổi, 1: Sửa
+
+    @ManyToOne
+    @JoinColumn(name = "warranty_id", nullable = false)
+    private Warranty warranty;
 }

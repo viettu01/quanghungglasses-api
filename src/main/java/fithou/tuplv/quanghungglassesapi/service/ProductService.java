@@ -14,6 +14,8 @@ public interface ProductService {
 
     ProductResponse findBySlug(String slug);
 
+    ProductResponse findById(Long id);
+
     PaginationDTO<ProductResponse> filter(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable);
 
     ProductResponse create(ProductRequest productRequest);
@@ -23,4 +25,8 @@ public interface ProductService {
     Long countByStatus(Boolean status);
 
     Long countAll();
+
+    void deleteById(Long id);
+
+    void deleteImageById(Long id, String imageName);
 }

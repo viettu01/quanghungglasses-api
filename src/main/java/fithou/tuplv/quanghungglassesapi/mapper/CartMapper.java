@@ -44,7 +44,7 @@ public class CartMapper {
     public CartDetailsResponse convertToResponse(CartDetails cartDetails) {
         CartDetailsResponse cartDetailsResponse = modelMapper.map(cartDetails, CartDetailsResponse.class);
         cartDetailsResponse.setProductDetailsId(cartDetails.getProductDetails().getId());
-        cartDetailsResponse.setProductDetailsImage(cartDetails.getProductDetails().getImages().get(0));
+//        cartDetailsResponse.setProductDetailsImage(cartDetails.getProductDetails().getImage());
         cartDetailsResponse.setProductName(cartDetails.getProductDetails().getProduct().getName());
         cartDetailsResponse.setProductColor(cartDetails.getProductDetails().getColor());
 

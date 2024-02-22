@@ -1,6 +1,5 @@
 package fithou.tuplv.quanghungglassesapi.dto.request;
 
-import fithou.tuplv.quanghungglassesapi.validation.ListFileMaxSizeAndIsImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,6 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -33,6 +30,8 @@ public class ProductDetailsRequest implements Serializable {
     @DecimalMin(value = "0", message = "Số lượng sản phẩm phải > 0")
     private Integer quantity;
 
-    @ListFileMaxSizeAndIsImage(max = 1024 * 1024)
-    private List<MultipartFile> imageFiles = new ArrayList<>();
+//    @ListFileMaxSizeAndIsImage(max = 1024 * 1024)
+//    private List<MultipartFile> imageFiles = new ArrayList<>();
+
+//    private MultipartFile imageFile;
 }

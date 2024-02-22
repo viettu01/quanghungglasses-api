@@ -60,6 +60,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductResponse findById(Long id) {
+        return productMapper.convertToResponse(productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND)));
+    }
+
+    @Override
     public PaginationDTO<ProductResponse> filter(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(
                 productRepository
@@ -79,26 +85,32 @@ public class ProductServiceImpl implements ProductService {
         if (productRequest.getProductDetails().stream().map(ProductDetailsRequest::getColor).collect(Collectors.toSet()).size()
                 != productRequest.getProductDetails().size())
             throw new RuntimeException(ERROR_PRODUCT_DETAILS_COLOR_ALREADY_EXISTS);
-        for (ProductDetailsRequest productDetailsRequest : productRequest.getProductDetails())
-            for (MultipartFile file : productDetailsRequest.getImageFiles())
-                if (file.isEmpty())
-                    throw new RuntimeException(ERROR_PRODUCT_DETAILS_IMAGE_NOT_EMPTY);
+        if (productRequest.getImageFiles().isEmpty())
+            throw new RuntimeException(ERROR_PRODUCT_IMAGE_NOT_EMPTY);
 
         Product product = productMapper.convertToEntity(productRequest);
         product.setThumbnail(storageService.saveImageFile(DIR_FILE_PRODUCT, productRequest.getThumbnailFile()));
-        productRepository.save(product);
+        for (MultipartFile imageFile : productRequest.getImageFiles())
+            product.getImages().add(storageService.saveImageFile(DIR_FILE_PRODUCT, imageFile));
+        try {
+            productRepository.save(product);
+        } catch (Exception e) {
+            storageService.deleteFile(product.getThumbnail());
+            product.getImages().forEach(storageService::deleteFile);
+            throw new RuntimeException(e.getMessage());
+        }
+
         product.getProductDetails().clear();
         try {
             for (ProductDetailsRequest productDetailsRequest : productRequest.getProductDetails()) {
                 ProductDetails productDetails = productMapper.convertToEntity(productDetailsRequest);
                 productDetails.setProduct(product);
-                for (MultipartFile file : productDetailsRequest.getImageFiles())
-                    productDetails.getImages().add(storageService.saveImageFile(DIR_FILE_PRODUCT, file));
                 productDetailsRepository.save(productDetails);
                 product.getProductDetails().add(productDetails);
             }
         } catch (Exception e) {
             storageService.deleteFile(product.getThumbnail());
+            product.getImages().forEach(storageService::deleteFile);
             throw new RuntimeException(e.getMessage());
         }
         return productMapper.convertToResponse(product);
@@ -106,7 +118,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse update(ProductRequest productRequest) {
-        String oldFileName = "";
         Product productExists = productRepository.findById(productRequest.getId()).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
 
         if (!productExists.getName().equalsIgnoreCase(productRequest.getName()) && productRepository.existsByName(productRequest.getName()))
@@ -114,9 +125,13 @@ public class ProductServiceImpl implements ProductService {
         if (!productExists.getSlug().equalsIgnoreCase(productRequest.getSlug()) && productRepository.existsBySlug(productRequest.getSlug()))
             throw new RuntimeException(ERROR_SLUG_ALREADY_EXISTS);
         for (ProductDetailsRequest productDetailsRequest : productRequest.getProductDetails()) {
-            ProductDetails productDetails = productDetailsRepository.findById(productDetailsRequest.getId()).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
-            if (!productDetails.getColor().equalsIgnoreCase(productDetailsRequest.getColor())
+            ProductDetails productDetails = productDetailsRepository
+                    .findByIdAndProductId(productDetailsRequest.getId(), productRequest.getId())
+                    .orElse(null);
+            if (productDetails != null && !productDetails.getColor().equalsIgnoreCase(productDetailsRequest.getColor())
                     && productExists.getProductDetails().stream().map(ProductDetails::getColor).collect(Collectors.toSet()).contains(productDetailsRequest.getColor()))
+                throw new RuntimeException(ERROR_PRODUCT_DETAILS_COLOR_ALREADY_EXISTS);
+            else if (productDetails == null && productExists.getProductDetails().stream().map(ProductDetails::getColor).collect(Collectors.toSet()).contains(productDetailsRequest.getColor()))
                 throw new RuntimeException(ERROR_PRODUCT_DETAILS_COLOR_ALREADY_EXISTS);
         }
 
@@ -124,25 +139,33 @@ public class ProductServiceImpl implements ProductService {
         if (productRequest.getThumbnailFile().isEmpty())
             product.setThumbnail(productExists.getThumbnail());
         else {
-            oldFileName = productExists.getThumbnail();
+            storageService.deleteFile(productExists.getThumbnail());
             product.setThumbnail(storageService.saveImageFile(DIR_FILE_PRODUCT, productRequest.getThumbnailFile()));
         }
+        product.getImages().addAll(productExists.getImages());
+        for (MultipartFile file : productRequest.getImageFiles())
+            if (!file.isEmpty())
+                product.getImages().add(storageService.saveImageFile(DIR_FILE_PRODUCT, file));
         productRepository.save(product);
         try {
-            // Cập nhật dữ liệu cho productDetails và các ảnh cũ sẽ được giữ lại và thêm ảnh mới
             for (ProductDetailsRequest productDetailsRequest : productRequest.getProductDetails()) {
-                ProductDetails productDetails = productDetailsRepository.findById(productDetailsRequest.getId()).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
-                productDetails.setColor(productDetailsRequest.getColor());
-                productDetails.setQuantity(productDetailsRequest.getQuantity());
-                for (MultipartFile file : productDetailsRequest.getImageFiles())
-                    if (!file.isEmpty())
-                        productDetails.getImages().add(storageService.saveImageFile(DIR_FILE_PRODUCT, file));
-
-                productDetailsRepository.save(productDetails);
+                ProductDetails productDetails =
+                        productDetailsRepository
+                                .findByIdAndProductId(productDetailsRequest.getId(), product.getId())
+                                .orElse(null);
+                if (productDetails == null) {
+                    ProductDetails newProductDetails = productMapper.convertToEntity(productDetailsRequest);
+                    newProductDetails.setProduct(product);
+                    productDetailsRepository.save(newProductDetails);
+                } else {
+                    productDetails.setColor(productDetailsRequest.getColor());
+                    productDetails.setQuantity(productDetailsRequest.getQuantity());
+                    productDetailsRepository.save(productDetails);
+                }
             }
-            storageService.deleteFile(oldFileName);
         } catch (Exception e) {
-            storageService.deleteFile(product.getThumbnail());
+//            e.printStackTrace();
+//            storageService.deleteFile(product.getThumbnail());
             throw new RuntimeException(e.getMessage());
         }
         return productMapper.convertToResponse(productExists);
@@ -156,5 +179,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long countAll() {
         return productRepository.count();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
+
+    @Override
+    public void deleteImageById(Long id, String imageName) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
+        for (int i = 0; i < product.getImages().size(); i++) {
+            if (product.getImages().get(i).equals(imageName)) {
+                product.getImages().remove(i);
+                storageService.deleteFile(imageName);
+                productRepository.save(product);
+            }
+        }
     }
 }

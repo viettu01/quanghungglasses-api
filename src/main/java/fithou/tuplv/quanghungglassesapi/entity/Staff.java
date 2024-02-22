@@ -30,6 +30,9 @@ public class Staff extends User implements Serializable {
     @OneToMany(mappedBy = "staff")
     private List<Sale> sales;
 
+    @OneToMany(mappedBy = "staff")
+    private List<Warranty> warranty;
+
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;

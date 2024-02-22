@@ -66,4 +66,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<OrderDetails> orderDetails;
+
+    @OneToMany(mappedBy = "order")
+    private List<Warranty> warranties;
 }

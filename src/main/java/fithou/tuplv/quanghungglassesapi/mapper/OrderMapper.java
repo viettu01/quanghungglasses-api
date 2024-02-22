@@ -45,7 +45,7 @@ public class OrderMapper {
         orderDetailsResponse.setProductName(orderDetails.getProductDetails().getProduct().getName());
         orderDetailsResponse.setProductColor(orderDetails.getProductDetails().getColor());
         orderDetailsResponse.setProductPrice(orderDetails.getProductDetails().getProduct().getPrice());
-        orderDetailsResponse.setProductDetailsImage(orderDetails.getProductDetails().getImages().get(0));
+//        orderDetailsResponse.setProductDetailsImage(orderDetails.getProductDetails().getImage());
         return orderDetailsResponse;
     }
 

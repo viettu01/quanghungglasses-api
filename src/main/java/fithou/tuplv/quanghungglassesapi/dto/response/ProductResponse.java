@@ -42,5 +42,7 @@ public class ProductResponse implements Serializable {
     private Long brandId;
     private String brandName;
 
+    private List<String> images = new ArrayList<>();
+
     private List<ProductDetailsResponse> productDetails = new ArrayList<>();
 }

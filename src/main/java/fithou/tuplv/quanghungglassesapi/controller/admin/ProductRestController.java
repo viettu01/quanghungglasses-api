@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,10 +46,10 @@ public class ProductRestController {
         return ResponseEntity.ok().body(productService.findAll(pageable));
     }
 
-    @GetMapping("/{slug}")
-    public ResponseEntity<?> getBySlug(@PathVariable String slug) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok().body(productService.findBySlug(slug));
+            return ResponseEntity.ok().body(productService.findById(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -80,6 +81,7 @@ public class ProductRestController {
         try {
             return ResponseEntity.ok().body(productService.update(productRequest));
         } catch (Exception e) {
+//            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -95,5 +97,27 @@ public class ProductRestController {
     @GetMapping("/count-all")
     public ResponseEntity<?> countAll() {
         return ResponseEntity.ok().body(Map.of("totalElements", productService.countAll()));
+    }
+
+//    @DeleteMapping({"/{id}"})
+//    public ResponseEntity<?> delete(@PathVariable Long id) {
+//        try {
+//            productService.deleteById(id);
+//            return ResponseEntity.ok().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+
+    @DeleteMapping("/{id}/images/**")
+    public ResponseEntity<?> deleteImage(HttpServletRequest request, @PathVariable Long id) {
+        String path = request.getRequestURI().substring(request.getContextPath().length() + "/api/admin/product/".length() + id.toString().length() + "/images/".length());
+        try {
+            productService.deleteImageById(id, path);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
