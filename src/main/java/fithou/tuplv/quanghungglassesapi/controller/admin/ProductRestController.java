@@ -86,6 +86,15 @@ public class ProductRestController {
         }
     }
 
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(productService.updateStatus(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/count")
     public ResponseEntity<?> countByStatus(@RequestParam Boolean status) {
         HashMap<String, String> map = new HashMap<>();
@@ -99,15 +108,15 @@ public class ProductRestController {
         return ResponseEntity.ok().body(Map.of("totalElements", productService.countAll()));
     }
 
-//    @DeleteMapping({"/{id}"})
-//    public ResponseEntity<?> delete(@PathVariable Long id) {
-//        try {
-//            productService.deleteById(id);
-//            return ResponseEntity.ok().build();
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            productService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @DeleteMapping("/{id}/images/**")
     public ResponseEntity<?> deleteImage(HttpServletRequest request, @PathVariable Long id) {
@@ -116,7 +125,17 @@ public class ProductRestController {
             productService.deleteImageById(id, path);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/details/{id}")
+    public ResponseEntity<?> deleteProductDetails(@PathVariable Long id) {
+        try {
+            productService.deleteProductDetailsById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

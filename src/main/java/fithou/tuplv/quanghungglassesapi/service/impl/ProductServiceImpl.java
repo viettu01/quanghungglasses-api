@@ -172,6 +172,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductResponse updateStatus(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
+        product.setStatus(!product.getStatus());
+        productRepository.save(product);
+        return productMapper.convertToResponse(product);
+    }
+
+    @Override
     public Long countByStatus(Boolean status) {
         return productRepository.countByStatus(status);
     }
@@ -183,7 +191,32 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
+        for (ProductDetails productDetails : product.getProductDetails()) {
+            if (!productDetails.getReceiptDetails().isEmpty())
+                throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_RECEIPT);
+            if (!productDetails.getOrderDetails().isEmpty())
+                throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_ORDER);
+            if (!productDetails.getWarrantyDetails().isEmpty())
+                throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_WARRANTY);
+        }
+        storageService.deleteFile(product.getThumbnail());
+        product.getImages().forEach(storageService::deleteFile);
+        productDetailsRepository.deleteAll(product.getProductDetails());
+        productRepository.deleteById(id);
+    }
 
+    @Override
+    public void deleteProductDetailsById(Long id) {
+        ProductDetails productDetails = productDetailsRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_DETAILS_NOT_FOUND));
+
+        if (!productDetails.getReceiptDetails().isEmpty())
+            throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_RECEIPT);
+        if (!productDetails.getOrderDetails().isEmpty())
+            throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_ORDER);
+        if (!productDetails.getWarrantyDetails().isEmpty())
+            throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_WARRANTY);
+        productDetailsRepository.deleteById(id);
     }
 
     @Override

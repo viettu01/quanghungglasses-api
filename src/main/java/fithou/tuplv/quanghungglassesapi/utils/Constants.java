@@ -51,11 +51,15 @@ public class Constants {
     public static final String ERROR_SUPPLIER_HAS_RECEIPT = "Nhà cung cấp đang có hóa đơn";
 
     public static final String ERROR_PRODUCT_NOT_FOUND = "Sản phẩm không tồn tại";
+    public static final String ERROR_PRODUCT_DETAILS_NOT_FOUND = "Chi tiết sản phẩm không tồn tại";
     public static final String ERROR_PRODUCT_NAME_ALREADY_EXISTS = "Tên sản phẩm đã tồn tại";
     public static final String ERROR_PRODUCT_DETAILS_COLOR_ALREADY_EXISTS = "Màu sắc của sản phẩm đã tồn tại";
     public static final String ERROR_PRODUCT_THUMBNAIL_NOT_EMPTY = "Ảnh sản phẩm không được để trống";
     public static final String ERROR_PRODUCT_DETAILS_IMAGE_NOT_EMPTY = "Ảnh chi tiết sản phẩm không được để trống";
     public static final String ERROR_PRODUCT_IMAGE_NOT_EMPTY = "Ảnh sản phẩm không được để trống";
+    public static final String ERROR_PRODUCT_DETAILS_HAS_ORDER = "Chi tiết sản phẩm đang có đơn hàng";
+    public static final String ERROR_PRODUCT_DETAILS_HAS_RECEIPT = "Chi tiết sản phẩm đang có hóa đơn";
+    public static final String ERROR_PRODUCT_DETAILS_HAS_WARRANTY = "Chi tiết sản phẩm đang có phiếu bảo hành";
 
     public static final String DIR_FILE_BANNER = "banners";
     public static final String DIR_FILE_PRODUCT = "products";

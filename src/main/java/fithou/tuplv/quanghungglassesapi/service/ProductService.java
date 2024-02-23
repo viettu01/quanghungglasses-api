@@ -22,11 +22,15 @@ public interface ProductService {
 
     ProductResponse update(ProductRequest productRequest);
 
+    ProductResponse updateStatus(Long id);
+
     Long countByStatus(Boolean status);
 
     Long countAll();
 
     void deleteById(Long id);
+
+    void deleteProductDetailsById(Long id);
 
     void deleteImageById(Long id, String imageName);
 }
