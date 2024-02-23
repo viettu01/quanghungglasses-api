@@ -1,6 +1,7 @@
 package fithou.tuplv.quanghungglassesapi.service;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.AccountRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.ForgotPasswordRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.AccountResponse;
 
 public interface AccountService {
@@ -11,4 +12,7 @@ public interface AccountService {
     AccountResponse update(AccountRequest accountRequest);
 
     void delete(Long[] ids);
+
+    void forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
+
 }

@@ -12,20 +12,18 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-    @NotBlank(message = "Họ tên không được để trống")
-    @Length(max = 30, message = "Họ tên không được quá 30 ký tự")
-    private String fullname;
-
-    @NotBlank(message = "Email không được để trống")
-    @Length(max = 50, message = "Email không được quá 50 ký tự")
-    @Email(message = "Email không đúng định dạng")
+@NoArgsConstructor
+public class ForgotPasswordRequest {
+    @NotBlank(message = "Email không được để trống")
+    @Email(message = "Email không hợp lệ")
     private String email;
 
-    @NotBlank(message = "Mật khẩu không được để trống")
+    @NotBlank(message = "Mã xác minh không được để trống")
+    private String verificationCode;
+
+    @NotBlank(message = "Mật khẩu không được để trống")
     @Length(min = 6, max = 20, message = "Mật khẩu phải từ 6 đến 20 ký tự")
     @Pattern(regexp = "^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\\D*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{9,}$", message = "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt")
-    private String password;
+    private String newPassword;
 }

@@ -21,6 +21,7 @@ public class Constants {
     public static final String SUCCESS_REGISTER = "Đăng ký thành công";
     public static final String SUCCESS_VERIFY_EMAIL = "Xác minh email thành công";
     public static final String SUCCESS_RESEND_VERIFICATION_CODE = "Đã gửi lại mã xác minh";
+    public static final String ERROR_ACCOUNT_IS_LOCKED = "Tài khoản của bạn bị khóa";
 
     public static final String ERROR_BANNER_NOT_FOUND = "Banner không tồn tại";
 

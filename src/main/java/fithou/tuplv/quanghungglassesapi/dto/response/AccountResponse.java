@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AccountResponse {
     private String email;
+    private String avatar;
     private Boolean status;
     private String verificationCode;
     private Boolean isVerifiedEmail;

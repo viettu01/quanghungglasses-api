@@ -87,6 +87,9 @@ public class CustomerServiceImpl implements CustomerService {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND));
 
+        if (!account.getStatus())
+            throw new RuntimeException(ERROR_ACCOUNT_IS_LOCKED);
+
         account.setVerificationCode(RandomStringUtils.randomNumeric(6));
         account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
         accountRepository.save(account);

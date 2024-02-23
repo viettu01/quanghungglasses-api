@@ -1,5 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.controller;
 
+import fithou.tuplv.quanghungglassesapi.dto.request.ForgotPasswordRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.LoginRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.VerifyEmailRequest;
@@ -99,6 +100,22 @@ public class AuthRestController {
         try {
             customerService.verifyEmail(verifyEmailRequest);
             return ResponseEntity.ok().body(Map.of("message", SUCCESS_VERIFY_EMAIL));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest, BindingResult result) {
+        if (result.hasErrors()) {
+            HashMap<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        try {
+            accountService.forgotPassword(forgotPasswordRequest);
+            return ResponseEntity.ok().body(Map.of("message", "Đổi mật khẩu thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
