@@ -1,9 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.controller;
 
-import fithou.tuplv.quanghungglassesapi.dto.request.ForgotPasswordRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.LoginRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.VerifyEmailRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.*;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.LoginResponse;
 import fithou.tuplv.quanghungglassesapi.security.CustomUserDetails;
@@ -28,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.SUCCESS_VERIFY_EMAIL;
 
 @RestController
 @RequestMapping("/api")
@@ -115,6 +111,22 @@ public class AuthRestController {
 
         try {
             accountService.forgotPassword(forgotPasswordRequest);
+            return ResponseEntity.ok().body(Map.of("message", "Đổi mật khẩu thành công"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, BindingResult result) {
+        if (result.hasErrors()) {
+            HashMap<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        try {
+            accountService.changePassword(changePasswordRequest);
             return ResponseEntity.ok().body(Map.of("message", "Đổi mật khẩu thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

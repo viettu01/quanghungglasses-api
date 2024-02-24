@@ -1,6 +1,7 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.AccountRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.ChangePasswordRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ForgotPasswordRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.AccountResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
@@ -40,8 +41,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountResponse update(AccountRequest accountRequest) {
-        return null;
+    public AccountResponse changePassword(ChangePasswordRequest changePasswordRequest) {
+        Account account = accountRepository.findByEmail(changePasswordRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND));
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword()))
+            throw new RuntimeException(ERROR_PASSWORD_CONFIRM_MUST_MATCH_NEW);
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), account.getPassword()))
+            throw new RuntimeException(ERROR_PASSWORD_OLD_INVALID);
+        if (passwordEncoder.matches(changePasswordRequest.getNewPassword(), account.getPassword()))
+            throw new RuntimeException(ERROR_PASSWORD_NEW_MUST_DIFFERENT_OLD);
+        account.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        return userMapper.convertToResponse(accountRepository.save(account));
     }
 
     @Override

@@ -1,9 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.mapper;
 
-import fithou.tuplv.quanghungglassesapi.dto.request.AccountRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.CustomerRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.StaffRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.*;
 import fithou.tuplv.quanghungglassesapi.dto.response.AccountResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.StaffResponse;
@@ -49,6 +46,10 @@ public class UserMapper {
         account.setVerificationCode(RandomStringUtils.randomNumeric(6));
         account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
         return account;
+    }
+
+    public Account convertToEntity(ChangePasswordRequest changePasswordRequest) {
+        return modelMapper.map(changePasswordRequest, Account.class);
     }
 
     public AccountResponse convertToResponse(Account account) {

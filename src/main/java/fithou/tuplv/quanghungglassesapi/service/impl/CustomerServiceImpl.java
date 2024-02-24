@@ -63,7 +63,6 @@ public class CustomerServiceImpl implements CustomerService {
         accountRepository.save(account);
         Customer customer = modelMapper.map(registerRequest, Customer.class);
         customer.setAccount(account);
-//        customerRepository.save(customer);
         return userMapper.convertToResponse(customerRepository.save(customer));
     }
 
