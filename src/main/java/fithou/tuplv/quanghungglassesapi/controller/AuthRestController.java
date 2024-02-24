@@ -111,7 +111,7 @@ public class AuthRestController {
 
         try {
             accountService.forgotPassword(forgotPasswordRequest);
-            return ResponseEntity.ok().body(Map.of("message", "Đổi mật khẩu thành công"));
+            return ResponseEntity.ok().body(Map.of("message", "Lấy lại mật khẩu thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
