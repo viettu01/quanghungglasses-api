@@ -48,10 +48,6 @@ public class UserMapper {
         return account;
     }
 
-    public Account convertToEntity(ChangePasswordRequest changePasswordRequest) {
-        return modelMapper.map(changePasswordRequest, Account.class);
-    }
-
     public AccountResponse convertToResponse(Account account) {
         return modelMapper.map(account, AccountResponse.class);
     }
