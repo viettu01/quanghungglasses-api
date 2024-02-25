@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.Date;
+
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @Service
@@ -69,6 +71,9 @@ public class AccountServiceImpl implements AccountService {
 
         if (account.getVerificationCode() == null || !account.getVerificationCode().equals(forgotPasswordRequest.getVerificationCode()))
             throw new RuntimeException(ERROR_VERIFICATION_CODE_INVALID);
+
+        if (account.getVerificationCodeExpiredAt().before(new Date()))
+            throw new RuntimeException(ERROR_VERIFICATION_CODE_EXPIRED);
 
         account.setPassword(passwordEncoder.encode(forgotPasswordRequest.getNewPassword()));
         account.setVerificationCode(null);
