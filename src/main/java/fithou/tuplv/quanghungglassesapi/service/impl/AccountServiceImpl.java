@@ -67,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
         if (!account.getStatus())
             throw new RuntimeException(ERROR_ACCOUNT_IS_LOCKED);
 
-        if (!account.getVerificationCode().equals(forgotPasswordRequest.getVerificationCode()))
+        if (account.getVerificationCode() == null || !account.getVerificationCode().equals(forgotPasswordRequest.getVerificationCode()))
             throw new RuntimeException(ERROR_VERIFICATION_CODE_INVALID);
 
         account.setPassword(passwordEncoder.encode(forgotPasswordRequest.getNewPassword()));
