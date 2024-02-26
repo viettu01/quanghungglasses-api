@@ -26,8 +26,8 @@ public class ChangePasswordRequest {
     private String oldPassword;
 
     @NotBlank(message = "Mật khẩu mới không được để trống")
-    @Length(min = 6, max = 20, message = "Mật khẩu mới phải từ 6 đến 20 ký tự")
-    @Pattern(regexp = "^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\\D*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{9,}$", message = "Mật khẩu mới phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt")
+    @Length(min = 8, max = 20, message = "Mật khẩu mới phải từ 8 đến 20 ký tự")
+    @Pattern(regexp = "^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\\D*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "Mật khẩu mới phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt")
     private String newPassword;
 
     @NotBlank(message = "Xác nhận mật khẩu không được để trống")
