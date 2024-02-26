@@ -72,7 +72,16 @@ public class CustomerRestController {
         try {
             return ResponseEntity.ok().body(customerService.update(customerRequest));
         } catch (Exception e) {
-            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            customerService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
