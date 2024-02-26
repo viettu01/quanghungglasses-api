@@ -8,14 +8,17 @@ import fithou.tuplv.quanghungglassesapi.security.jwt.JwtTokenProvider;
 import fithou.tuplv.quanghungglassesapi.service.AccountService;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
 import fithou.tuplv.quanghungglassesapi.service.EmailService;
+import fithou.tuplv.quanghungglassesapi.service.StaffService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 public class AuthRestController {
     final AccountService accountService;
     final CustomerService customerService;
+    final StaffService staffService;
     final EmailService emailService;
     final JwtTokenProvider tokenProvider;
     final AuthenticationManager authenticationManager;
@@ -128,6 +132,21 @@ public class AuthRestController {
         try {
             accountService.changePassword(changePasswordRequest);
             return ResponseEntity.ok().body(Map.of("message", "Đổi mật khẩu thành công"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/profile/{email}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF') or #email == authentication.name")
+    public ResponseEntity<?> getProfile(@PathVariable String email) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if (authority.getAuthority().equals("ROLE_ADMIN") || authority.getAuthority().equals("ROLE_STAFF"))
+                    return ResponseEntity.ok().body(staffService.findByAccountEmail(email));
+            }
+            return ResponseEntity.ok().body(customerService.findByAccountEmail(email));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

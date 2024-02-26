@@ -12,6 +12,8 @@ public interface StaffService {
 
     StaffResponse findById(Long id);
 
+    StaffResponse findByAccountEmail(String email);
+
     StaffResponse create(StaffRequest staffRequest);
 
     StaffResponse update(StaffRequest staffRequest);

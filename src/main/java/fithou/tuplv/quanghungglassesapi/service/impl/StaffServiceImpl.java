@@ -51,6 +51,14 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public StaffResponse findByAccountEmail(String email) {
+        return userMapper.convertToResponse(staffRepository
+                .findByAccountEmail(email)
+                .orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND))
+        );
+    }
+
+    @Override
     public StaffResponse create(StaffRequest staffRequest) {
         if (staffRepository.existsByPhone(staffRequest.getPhone()))
             throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);

@@ -18,4 +18,6 @@ public class UserResponse implements Serializable {
     private String phone;
     private String gender;
     private Date birthday;
+    private Date createdDate;
+    private Date updatedDate;
 }

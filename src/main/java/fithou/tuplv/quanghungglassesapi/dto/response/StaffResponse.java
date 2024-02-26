@@ -12,5 +12,6 @@ import lombok.Setter;
 public class StaffResponse extends UserResponse {
     private Integer totalOrder; // Tổng số đơn hàng đã xử lý
     private Double totalMoney; // Tổng số tiền đã bán
+    private Boolean status; // Trạng thái làm việc
     AccountResponse account;
 }

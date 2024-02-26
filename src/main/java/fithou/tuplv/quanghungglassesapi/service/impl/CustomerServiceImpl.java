@@ -59,6 +59,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public CustomerResponse findByAccountEmail(String email) {
+        return userMapper.convertToResponse(
+                customerRepository.findByAccountEmail(email)
+                        .orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND))
+        );
+    }
+
+    @Override
     public CustomerResponse create(CustomerRequest customerRequest) {
         if (customerRepository.existsByPhone(customerRequest.getPhone()))
             throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);

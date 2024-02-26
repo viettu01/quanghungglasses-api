@@ -14,6 +14,8 @@ public interface CustomerService {
 
     CustomerResponse findById(Long id);
 
+    CustomerResponse findByAccountEmail(String email);
+
     CustomerResponse create(CustomerRequest customerRequest);
 
     CustomerResponse update(CustomerRequest customerRequest);
