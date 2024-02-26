@@ -4,7 +4,6 @@ import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.StaffRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.StaffResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
-import fithou.tuplv.quanghungglassesapi.entity.Customer;
 import fithou.tuplv.quanghungglassesapi.entity.Staff;
 import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.UserMapper;
@@ -18,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
-import java.util.Collections;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 

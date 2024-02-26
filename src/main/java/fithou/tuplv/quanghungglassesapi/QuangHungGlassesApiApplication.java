@@ -1,11 +1,9 @@
 package fithou.tuplv.quanghungglassesapi;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.*;
-import fithou.tuplv.quanghungglassesapi.entity.Account;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import fithou.tuplv.quanghungglassesapi.service.*;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.Collections;
 
@@ -42,9 +39,9 @@ public class QuangHungGlassesApiApplication {
     }
 
     @Bean
-    CommandLineRunner run(RoleService roleService, RoleRepository roleRepository, AccountRepository accountRepository, CategoryService categoryService,
-                          MaterialService materialService, OriginService originService, ShapeService shapeService, BrandService brandService,
-                          SupplierService supplierService, AccountService accountService, StaffService staffService) {
+    CommandLineRunner run(RoleService roleService, AccountRepository accountRepository, CategoryService categoryService,
+                          MaterialService materialService, OriginService originService, ShapeService shapeService,
+                          BrandService brandService, SupplierService supplierService, StaffService staffService) {
         return args -> {
             // region Role
             if (!roleService.existsByName(ROLE_ADMIN))
