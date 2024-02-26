@@ -4,9 +4,7 @@ import fithou.tuplv.quanghungglassesapi.dto.request.*;
 import fithou.tuplv.quanghungglassesapi.dto.response.AccountResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.StaffResponse;
-import fithou.tuplv.quanghungglassesapi.entity.Account;
-import fithou.tuplv.quanghungglassesapi.entity.Customer;
-import fithou.tuplv.quanghungglassesapi.entity.Staff;
+import fithou.tuplv.quanghungglassesapi.entity.*;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import lombok.AllArgsConstructor;
@@ -53,23 +51,50 @@ public class UserMapper {
     }
 
     public Staff convertToEntity(StaffRequest staffRequest) {
-        Staff staff = modelMapper.map(staffRequest, Staff.class);
-        staff.setAccount(accountRepository.findById(staffRequest.getAccountId()).orElse(null));
-        return staff;
+        return modelMapper.map(staffRequest, Staff.class);
     }
 
     public StaffResponse convertToResponse(Staff staff) {
-        return modelMapper.map(staff, StaffResponse.class);
+        StaffResponse staffResponse = modelMapper.map(staff, StaffResponse.class);
+        staffResponse.setTotalOrder(0);
+        staffResponse.setTotalMoney(0D);
+        if (staff.getOrders() != null && !staff.getOrders().isEmpty()) {
+            double totalMoney = 0.0;
+            staffResponse.setTotalOrder(staff.getOrders().size());
+            for (Order order : staff.getOrders()) {
+                if (order.getPaymentStatus()) {
+                    for (OrderDetails orderDetails : order.getOrderDetails()) {
+                        totalMoney += orderDetails.getPrice() * orderDetails.getQuantity();
+                    }
+                }
+            }
+            staffResponse.setTotalMoney(totalMoney);
+        }
+        return staffResponse;
     }
 
 
     public Customer convertToEntity(CustomerRequest customerRequest) {
-//        Customer customer = modelMapper.map(customerRequest, Customer.class);
-
         return modelMapper.map(customerRequest, Customer.class);
     }
 
     public CustomerResponse convertToResponse(Customer customer) {
-        return modelMapper.map(customer, CustomerResponse.class);
+        CustomerResponse customerResponse = modelMapper.map(customer, CustomerResponse.class);
+        customerResponse.setTotalOrder(0);
+        customerResponse.setTotalMoney(0D);
+        if (customer.getOrders() != null && !customer.getOrders().isEmpty()) {
+            double totalMoney = 0.0;
+            customerResponse.setTotalOrder(customer.getOrders().size());
+            for (Order order : customer.getOrders()) {
+                if (order.getPaymentStatus()) {
+                    for (OrderDetails orderDetails : order.getOrderDetails()) {
+                        totalMoney += orderDetails.getPrice() * orderDetails.getQuantity();
+                    }
+                }
+            }
+            customerResponse.setTotalMoney(totalMoney);
+        }
+
+        return customerResponse;
     }
 }

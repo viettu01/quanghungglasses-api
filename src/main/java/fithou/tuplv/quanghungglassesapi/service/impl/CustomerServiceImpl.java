@@ -11,7 +11,6 @@ import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.UserMapper;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
-import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,6 @@ public class CustomerServiceImpl implements CustomerService {
     final StorageService storageService;
     final AccountRepository accountRepository;
     final CustomerRepository customerRepository;
-    final RoleRepository roleRepository;
     final PaginationMapper paginationMapper;
     final UserMapper userMapper;
     final ModelMapper modelMapper;
@@ -71,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
             customerRequest.getAccount().setRoleName(Collections.singletonList("ROLE_USER"));
             Account account = userMapper.convertToEntity(customerRequest.getAccount());
             account.setIsVerifiedEmail(true);
-            if (!customerRequest.getAccount().getAvatarFile().isEmpty())
+            if (customerRequest.getAccount().getAvatarFile() != null && !customerRequest.getAccount().getAvatarFile().isEmpty())
                 account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
             try {
                 accountRepository.save(account);

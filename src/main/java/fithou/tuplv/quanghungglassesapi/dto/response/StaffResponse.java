@@ -10,5 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StaffResponse extends UserResponse {
+    private Integer totalOrder; // Tổng số đơn hàng đã xử lý
+    private Double totalMoney; // Tổng số tiền đã bán
     AccountResponse account;
 }

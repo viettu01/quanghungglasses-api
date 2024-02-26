@@ -8,9 +8,13 @@ import org.springframework.data.domain.Pageable;
 public interface StaffService {
     PaginationDTO<StaffResponse> findAll(Pageable pageable);
 
+    PaginationDTO<StaffResponse> findByFullnameContaining(String name, Pageable pageable);
+
+    StaffResponse findById(Long id);
+
     StaffResponse create(StaffRequest staffRequest);
 
     StaffResponse update(StaffRequest staffRequest);
 
-    void deleteByIds(Long[] ids);
+    void deleteById(Long id);
 }

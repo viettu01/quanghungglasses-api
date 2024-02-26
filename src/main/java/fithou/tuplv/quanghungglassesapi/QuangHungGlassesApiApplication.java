@@ -68,13 +68,14 @@ public class QuangHungGlassesApiApplication {
                 accountRequest.setStatus(true);
                 accountRequest.setRoleName(Collections.singletonList(ROLE_ADMIN));
                 accountRequest.setIsVerifiedEmail(true);
-                accountService.create(accountRequest);
+
                 StaffRequest staffRequest = new StaffRequest();
                 staffRequest.setFullname("Chủ cửa hàng");
                 staffRequest.setPhone("0096871026");
                 staffRequest.setGender("Nam");
                 staffRequest.setStatus(true);
-                staffRequest.setAccountId(1L);
+                staffRequest.setAccount(accountRequest);
+
                 staffService.create(staffRequest);
             }
             // endregion

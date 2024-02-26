@@ -25,6 +25,9 @@ public class Constants {
     public static final String ERROR_PASSWORD_CONFIRM_MUST_MATCH_NEW = "Mật khẩu xác nhận phải trùng với mật khẩu mới";
     public static final String ERROR_PASSWORD_OLD_INVALID = "Mật khẩu cũ không đúng";
     public static final String ERROR_PASSWORD_NEW_MUST_DIFFERENT_OLD = "Mật khẩu mới phải khác mật khẩu cũ";
+    public static final String ERROR_STAFF_HAS_RECEIPTS = "Nhân viên đang có hóa đơn";
+    public static final String ERROR_STAFF_HAS_ORDERS = "Nhân viên đang có đơn hàng";
+    public static final String ERROR_STAFF_HAS_WARRANTY = "Nhân viên đang có phiếu bảo hành";
 
     public static final String ERROR_BANNER_NOT_FOUND = "Banner không tồn tại";
 
