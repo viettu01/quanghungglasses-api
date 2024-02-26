@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -12,6 +13,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerRequest extends UserRequest {
-    @NotNull(message = "Tài khoản không được để trống")
-    private Long accountId;
+//    @NotNull(message = "Tài khoản không được để trống")
+//    private Long accountId;
+
+    @Valid
+    private AccountRequest account;
 }

@@ -62,7 +62,10 @@ public class UserMapper {
         return modelMapper.map(staff, StaffResponse.class);
     }
 
+
     public Customer convertToEntity(CustomerRequest customerRequest) {
+//        Customer customer = modelMapper.map(customerRequest, Customer.class);
+
         return modelMapper.map(customerRequest, Customer.class);
     }
 

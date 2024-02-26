@@ -7,17 +7,22 @@ import fithou.tuplv.quanghungglassesapi.dto.request.VerifyEmailRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
 import fithou.tuplv.quanghungglassesapi.entity.Customer;
+import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.UserMapper;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
+import fithou.tuplv.quanghungglassesapi.repository.RoleRepository;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
+import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.Date;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
@@ -26,32 +31,128 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @Transactional
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
+    final StorageService storageService;
     final AccountRepository accountRepository;
     final CustomerRepository customerRepository;
+    final RoleRepository roleRepository;
+    final PaginationMapper paginationMapper;
     final UserMapper userMapper;
     final ModelMapper modelMapper;
 
     @Override
     public PaginationDTO<CustomerResponse> findAll(Pageable pageable) {
-        return null;
+        return paginationMapper.mapToPaginationDTO(customerRepository.findAll(pageable).map(userMapper::convertToResponse));
+    }
+
+    @Override
+    public PaginationDTO<CustomerResponse> findByFullnameContaining(String name, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                customerRepository.findByFullnameContaining(name, pageable).map(userMapper::convertToResponse)
+        );
+    }
+
+    @Override
+    public CustomerResponse findById(Long id) {
+        return userMapper.convertToResponse(
+                customerRepository
+                        .findById(id)
+                        .orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND))
+        );
     }
 
     @Override
     public CustomerResponse create(CustomerRequest customerRequest) {
-        return null;
+        if (customerRepository.existsByPhone(customerRequest.getPhone()))
+            throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);
+        Customer customer = userMapper.convertToEntity(customerRequest);
+        if (customerRequest.getAccount() != null) {
+            if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
+                throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
+            customerRequest.getAccount().setRoleName(Collections.singletonList("ROLE_USER"));
+            Account account = userMapper.convertToEntity(customerRequest.getAccount());
+            account.setIsVerifiedEmail(true);
+            if (!customerRequest.getAccount().getAvatarFile().isEmpty())
+                account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
+            try {
+                accountRepository.save(account);
+            } catch (Exception e) {
+                if (account.getAvatar() != null)
+                    storageService.deleteFile(account.getAvatar());
+            }
+            customer.setAccount(account);
+        }
+
+        try {
+            customerRepository.save(customer);
+        } catch (Exception e) {
+            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
+                storageService.deleteFile(customer.getAccount().getAvatar());
+        }
+
+        return userMapper.convertToResponse(customer);
     }
 
     @Override
     public CustomerResponse update(CustomerRequest customerRequest) {
-        Customer customer = customerRepository.findById(customerRequest.getId())
-                .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS));
+        Customer customerExists = customerRepository.findById(customerRequest.getId())
+                .orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND));
 
-        return userMapper.convertToResponse(customerRepository.save(customer));
+        if (!customerExists.getPhone().equals(customerRequest.getPhone())
+                && customerRepository.existsByPhone(customerRequest.getPhone()))
+            throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);
+
+        Customer customer = userMapper.convertToEntity(customerRequest);
+        if (customerRequest.getAccount() != null) {
+            if (customer.getAccount() == null) {
+                if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
+                    throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
+            } else if (!customer.getAccount().getEmail().equals(customerRequest.getAccount().getEmail())
+                    && accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
+                throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
+            customerRequest.getAccount().setRoleName(Collections.singletonList("ROLE_USER"));
+            Account account = userMapper.convertToEntity(customerRequest.getAccount());
+            account.setIsVerifiedEmail(true);
+            String oldFileName = null;
+            if (customerRequest.getAccount().getAvatarFile().isEmpty()) {
+                account.setAvatar(customerExists.getAccount().getAvatar());
+            } else {
+                if (customerExists.getAccount().getAvatar() != null)
+                    oldFileName = customerExists.getAccount().getAvatar();
+                account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
+            }
+
+            if (StringUtils.isEmpty(customerRequest.getAccount().getPassword()))
+                account.setPassword(customerExists.getAccount().getPassword());
+            try {
+                accountRepository.save(account);
+            } catch (Exception e) {
+                if (account.getAvatar() != null)
+                    storageService.deleteFile(account.getAvatar());
+            }
+            if (oldFileName != null)
+                storageService.deleteFile(oldFileName);
+            customer.setAccount(account);
+        }
+
+        try {
+            customerRepository.save(customer);
+        } catch (Exception e) {
+            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
+                storageService.deleteFile(customer.getAccount().getAvatar());
+        }
+
+        return userMapper.convertToResponse(customer);
     }
 
     @Override
-    public void deleteByIds(Long[] ids) {
-
+    public void deleteById(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND));
+        if (!customer.getOrders().isEmpty())
+            throw new RuntimeException("Không thể xóa khách hàng đã có đơn hàng");
+        if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
+            storageService.deleteFile(customer.getAccount().getAvatar());
+        customerRepository.deleteById(id);
     }
 
     @Override
@@ -65,7 +166,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setAccount(account);
         return userMapper.convertToResponse(customerRepository.save(customer));
     }
-
 
     @Override
     public void verifyEmail(VerifyEmailRequest verifyEmailRequest) {
