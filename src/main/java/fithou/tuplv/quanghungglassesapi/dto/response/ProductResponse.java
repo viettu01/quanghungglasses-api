@@ -19,6 +19,7 @@ public class ProductResponse implements Serializable {
     private String name;
     private Double price;
     private Double priceDiscount;
+    private Integer timeWarranty;
     private Integer quantity;
     private String thumbnail;
     private String description;

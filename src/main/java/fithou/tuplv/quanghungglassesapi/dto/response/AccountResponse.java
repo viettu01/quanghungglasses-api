@@ -17,7 +17,7 @@ public class AccountResponse {
     private String avatar;
     private Boolean status;
     private String verificationCode;
-    private Boolean isVerifiedEmail;
+//    private Boolean isVerifiedEmail;
     private Date verificationCodeExpiredAt;
     private List<RoleResponse> roles;
 }

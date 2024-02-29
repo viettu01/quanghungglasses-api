@@ -194,11 +194,11 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
         for (ProductDetails productDetails : product.getProductDetails()) {
             if (!productDetails.getReceiptDetails().isEmpty())
-                throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_RECEIPT);
+                throw new RuntimeException(ERROR_PRODUCT_HAS_RECEIPT);
             if (!productDetails.getOrderDetails().isEmpty())
-                throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_ORDER);
+                throw new RuntimeException(ERROR_PRODUCT_HAS_ORDER);
             if (!productDetails.getWarrantyDetails().isEmpty())
-                throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_WARRANTY);
+                throw new RuntimeException(ERROR_PRODUCT_HAS_WARRANTY);
         }
         storageService.deleteFile(product.getThumbnail());
         product.getImages().forEach(storageService::deleteFile);
@@ -211,11 +211,11 @@ public class ProductServiceImpl implements ProductService {
         ProductDetails productDetails = productDetailsRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_DETAILS_NOT_FOUND));
 
         if (!productDetails.getReceiptDetails().isEmpty())
-            throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_RECEIPT);
+            throw new RuntimeException(ERROR_PRODUCT_HAS_RECEIPT);
         if (!productDetails.getOrderDetails().isEmpty())
-            throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_ORDER);
+            throw new RuntimeException(ERROR_PRODUCT_HAS_ORDER);
         if (!productDetails.getWarrantyDetails().isEmpty())
-            throw new RuntimeException(ERROR_PRODUCT_DETAILS_HAS_WARRANTY);
+            throw new RuntimeException(ERROR_PRODUCT_HAS_WARRANTY);
         productDetailsRepository.deleteById(id);
     }
 

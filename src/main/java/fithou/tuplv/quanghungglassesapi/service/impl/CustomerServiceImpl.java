@@ -74,7 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerRequest.getAccount() != null) {
             if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
                 throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
-            customerRequest.getAccount().setRoleName(Collections.singletonList("ROLE_USER"));
+            customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
             Account account = userMapper.convertToEntity(customerRequest.getAccount());
             account.setIsVerifiedEmail(true);
             if (customerRequest.getAccount().getAvatarFile() != null && !customerRequest.getAccount().getAvatarFile().isEmpty())
@@ -115,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
             } else if (!customer.getAccount().getEmail().equals(customerRequest.getAccount().getEmail())
                     && accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
                 throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
-            customerRequest.getAccount().setRoleName(Collections.singletonList("ROLE_USER"));
+            customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
             Account account = userMapper.convertToEntity(customerRequest.getAccount());
             account.setIsVerifiedEmail(true);
             String oldFileName = null;

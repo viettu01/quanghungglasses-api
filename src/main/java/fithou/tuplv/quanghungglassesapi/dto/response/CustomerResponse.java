@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerResponse extends UserResponse {
+    private String address; // Địa chỉ
     private Integer totalOrder; // Tổng số đơn hàng
     private Double totalMoney; // Tổng số tiền đã mua
     private AccountResponse account;

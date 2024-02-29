@@ -23,17 +23,20 @@ public class Product extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 50, unique = true)
     private String name;
 
+    @Column(nullable = false, length = 100, unique = true)
+    private String slug;
+
     @Column(nullable = false)
     private Double price;
+
+    @Column(nullable = false)
+    private Integer timeWarranty; // Thời gian bảo hành (ngày)
 
     @Column(nullable = false, length = 100)
     private String thumbnail;
 
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String description;
-
-    @Column(nullable = false, length = 100, unique = true)
-    private String slug;
 
     @Column(nullable = false)
     private Boolean status; // 0: Ngừng kinh doanh, 1: Đang kinh doanh

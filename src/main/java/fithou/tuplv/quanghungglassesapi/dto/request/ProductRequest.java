@@ -28,9 +28,17 @@ public class ProductRequest implements Serializable {
     @Length(max = 50, message = "Tên sản phẩm không được quá 50 ký tự")
     private String name;
 
+    @NotBlank(message = "Slug không được để trống")
+    @Length(max = 100, message = "Slug không được quá 100 ký tự")
+    private String slug;
+
     @NotNull(message = "Giá sản phẩm không được để trống")
-    @DecimalMin(value = "0", inclusive = false, message = "Giá sản phẩm phải > 0")
+    @DecimalMin(value = "0", inclusive = false, message = "Giá sản phẩm phải lớn 0")
     private Double price;
+
+    @NotNull(message = "Thời gian bảo hành không được để trống")
+    @DecimalMin(value = "0", inclusive = false, message = "Thời gian bảo hành phải lớn 0")
+    private Integer timeWarranty;
 
 //    @NotBlank(message = "Ảnh sản phẩm không được để trống")
 //    private String thumbnail;
@@ -40,10 +48,6 @@ public class ProductRequest implements Serializable {
 
     @NotBlank(message = "Mô tả sản phẩm không được để trống")
     private String description;
-
-    @NotBlank(message = "Slug không được để trống")
-    @Length(max = 100, message = "Slug không được quá 100 ký tự")
-    private String slug;
 
     @NotNull(message = "Trạng thái không được để trống")
     private Boolean status;

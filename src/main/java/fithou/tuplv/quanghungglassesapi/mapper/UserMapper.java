@@ -1,6 +1,9 @@
 package fithou.tuplv.quanghungglassesapi.mapper;
 
-import fithou.tuplv.quanghungglassesapi.dto.request.*;
+import fithou.tuplv.quanghungglassesapi.dto.request.AccountRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.CustomerRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
+import fithou.tuplv.quanghungglassesapi.dto.request.StaffRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.AccountResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.StaffResponse;
@@ -28,17 +31,16 @@ public class UserMapper {
     public Account convertToEntity(AccountRequest accountRequest) {
         Account account = modelMapper.map(accountRequest, Account.class);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setRoles(accountRequest.getRoleName().stream()
-                .map(roleRepository::findByName)
-                .collect(Collectors.toList())
-        );
+        account.setRoles(accountRequest.getRoleIds().stream()
+                .map(roleId -> roleRepository.findById(roleId).orElse(null))
+                .collect(Collectors.toList()));
         return account;
     }
 
     public Account convertToEntity(RegisterRequest registerRequest) {
         Account account = modelMapper.map(registerRequest, Account.class);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")));
+        account.setRoles(Collections.singletonList(roleRepository.findById(3L).orElse(null)));
         account.setStatus(true);
         account.setIsVerifiedEmail(false);
         account.setVerificationCode(RandomStringUtils.randomNumeric(6));

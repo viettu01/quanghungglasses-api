@@ -14,6 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer extends User {
+    @Column(length = 200)
+    private String address;
+
     @OneToMany(mappedBy = "customer")
     private List<Address> addresses;
 

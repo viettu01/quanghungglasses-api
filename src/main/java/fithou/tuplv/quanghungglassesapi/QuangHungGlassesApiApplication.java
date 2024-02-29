@@ -62,7 +62,7 @@ public class QuangHungGlassesApiApplication {
                 accountRequest.setEmail(ADMIN_EMAIL);
                 accountRequest.setPassword(ADMIN_PASSWORD);
                 accountRequest.setStatus(true);
-                accountRequest.setRoleName(Collections.singletonList(ROLE_ADMIN));
+                accountRequest.setRoleIds(Collections.singletonList(1L));
                 accountRequest.setIsVerifiedEmail(true);
 
                 StaffRequest staffRequest = new StaffRequest();

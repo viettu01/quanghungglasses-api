@@ -7,7 +7,9 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class AccountRequest {
     @Email(message = "Email không đúng định dạng")
     private String email;
 
-//    @NotBlank(message = "Mật khẩu không được để trống")
+    //    @NotBlank(message = "Mật khẩu không được để trống")
 //    @Length(min = 8, max = 20, message = "Mật khẩu phải từ 8 đến 20 ký tự")
 //    @Pattern(regexp = "^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\\D*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt")
     private String password;
@@ -33,9 +35,9 @@ public class AccountRequest {
     @NotNull(message = "Trạng thái không được để trống")
     private Boolean status;
 
-//    @NotEmpty(message = "Quyền không được để trống")
-    private List<String> roleName = new ArrayList<>();
+    //    @NotEmpty(message = "Quyền không được để trống")
+    private List<Long> roleIds = new ArrayList<>();
 
-//    @NotNull(message = "Trạng thái xác thực email không được để trống")
+    //    @NotNull(message = "Trạng thái xác thực email không được để trống")
     private Boolean isVerifiedEmail;
 }
