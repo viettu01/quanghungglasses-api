@@ -72,20 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);
         Customer customer = userMapper.convertToEntity(customerRequest);
         if (customerRequest.getAccount() != null) {
-            if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
-                throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
-            customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
-            Account account = userMapper.convertToEntity(customerRequest.getAccount());
-            account.setIsVerifiedEmail(true);
-            if (customerRequest.getAccount().getAvatarFile() != null && !customerRequest.getAccount().getAvatarFile().isEmpty())
-                account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
-            try {
-                accountRepository.save(account);
-            } catch (Exception e) {
-                if (account.getAvatar() != null)
-                    storageService.deleteFile(account.getAvatar());
-            }
-            customer.setAccount(account);
+            saveAccount(customerRequest, customer);
         }
 
         try {
@@ -109,37 +96,41 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = userMapper.convertToEntity(customerRequest);
         if (customerRequest.getAccount() != null) {
-            if (customer.getAccount() == null) {
-                if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
+            if (customerExists.getAccount() != null) {
+                if (customer.getAccount() == null) {
+                    if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
+                        throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
+                } else if (!customer.getAccount().getEmail().equals(customerRequest.getAccount().getEmail())
+                        && accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
                     throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
-            } else if (!customer.getAccount().getEmail().equals(customerRequest.getAccount().getEmail())
-                    && accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
-                throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
-            customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
-            Account account = userMapper.convertToEntity(customerRequest.getAccount());
-            account.setIsVerifiedEmail(true);
-            String oldFileName = null;
-            if (customerRequest.getAccount().getAvatarFile().isEmpty()) {
-                account.setAvatar(customerExists.getAccount().getAvatar());
-            } else {
-                if (customerExists.getAccount().getAvatar() != null)
+                customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
+                Account account = userMapper.convertToEntity(customerRequest.getAccount());
+                account.setIsVerifiedEmail(true);
+                String oldFileName = null;
+                if (customerRequest.getAccount().getAvatarFile() != null && customerRequest.getAccount().getAvatarFile().isEmpty()) {
+                    account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
                     oldFileName = customerExists.getAccount().getAvatar();
-                account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
-            }
+                } else {
+                    if (customerExists.getAccount().getAvatar() != null) {
+                        account.setAvatar(customerExists.getAccount().getAvatar());
+                    }
+                }
 
-            if (StringUtils.isEmpty(customerRequest.getAccount().getPassword()))
-                account.setPassword(customerExists.getAccount().getPassword());
-            try {
-                accountRepository.save(account);
-            } catch (Exception e) {
-                if (account.getAvatar() != null)
-                    storageService.deleteFile(account.getAvatar());
+                if (StringUtils.isEmpty(customerRequest.getAccount().getPassword()))
+                    account.setPassword(customerExists.getAccount().getPassword());
+                try {
+                    accountRepository.save(account);
+                } catch (Exception e) {
+                    if (account.getAvatar() != null)
+                        storageService.deleteFile(account.getAvatar());
+                }
+                if (oldFileName != null)
+                    storageService.deleteFile(oldFileName);
+                customer.setAccount(account);
+            } else {
+                saveAccount(customerRequest, customer);
             }
-            if (oldFileName != null)
-                storageService.deleteFile(oldFileName);
-            customer.setAccount(account);
         }
-
         try {
             customerRepository.save(customer);
         } catch (Exception e) {
@@ -201,5 +192,22 @@ public class CustomerServiceImpl implements CustomerService {
 
         return userMapper.convertToResponse(customerRepository.findByAccountEmail(email)
                 .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND)));
+    }
+
+    private void saveAccount(CustomerRequest customerRequest, Customer customer) {
+        if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
+            throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
+        customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
+        Account account = userMapper.convertToEntity(customerRequest.getAccount());
+        account.setIsVerifiedEmail(true);
+        if (customerRequest.getAccount().getAvatarFile() != null && !customerRequest.getAccount().getAvatarFile().isEmpty())
+            account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
+        try {
+            accountRepository.save(account);
+        } catch (Exception e) {
+            if (account.getAvatar() != null)
+                storageService.deleteFile(account.getAvatar());
+        }
+        customer.setAccount(account);
     }
 }
