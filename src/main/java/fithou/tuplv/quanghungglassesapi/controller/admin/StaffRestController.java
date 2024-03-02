@@ -60,7 +60,6 @@ public class StaffRestController {
         try {
             return ResponseEntity.ok().body(staffService.create(staffRequest));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -75,7 +74,6 @@ public class StaffRestController {
         try {
             return ResponseEntity.ok().body(staffService.update(staffRequest));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

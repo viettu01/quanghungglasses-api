@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
@@ -58,6 +57,7 @@ public class StaffServiceImpl implements StaffService {
                 .orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND))
         );
     }
+
     private void saveAccount(StaffRequest staffRequest, Staff staff) {
         if (accountRepository.existsByEmail(staffRequest.getAccount().getEmail()))
             throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
