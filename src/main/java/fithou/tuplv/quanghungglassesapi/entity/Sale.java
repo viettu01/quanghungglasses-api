@@ -34,5 +34,5 @@ public class Sale extends BaseEntity implements Serializable {
     private Staff staff;
 
     @OneToMany(mappedBy = "sale")
-    private List<ProductSale> productSales;
+    private List<SaleDetails> saleDetails;
 }

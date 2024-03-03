@@ -14,14 +14,14 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductSaleRequest implements Serializable {
+public class SaleDetailsRequest implements Serializable {
     @NotNull(message = "Mức giảm giá không được để trống")
     @DecimalMin(value = "0", message = "Mức giảm giá phải ≥ 0 và ≤ 100")
     @DecimalMax(value = "100", message = "Mức giảm giá phải ≥ 0 và ≤ 100")
     private Float discount; // Giảm giá: 0% - 100%
 
-    @NotNull(message = "Mã khuyến mãi không được để trống")
-    private Long saleId;
+//    @NotNull(message = "Mã khuyến mãi không được để trống")
+//    private Long saleId;
 
     @NotNull(message = "Mã sản phẩm không được để trống")
     private Long productId;

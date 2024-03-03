@@ -2,11 +2,10 @@ package fithou.tuplv.quanghungglassesapi.mapper;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Product;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
-import fithou.tuplv.quanghungglassesapi.entity.ProductSale;
+import fithou.tuplv.quanghungglassesapi.entity.SaleDetails;
 import fithou.tuplv.quanghungglassesapi.entity.Sale;
 import fithou.tuplv.quanghungglassesapi.repository.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +26,7 @@ public class ProductMapper {
     final BrandRepository brandRepository;
     final ProductRepository productRepository;
     final SaleRepository saleRepository;
-    final ProductSaleRepository productSaleRepository;
+    final SaleDetailsRepository saleDetailsRepository;
 
     // ProductMapper
     public ProductResponse convertToResponse(Product product) {
@@ -48,7 +47,7 @@ public class ProductMapper {
         Date now = new Date();
         Optional<Sale> sale = saleRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now);
         if (sale.isPresent()) {
-            Optional<ProductSale> productSale = productSaleRepository.findByProductAndSale(product, sale.get());
+            Optional<SaleDetails> productSale = saleDetailsRepository.findByProductAndSale(product, sale.get());
             if (productSale.isPresent())
                 price = price * ((100 - productSale.get().getDiscount()) / 100);
         }

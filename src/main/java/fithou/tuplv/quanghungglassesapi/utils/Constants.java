@@ -67,6 +67,8 @@ public class Constants {
     public static final String ERROR_PRODUCT_HAS_RECEIPT = "Sản phẩm đang có hóa đơn";
     public static final String ERROR_PRODUCT_HAS_WARRANTY = "Sản phẩm đang có phiếu bảo hành";
 
+    public static final String ERROR_SALE_NOT_FOUND = "Chương trình khuyến mãi không tồn tại";
+
     public static final String DIR_FILE_BANNER = "banners";
     public static final String DIR_FILE_PRODUCT = "products";
     public static final String DIR_FILE_STAFF = "staffs";

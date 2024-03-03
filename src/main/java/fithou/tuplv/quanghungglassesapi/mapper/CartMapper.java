@@ -6,11 +6,11 @@ import fithou.tuplv.quanghungglassesapi.dto.response.CartDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.CartResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Cart;
 import fithou.tuplv.quanghungglassesapi.entity.CartDetails;
-import fithou.tuplv.quanghungglassesapi.entity.ProductSale;
+import fithou.tuplv.quanghungglassesapi.entity.SaleDetails;
 import fithou.tuplv.quanghungglassesapi.entity.Sale;
 import fithou.tuplv.quanghungglassesapi.repository.CartRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
-import fithou.tuplv.quanghungglassesapi.repository.ProductSaleRepository;
+import fithou.tuplv.quanghungglassesapi.repository.SaleDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.SaleRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,7 +26,7 @@ public class CartMapper {
     final CustomerRepository customerRepository;
     final CartRepository cartRepository;
     final SaleRepository saleRepository;
-    final ProductSaleRepository productSaleRepository;
+    final SaleDetailsRepository saleDetailsRepository;
 
     public CartResponse convertToResponse(Cart cart) {
         CartResponse cartResponse = modelMapper.map(cart, CartResponse.class);
@@ -53,7 +53,7 @@ public class CartMapper {
         Date now = new Date();
         Optional<Sale> sale = saleRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now);
         if (sale.isPresent()) {
-            Optional<ProductSale> productSale = productSaleRepository.findByProductAndSale(cartDetails.getProductDetails().getProduct(), sale.get());
+            Optional<SaleDetails> productSale = saleDetailsRepository.findByProductAndSale(cartDetails.getProductDetails().getProduct(), sale.get());
             if (productSale.isPresent())
                 price = price * ((double) (100 - productSale.get().getDiscount()) / 100);
         }

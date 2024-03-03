@@ -70,5 +70,5 @@ public class Product extends BaseEntity implements Serializable {
     private List<ProductDetails> productDetails;
 
     @OneToMany(mappedBy = "product")
-    private List<ProductSale> productSales;
+    private List<SaleDetails> saleDetails;
 }
