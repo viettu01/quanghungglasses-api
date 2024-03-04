@@ -39,6 +39,15 @@ public class SaleRestController {
         return ResponseEntity.ok().body(saleService.findAll(pageable));
     }
 
+    @GetMapping({"/{id}"})
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(saleService.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping({"/", ""})
     public ResponseEntity<?> create(@Valid @RequestBody SaleRequest saleRequest, BindingResult result) {
         if (result.hasErrors()) {

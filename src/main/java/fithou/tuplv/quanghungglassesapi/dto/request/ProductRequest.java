@@ -37,7 +37,7 @@ public class ProductRequest implements Serializable {
     private Double price;
 
     @NotNull(message = "Thời gian bảo hành không được để trống")
-    @DecimalMin(value = "0", inclusive = false, message = "Thời gian bảo hành phải lớn 0")
+    @DecimalMin(value = "0", message = "Thời gian bảo hành phải lớn hơn hoặc bằng 0")
     private Integer timeWarranty;
 
 //    @NotBlank(message = "Ảnh sản phẩm không được để trống")

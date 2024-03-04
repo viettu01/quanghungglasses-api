@@ -32,7 +32,9 @@ public class SaleMapper {
     }
 
     public SaleResponse convertToResponse(Sale sale) {
-        return modelMapper.map(sale, SaleResponse.class);
+        SaleResponse saleResponse = modelMapper.map(sale, SaleResponse.class);
+        saleResponse.setTotalProduct(sale.getSaleDetails().size());
+        return saleResponse;
     }
 
     public SaleDetails convertToEntity(SaleDetailsRequest saleDetailsRequest) {

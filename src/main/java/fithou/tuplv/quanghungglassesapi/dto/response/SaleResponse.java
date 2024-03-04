@@ -17,8 +17,11 @@ import java.util.List;
 public class SaleResponse implements Serializable {
     private Long id;
     private String name;
+    private Integer totalProduct;
     private Date startDate;
     private Date endDate;
     private List<SaleDetailsResponse> saleDetails = new ArrayList<>();
     private StaffResponse staff;
+    private Date createdDate;
+    private Date updatedDate;
 }
