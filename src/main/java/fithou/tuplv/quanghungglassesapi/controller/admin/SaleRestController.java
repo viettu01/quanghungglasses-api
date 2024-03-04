@@ -85,4 +85,14 @@ public class SaleRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/details/{id}")
+    public ResponseEntity<?> deleteSaleDetails(@PathVariable Long id) {
+        try {
+            saleService.deleteSaleDetailsById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

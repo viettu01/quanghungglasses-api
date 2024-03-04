@@ -129,6 +129,12 @@ public class SaleServiceImpl implements SaleService {
         saleRepository.deleteById(id);
     }
 
+    @Override
+    public void deleteSaleDetailsById(Long id) {
+        saleDetailsRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm khuyến mãi"));
+        saleDetailsRepository.deleteById(id);
+    }
+
     private void setTimes(SaleRequest saleRequest) {
         saleRequest.getStartDate().setHours(0);
         saleRequest.getStartDate().setMinutes(0);

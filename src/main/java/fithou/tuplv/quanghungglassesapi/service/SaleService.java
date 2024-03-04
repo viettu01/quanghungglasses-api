@@ -21,4 +21,6 @@ public interface SaleService {
     SaleResponse update(SaleRequest saleRequest);
 
     void deleteById(Long id);
+
+    void deleteSaleDetailsById(Long id);
 }
