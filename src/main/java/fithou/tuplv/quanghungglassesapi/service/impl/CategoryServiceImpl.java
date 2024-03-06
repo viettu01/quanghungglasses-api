@@ -2,6 +2,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.CategoryRequest;
+import fithou.tuplv.quanghungglassesapi.dto.response.CategoryProductResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.CategoryResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Category;
 import fithou.tuplv.quanghungglassesapi.mapper.CategoryMapper;
@@ -32,6 +33,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponse> findAll() {
         return categoryRepository.findAll().stream().map(categoryMapper::convertToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryProductResponse> findAllCategoryAndProduct(Boolean categoryStatus) {
+        return categoryRepository.findByStatus(categoryStatus).stream().map(categoryMapper::convertToCategoryProductResponse).collect(Collectors.toList());
     }
 
     @Override

@@ -18,6 +18,7 @@ public class ProductResponse implements Serializable {
     private Long id;
     private String name;
     private Double price;
+    private Float discount;
     private Double priceDiscount;
     private Integer timeWarranty;
     private Integer quantity;

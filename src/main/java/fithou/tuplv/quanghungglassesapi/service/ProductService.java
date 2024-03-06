@@ -12,6 +12,8 @@ public interface ProductService {
 
     PaginationDTO<ProductResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
 
+    PaginationDTO<ProductResponse> findByCategorySlug(String slug, Pageable pageable);
+
     ProductResponse findBySlug(String slug);
 
     ProductResponse findById(Long id);

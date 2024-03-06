@@ -54,6 +54,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public PaginationDTO<ProductResponse> findByCategorySlug(String slug, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                productRepository.findByCategorySlug(slug, pageable).map(productMapper::convertToResponse)
+        );
+    }
+
+    @Override
     public ProductResponse findBySlug(String slug) {
         return productMapper.convertToResponse(productRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND)));

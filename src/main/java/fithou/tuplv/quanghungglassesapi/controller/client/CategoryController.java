@@ -17,6 +17,6 @@ public class CategoryController {
 
     @GetMapping({"/", ""})
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok().body(categoryService.findByStatus(true));
+        return ResponseEntity.ok().body(categoryService.findAllCategoryAndProduct(true));
     }
 }
