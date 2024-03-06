@@ -16,6 +16,9 @@ import java.util.List;
 public class ReceiptResponse {
     private Long id;
     private Date createdDate;
-    private UserResponse user;
+    private Date updatedDate;
+    private String staffFullname;
+    private String supplierName;
+    private Double totalMoney;
     private List<ReceiptDetailsResponse> receiptDetails = new ArrayList<>();
 }
