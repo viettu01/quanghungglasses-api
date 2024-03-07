@@ -35,6 +35,14 @@ public class ReceiptRestController {
         return ResponseEntity.ok().body(receiptService.findByStaffFullnameContaining(fullname, pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(receiptService.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping({"/", ""})
     public ResponseEntity<?> create(@Valid @RequestBody ReceiptRequest receiptRequest, BindingResult result) {

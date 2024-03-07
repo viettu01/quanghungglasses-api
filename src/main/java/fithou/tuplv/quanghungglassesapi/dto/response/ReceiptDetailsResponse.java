@@ -15,5 +15,7 @@ public class ReceiptDetailsResponse {
     //    private Integer actualQuantity; // số lượng thực nhập
     private Integer quantity; // số lượng thực nhập
     private Double price;
-    private ProductDetailsResponse productDetails;
+//    private ProductDetailsResponse productDetails;
+    private String productName;
+    private String productColor;
 }

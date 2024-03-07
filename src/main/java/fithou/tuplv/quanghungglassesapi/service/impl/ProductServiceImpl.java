@@ -3,6 +3,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
+import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsInvoiceResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Product;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
@@ -57,6 +58,15 @@ public class ProductServiceImpl implements ProductService {
     public PaginationDTO<ProductResponse> findByCategorySlug(String slug, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(
                 productRepository.findByCategorySlug(slug, pageable).map(productMapper::convertToResponse)
+        );
+    }
+
+    @Override
+    public ProductDetailsInvoiceResponse findProductDetailsById(Long id) {
+        return productMapper.convertToProductDetailsInvoiceResponse(
+                productDetailsRepository
+                        .findById(id)
+                        .orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_DETAILS_NOT_FOUND))
         );
     }
 

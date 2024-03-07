@@ -55,6 +55,15 @@ public class ProductRestController {
         }
     }
 
+    @GetMapping("/details/{id}")
+    public ResponseEntity<?> getProductDetailsById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(productService.findProductDetailsById(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping({"/", ""})
     public ResponseEntity<?> create(@Valid @ModelAttribute ProductRequest productRequest, BindingResult result) {
         if (result.hasErrors()) {

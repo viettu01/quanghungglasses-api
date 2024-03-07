@@ -18,5 +18,4 @@ public class ProductDetailsResponse implements Serializable {
     private Integer quantity;
     private Date createdDate;
     private Date updatedDate;
-//    private String image;
 }

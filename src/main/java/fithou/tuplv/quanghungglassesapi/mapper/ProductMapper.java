@@ -2,6 +2,7 @@ package fithou.tuplv.quanghungglassesapi.mapper;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
+import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsInvoiceResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Product;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
@@ -69,5 +70,11 @@ public class ProductMapper {
 
     public ProductDetails convertToEntity(ProductDetailsRequest productDetailsRequest) {
         return modelMapper.map(productDetailsRequest, ProductDetails.class);
+    }
+
+    public ProductDetailsInvoiceResponse convertToProductDetailsInvoiceResponse(ProductDetails productDetails) {
+        ProductDetailsInvoiceResponse productDetailsInvoiceResponse = modelMapper.map(productDetails, ProductDetailsInvoiceResponse.class);
+        productDetailsInvoiceResponse.setName(productDetails.getProduct().getName());
+        return productDetailsInvoiceResponse;
     }
 }
