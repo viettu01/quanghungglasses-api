@@ -153,18 +153,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse register(RegisterRequest registerRequest) {
-        if (accountRepository.existsByEmail(registerRequest.getEmail()))
-            throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
-
-        Account account = userMapper.convertToEntity(registerRequest);
-        accountRepository.save(account);
-        Customer customer = modelMapper.map(registerRequest, Customer.class);
-        customer.setAccount(account);
-        return userMapper.convertToResponse(customerRepository.save(customer));
-    }
-
-    @Override
     public void verifyEmail(VerifyEmailRequest verifyEmailRequest) {
         Account account = accountRepository.findByEmailAndVerificationCode(verifyEmailRequest.getEmail(), verifyEmailRequest.getVerificationCode())
                 .orElseThrow(() -> new RuntimeException(ERROR_VERIFICATION_CODE_INVALID));

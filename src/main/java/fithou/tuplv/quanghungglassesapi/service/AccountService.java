@@ -1,18 +1,16 @@
 package fithou.tuplv.quanghungglassesapi.service;
 
-import fithou.tuplv.quanghungglassesapi.dto.request.AccountRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ChangePasswordRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ForgotPasswordRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.AccountResponse;
+import fithou.tuplv.quanghungglassesapi.dto.request.LoginRequest;
+import fithou.tuplv.quanghungglassesapi.dto.response.LoginResponse;
 
 public interface AccountService {
-    boolean existsByUsername(String username);
+    LoginResponse login(LoginRequest loginRequest);
 
-    AccountResponse create(AccountRequest accountRequest);
+    boolean existsByEmail(String email);
 
-    AccountResponse changePassword(ChangePasswordRequest changePasswordRequest);
-
-    void delete(Long[] ids);
+    void changePassword(ChangePasswordRequest changePasswordRequest);
 
     void forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
 

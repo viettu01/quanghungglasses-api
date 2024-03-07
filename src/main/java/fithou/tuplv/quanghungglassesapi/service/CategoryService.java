@@ -13,13 +13,11 @@ public interface CategoryService {
 
     List<CategoryProductResponse> findAllCategoryAndProduct(Boolean categoryStatus);
 
-    PaginationDTO<CategoryResponse> findAll(Pageable pageable);
-
-    PaginationDTO<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
+//    PaginationDTO<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
 
     PaginationDTO<CategoryResponse> findByNameContaining(String name, Pageable pageable);
 
-    List<CategoryResponse> findByStatus(Boolean status);
+//    List<CategoryResponse> findByStatus(Boolean status);
 
     CategoryResponse findBySlug(String slug);
 
@@ -27,13 +25,11 @@ public interface CategoryService {
 
     CategoryResponse update(CategoryRequest categoryRequest);
 
-    void deleteByIds(Long[] ids);
-
     void deleteById(Long id);
 
     boolean existsByName(String name);
 
-    Long countByStatus(Boolean status);
-
-    Long countAll();
+//    Long countByStatus(Boolean status);
+//
+//    Long countAll();
 }

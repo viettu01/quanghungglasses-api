@@ -34,11 +34,6 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public PaginationDTO<BrandResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(brandRepository.findAll(pageable).map(brandMapper::convertToResponse));
-    }
-
-    @Override
     public PaginationDTO<BrandResponse> findByNameContaining(String name, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(brandRepository.findByNameContaining(name, pageable).map(brandMapper::convertToResponse));
     }
@@ -71,17 +66,6 @@ public class BrandServiceImpl implements BrandService {
         if (!brand.getProducts().isEmpty())
             throw new RuntimeException(ERROR_BRAND_HAS_PRODUCTS);
         brandRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteByIds(Long[] ids) {
-        for (Long id : ids) {
-            try {
-                brandRepository.deleteById(id);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }
     }
 
     @Override

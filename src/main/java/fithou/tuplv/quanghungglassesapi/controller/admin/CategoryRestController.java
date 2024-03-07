@@ -7,13 +7,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.Map;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
@@ -35,13 +33,11 @@ public class CategoryRestController {
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        if (status != null)
-            return ResponseEntity.ok().body(categoryService.findByNameContainingAndStatus(name, status, pageable));
+//        if (status != null)
+//            return ResponseEntity.ok().body(categoryService.findByNameContainingAndStatus(name, status, pageable));
 
-        if (StringUtils.hasText(name))
-            return ResponseEntity.ok().body(categoryService.findByNameContaining(name, pageable));
-
-        return ResponseEntity.ok().body(categoryService.findAll(pageable));
+//        if (StringUtils.hasText(name))
+        return ResponseEntity.ok().body(categoryService.findByNameContaining(name, pageable));
     }
 
     @GetMapping("/{slug}")
@@ -91,16 +87,16 @@ public class CategoryRestController {
         }
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<?> countByStatus(@RequestParam Boolean status) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("status", status.toString());
-        map.put("totalElements", categoryService.countByStatus(status).toString());
-        return ResponseEntity.ok().body(map);
-    }
-
-    @GetMapping("/count-all")
-    public ResponseEntity<?> countAll() {
-        return ResponseEntity.ok().body(Map.of("totalElements", categoryService.countAll()));
-    }
+//    @GetMapping("/count")
+//    public ResponseEntity<?> countByStatus(@RequestParam Boolean status) {
+//        HashMap<String, String> map = new HashMap<>();
+//        map.put("status", status.toString());
+//        map.put("totalElements", categoryService.countByStatus(status).toString());
+//        return ResponseEntity.ok().body(map);
+//    }
+//
+//    @GetMapping("/count-all")
+//    public ResponseEntity<?> countAll() {
+//        return ResponseEntity.ok().body(Map.of("totalElements", categoryService.countAll()));
+//    }
 }

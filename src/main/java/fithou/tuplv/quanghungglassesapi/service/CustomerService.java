@@ -22,8 +22,6 @@ public interface CustomerService {
 
     void deleteById(Long id);
 
-    CustomerResponse register(RegisterRequest registerRequest);
-
     void verifyEmail(VerifyEmailRequest verifyEmailRequest);
 
     CustomerResponse resendVerificationCode(String email);

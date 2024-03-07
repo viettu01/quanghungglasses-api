@@ -40,17 +40,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByStatus(categoryStatus).stream().map(categoryMapper::convertToCategoryProductResponse).collect(Collectors.toList());
     }
 
-    @Override
-    public PaginationDTO<CategoryResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(categoryRepository.findAll(pageable).map(categoryMapper::convertToResponse));
-    }
-
-    @Override
-    public PaginationDTO<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(
-                categoryRepository.findByNameContainingAndStatus(name, status, pageable).map(categoryMapper::convertToResponse)
-        );
-    }
+//    @Override
+//    public PaginationDTO<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable) {
+//        return paginationMapper.mapToPaginationDTO(
+//                categoryRepository.findByNameContainingAndStatus(name, status, pageable).map(categoryMapper::convertToResponse)
+//        );
+//    }
 
     @Override
     public PaginationDTO<CategoryResponse> findByNameContaining(String name, Pageable pageable) {
@@ -59,13 +54,13 @@ public class CategoryServiceImpl implements CategoryService {
         );
     }
 
-    @Override
-    public List<CategoryResponse> findByStatus(Boolean status) {
-        return categoryRepository.findByStatus(status)
-                .stream()
-                .map(categoryMapper::convertToResponse)
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<CategoryResponse> findByStatus(Boolean status) {
+//        return categoryRepository.findByStatus(status)
+//                .stream()
+//                .map(categoryMapper::convertToResponse)
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public CategoryResponse findBySlug(String slug) {
@@ -92,17 +87,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteByIds(Long[] ids) {
-        for (Long id : ids) {
-            try {
-                categoryRepository.deleteById(id);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }
-    }
-
-    @Override
     public void deleteById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_CATEGORY_NOT_FOUND));
         if (!category.getProducts().isEmpty())
@@ -116,13 +100,13 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.existsByName(name);
     }
 
-    @Override
-    public Long countByStatus(Boolean status) {
-        return categoryRepository.countByStatus(status);
-    }
-
-    @Override
-    public Long countAll() {
-        return categoryRepository.count();
-    }
+//    @Override
+//    public Long countByStatus(Boolean status) {
+//        return categoryRepository.countByStatus(status);
+//    }
+//
+//    @Override
+//    public Long countAll() {
+//        return categoryRepository.count();
+//    }
 }

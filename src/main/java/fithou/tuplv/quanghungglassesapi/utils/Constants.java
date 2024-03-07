@@ -22,6 +22,7 @@ public class Constants {
     public static final String SUCCESS_VERIFY_EMAIL = "Xác minh email thành công";
     public static final String SUCCESS_RESEND_VERIFICATION_CODE = "Đã gửi lại mã xác minh";
     public static final String ERROR_ACCOUNT_IS_LOCKED = "Tài khoản của bạn bị khóa";
+    public static final String ERROR_PASSWORD_INVALID = "Sai mật khẩu";
     public static final String ERROR_PASSWORD_CONFIRM_MUST_MATCH_NEW = "Mật khẩu xác nhận phải trùng với mật khẩu mới";
     public static final String ERROR_PASSWORD_OLD_INVALID = "Mật khẩu cũ không đúng";
     public static final String ERROR_PASSWORD_NEW_MUST_DIFFERENT_OLD = "Mật khẩu mới phải khác mật khẩu cũ";

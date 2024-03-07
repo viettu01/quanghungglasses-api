@@ -10,8 +10,6 @@ import java.util.List;
 public interface BrandService {
     List<BrandResponse> findAll();
 
-    PaginationDTO<BrandResponse> findAll(Pageable pageable);
-
     PaginationDTO<BrandResponse> findByNameContaining(String name, Pageable pageable);
 
     BrandResponse findById(Long id);
@@ -21,8 +19,6 @@ public interface BrandService {
     BrandResponse update(BrandRequest brandRequest);
 
     void deleteById(Long id);
-
-    void deleteByIds(Long[] ids);
 
     boolean existsByName(String name);
 }
