@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +34,7 @@ public class StaffRestController {
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        if (StringUtils.hasText(fullname))
-            return ResponseEntity.ok().body(staffService.findByFullnameContaining(fullname, pageable));
-
-        return ResponseEntity.ok().body(staffService.findAll(pageable));
+        return ResponseEntity.ok().body(staffService.findByFullnameContaining(fullname, pageable));
     }
 
     @GetMapping("/{id}")

@@ -2,7 +2,6 @@ package fithou.tuplv.quanghungglassesapi.mapper;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.ReceiptDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ReceiptRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsInvoiceResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ReceiptDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ReceiptResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Receipt;

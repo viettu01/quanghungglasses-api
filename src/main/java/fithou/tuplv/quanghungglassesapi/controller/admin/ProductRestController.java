@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +27,6 @@ public class ProductRestController {
 
     @GetMapping({"/", ""})
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
-                                    @RequestParam(value = "status", defaultValue = "", required = false) Boolean status,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
                                     @RequestParam(value = "sort-direction", defaultValue = SORT_DESC, required = false) String sortDir,
@@ -37,13 +35,7 @@ public class ProductRestController {
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        if (status != null)
-            return ResponseEntity.ok().body(productService.findByNameContainingAndStatus(name, status, pageable));
-
-        if (StringUtils.hasText(name))
-            return ResponseEntity.ok().body(productService.findByNameContaining(name, pageable));
-
-        return ResponseEntity.ok().body(productService.findAll(pageable));
+        return ResponseEntity.ok().body(productService.findByNameContaining(name, pageable));
     }
 
     @GetMapping("/{id}")

@@ -63,13 +63,13 @@ public class StaffServiceImpl implements StaffService {
             throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
         Account account = userMapper.convertToEntity(staffRequest.getAccount());
         account.setIsVerifiedEmail(true);
-        if (staffRequest.getAccount().getAvatarFile() != null && !staffRequest.getAccount().getAvatarFile().isEmpty())
-            account.setAvatar(storageService.saveImageFile(DIR_FILE_STAFF, staffRequest.getAccount().getAvatarFile()));
+//        if (staffRequest.getAccount().getAvatarFile() != null && !staffRequest.getAccount().getAvatarFile().isEmpty())
+//            account.setAvatar(storageService.saveImageFile(DIR_FILE_STAFF, staffRequest.getAccount().getAvatarFile()));
         try {
             accountRepository.save(account);
         } catch (Exception e) {
-            if (account.getAvatar() != null)
-                storageService.deleteFile(account.getAvatar());
+//            if (account.getAvatar() != null)
+//                storageService.deleteFile(account.getAvatar());
         }
         staff.setAccount(account);
     }
@@ -98,8 +98,8 @@ public class StaffServiceImpl implements StaffService {
         try {
             staffRepository.save(staff);
         } catch (Exception e) {
-            if (staff.getAccount() != null && staff.getAccount().getAvatar() != null)
-                storageService.deleteFile(staff.getAccount().getAvatar());
+//            if (staff.getAccount() != null && staff.getAccount().getAvatar() != null)
+//                storageService.deleteFile(staff.getAccount().getAvatar());
         }
 
         return userMapper.convertToResponse(staff);
@@ -125,25 +125,25 @@ public class StaffServiceImpl implements StaffService {
                     throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
                 Account account = userMapper.convertToEntity(staffRequest.getAccount());
                 account.setIsVerifiedEmail(true);
-                String oldFileName = null;
-                if (staffRequest.getAccount().getAvatarFile() != null && staffRequest.getAccount().getAvatarFile().isEmpty()) {
-                    account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, staffRequest.getAccount().getAvatarFile()));
-                    oldFileName = staffExists.getAccount().getAvatar();
-                } else {
-                    if (staffExists.getAccount().getAvatar() != null)
-                        account.setAvatar(staffExists.getAccount().getAvatar());
-                }
+//                String oldFileName = null;
+//                if (staffRequest.getAccount().getAvatarFile() != null && staffRequest.getAccount().getAvatarFile().isEmpty()) {
+//                    account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, staffRequest.getAccount().getAvatarFile()));
+//                    oldFileName = staffExists.getAccount().getAvatar();
+//                } else {
+//                    if (staffExists.getAccount().getAvatar() != null)
+//                        account.setAvatar(staffExists.getAccount().getAvatar());
+//                }
 
                 if (StringUtils.isEmpty(staffRequest.getAccount().getPassword()))
                     account.setPassword(staffExists.getAccount().getPassword());
                 try {
                     accountRepository.save(account);
                 } catch (Exception e) {
-                    if (account.getAvatar() != null)
-                        storageService.deleteFile(account.getAvatar());
+//                    if (account.getAvatar() != null)
+//                        storageService.deleteFile(account.getAvatar());
                 }
-                if (oldFileName != null)
-                    storageService.deleteFile(oldFileName);
+//                if (oldFileName != null)
+//                    storageService.deleteFile(oldFileName);
                 staff.setAccount(account);
             } else {
                 saveAccount(staffRequest, staff);
@@ -153,8 +153,8 @@ public class StaffServiceImpl implements StaffService {
         try {
             staffRepository.save(staff);
         } catch (Exception e) {
-            if (staff.getAccount() != null && staff.getAccount().getAvatar() != null)
-                storageService.deleteFile(staff.getAccount().getAvatar());
+//            if (staff.getAccount() != null && staff.getAccount().getAvatar() != null)
+//                storageService.deleteFile(staff.getAccount().getAvatar());
         }
 
         return userMapper.convertToResponse(staff);
@@ -170,9 +170,9 @@ public class StaffServiceImpl implements StaffService {
         if (!staff.getWarranty().isEmpty())
             throw new RuntimeException(ERROR_STAFF_HAS_WARRANTY);
 
-        if (staff.getAccount() != null && staff.getAccount().getAvatar() != null) {
-            storageService.deleteFile(staff.getAccount().getAvatar());
-        }
+//        if (staff.getAccount() != null && staff.getAccount().getAvatar() != null) {
+//            storageService.deleteFile(staff.getAccount().getAvatar());
+//        }
         staffRepository.deleteById(id);
     }
 

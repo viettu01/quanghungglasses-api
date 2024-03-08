@@ -78,8 +78,8 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             customerRepository.save(customer);
         } catch (Exception e) {
-            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
-                storageService.deleteFile(customer.getAccount().getAvatar());
+//            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
+//                storageService.deleteFile(customer.getAccount().getAvatar());
         }
 
         return userMapper.convertToResponse(customer);
@@ -106,15 +106,15 @@ public class CustomerServiceImpl implements CustomerService {
                 customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
                 Account account = userMapper.convertToEntity(customerRequest.getAccount());
                 account.setIsVerifiedEmail(true);
-                String oldFileName = null;
-                if (customerRequest.getAccount().getAvatarFile() != null && customerRequest.getAccount().getAvatarFile().isEmpty()) {
-                    account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
-                    oldFileName = customerExists.getAccount().getAvatar();
-                } else {
-                    if (customerExists.getAccount().getAvatar() != null) {
-                        account.setAvatar(customerExists.getAccount().getAvatar());
-                    }
-                }
+//                String oldFileName = null;
+//                if (customerRequest.getAccount().getAvatarFile() != null && customerRequest.getAccount().getAvatarFile().isEmpty()) {
+//                    account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
+//                    oldFileName = customerExists.getAccount().getAvatar();
+//                } else {
+//                    if (customerExists.getAccount().getAvatar() != null) {
+//                        account.setAvatar(customerExists.getAccount().getAvatar());
+//                    }
+//                }
 
                 if (StringUtils.isEmpty(customerRequest.getAccount().getPassword()))
                     account.setPassword(customerExists.getAccount().getPassword());
@@ -124,8 +124,8 @@ public class CustomerServiceImpl implements CustomerService {
                     if (account.getAvatar() != null)
                         storageService.deleteFile(account.getAvatar());
                 }
-                if (oldFileName != null)
-                    storageService.deleteFile(oldFileName);
+//                if (oldFileName != null)
+//                    storageService.deleteFile(oldFileName);
                 customer.setAccount(account);
             } else {
                 saveAccount(customerRequest, customer);
@@ -134,8 +134,8 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             customerRepository.save(customer);
         } catch (Exception e) {
-            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
-                storageService.deleteFile(customer.getAccount().getAvatar());
+//            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
+//                storageService.deleteFile(customer.getAccount().getAvatar());
         }
 
         return userMapper.convertToResponse(customer);
@@ -147,8 +147,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND));
         if (!customer.getOrders().isEmpty())
             throw new RuntimeException("Không thể xóa khách hàng đã có đơn hàng");
-        if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
-            storageService.deleteFile(customer.getAccount().getAvatar());
+//        if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
+//            storageService.deleteFile(customer.getAccount().getAvatar());
         customerRepository.deleteById(id);
     }
 
@@ -188,13 +188,13 @@ public class CustomerServiceImpl implements CustomerService {
         customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
         Account account = userMapper.convertToEntity(customerRequest.getAccount());
         account.setIsVerifiedEmail(true);
-        if (customerRequest.getAccount().getAvatarFile() != null && !customerRequest.getAccount().getAvatarFile().isEmpty())
-            account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
+//        if (customerRequest.getAccount().getAvatarFile() != null && !customerRequest.getAccount().getAvatarFile().isEmpty())
+//            account.setAvatar(storageService.saveImageFile(DIR_FILE_CUSTOMER, customerRequest.getAccount().getAvatarFile()));
         try {
             accountRepository.save(account);
         } catch (Exception e) {
-            if (account.getAvatar() != null)
-                storageService.deleteFile(account.getAvatar());
+//            if (account.getAvatar() != null)
+//                storageService.deleteFile(account.getAvatar());
         }
         customer.setAccount(account);
     }
