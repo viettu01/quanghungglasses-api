@@ -17,10 +17,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_SALE_NOT_FOUND;
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @Slf4j
 @Service
@@ -55,23 +58,32 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public SaleResponse create(SaleRequest saleRequest) {
         setTimes(saleRequest);
+        if (saleRepository.existsByName(saleRequest.getName()))
+            throw new RuntimeException(ERROR_SALE_NAME_ALREADY_EXISTS);
+        if (saleRequest.getStartDate().after(saleRequest.getEndDate()))
+            throw new RuntimeException(ERROR_SALE_START_DATE_AFTER_END_DATE);
         saleRequest.getSaleDetails().forEach(saleDetailsRequest -> {
             if (saleRequest.getSaleDetails().stream().filter(saleDetailsRequest1 -> saleDetailsRequest1.getProductId().equals(saleDetailsRequest.getProductId())).count() > 1) {
-                throw new RuntimeException("Mã sản phẩm không được trùng nhau");
+                throw new RuntimeException(ERROR_SALE_PRODUCT_ALREADY_EXISTS);
             }
         });
 
-        // Thoi gian bat dau chuong trinh khuyen mai phai truoc thoi gian ket thuc
-        if (saleRequest.getStartDate().after(saleRequest.getEndDate())) {
-            throw new RuntimeException("Thời gian bắt đầu không được sau thời gian kết thúc");
+        // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian mới tạo
+        List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetween(
+                saleRequest.getStartDate(), saleRequest.getEndDate(),
+                saleRequest.getStartDate(), saleRequest.getEndDate());
+        if (!salesExists.isEmpty()) {
+            // Kiem tra danh sach san pham cua chuong trinh khuyen mai moi tao co trung voi chuong trinh khuyen mai dang dien ra khong
+            Set<Long> productIds = new HashSet<>();
+            saleRequest.getSaleDetails().forEach(saleDetailsRequest -> productIds.add(saleDetailsRequest.getProductId()));
+            salesExists.forEach(sale -> {
+                sale.getSaleDetails().forEach(saleDetails -> {
+                    if (productIds.contains(saleDetails.getProduct().getId())) {
+                        throw new RuntimeException("Sản phẩm '" + saleDetails.getProduct().getName() + "' đã tồn tại trong chương trình khuyến mãi đang diễn ra");
+                    }
+                });
+            });
         }
-
-        // Kiem tra thoi gian bat dau chuong trinh giam gia moi phai sau thoi gian ket thuc chuong trinh giam gia cu
-        saleRepository.findAll().forEach(sale -> {
-            if (sale.getEndDate().after(saleRequest.getStartDate())) {
-                throw new RuntimeException("Thời gian bắt đầu chương trình khuyến mãi mới phải sau thời gian kết thúc chương trình khuyến mãi cũ");
-            }
-        });
 
         Sale sale = saleRepository.save(saleMapper.convertToEntity(saleRequest));
         sale.getSaleDetails().clear();
@@ -87,36 +99,46 @@ public class SaleServiceImpl implements SaleService {
     public SaleResponse update(SaleRequest saleRequest) {
         setTimes(saleRequest);
         Sale saleExists = saleRepository.findById(saleRequest.getId()).orElseThrow(() -> new RuntimeException(ERROR_SALE_NOT_FOUND));
-
+        if (!saleExists.getName().equals(saleRequest.getName()) && saleRepository.existsByName(saleRequest.getName()))
+            throw new RuntimeException(ERROR_SALE_NAME_ALREADY_EXISTS);
+        if (saleRequest.getStartDate().after(saleRequest.getEndDate()))
+            throw new RuntimeException(ERROR_SALE_START_DATE_AFTER_END_DATE);
         saleRequest.getSaleDetails().forEach(saleDetailsRequest -> {
             if (saleRequest.getSaleDetails().stream().filter(saleDetailsRequest1 -> saleDetailsRequest1.getProductId().equals(saleDetailsRequest.getProductId())).count() > 1) {
-                throw new RuntimeException("Mã sản phẩm không được trùng nhau");
+                throw new RuntimeException(ERROR_SALE_PRODUCT_ALREADY_EXISTS);
             }
         });
 
-        // Thoi gian bat dau chuong trinh khuyen mai phai truoc thoi gian ket thuc
-        if (saleRequest.getStartDate().after(saleRequest.getEndDate())) {
-            throw new RuntimeException("Thời gian bắt đầu không được sau thời gian kết thúc");
-        }
-
-        // Kiem tra thoi gian dang chinh sua phai khac thoi gian hien tai chua chinh sua thi moi kiem tra thoi gian bat dau chuong trinh giam gia moi phai sau thoi gian ket thuc chuong trinh giam gia cu
-        if (!saleRequest.getStartDate().equals(saleExists.getStartDate()) || !saleRequest.getEndDate().equals(saleExists.getEndDate())) {
-            saleRepository.findAll().forEach(sale1 -> {
-                if (sale1.getEndDate().after(saleRequest.getStartDate())) {
-                    throw new RuntimeException("Thời gian bắt đầu chương trình khuyến mãi mới phải sau thời gian kết thúc chương trình khuyến mãi cũ");
+        // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian mới tạo
+        List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetween(
+                saleRequest.getStartDate(), saleRequest.getEndDate(),
+                saleRequest.getStartDate(), saleRequest.getEndDate());
+        if (!salesExists.isEmpty()) {
+            // Kiem tra danh sach san pham cua chuong trinh khuyen mai moi tao co trung voi chuong trinh khuyen mai dang dien ra khong
+            Set<Long> productIdsExists = new HashSet<>();
+            Set<Long> productIdsRequest = new HashSet<>();
+            saleExists.getSaleDetails().forEach(saleDetails -> productIdsExists.add(saleDetails.getProduct().getId()));
+            saleRequest.getSaleDetails().forEach(saleDetailsRequest2 -> productIdsRequest.add(saleDetailsRequest2.getProductId()));
+            productIdsRequest.forEach(productIdRequest -> {
+                if (!productIdsExists.contains(productIdRequest)) {
+                    salesExists.forEach(sale -> {
+                        sale.getSaleDetails().forEach(saleDetails2 -> {
+                            if (saleDetails2.getProduct().getId().equals(productIdRequest)) {
+                                throw new RuntimeException("Sản phẩm '" + saleDetails2.getProduct().getName() + "' đã tồn tại trong chương trình khuyến mãi đang diễn ra");
+                            }
+                        });
+                    });
                 }
             });
         }
 
         Sale saleUpdate = saleRepository.save(saleMapper.convertToEntity(saleRequest));
         for (SaleDetailsRequest saleDetailsRequest : saleRequest.getSaleDetails()) {
-            SaleDetails saleDetails = saleDetailsRepository.findByProductIdAndSaleId(saleDetailsRequest.getProductId(), saleUpdate.getId()).orElse(null);
-            if (saleDetails == null) {
-                saleDetails = saleMapper.convertToEntity(saleDetailsRequest);
-                saleDetails.setSale(saleUpdate);
-            } else {
-                saleDetails.setDiscount(saleDetailsRequest.getDiscount());
+            SaleDetails saleDetails = saleMapper.convertToEntity(saleDetailsRequest);
+            if (Objects.isNull(saleDetails.getId())) {
+                saleDetails.setId(0L);
             }
+            saleDetails.setSale(saleUpdate);
             saleDetailsRepository.save(saleDetails);
         }
         return saleMapper.convertToResponse(saleRepository.save(saleUpdate));

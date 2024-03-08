@@ -21,12 +21,6 @@ public class SaleMapper {
 
     public Sale convertToEntity(SaleRequest saleRequest) {
         Sale sale = modelMapper.map(saleRequest, Sale.class);
-//        sale.getStartDate().setHours(0);
-//        sale.getStartDate().setMinutes(0);
-//        sale.getStartDate().setSeconds(0);
-//        sale.getEndDate().setHours(23);
-//        sale.getEndDate().setMinutes(59);
-//        sale.getEndDate().setSeconds(59);
         sale.setStaff(staffRepository.findByAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null));
         return sale;
     }

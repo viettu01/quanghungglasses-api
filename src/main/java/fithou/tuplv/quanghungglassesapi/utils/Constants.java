@@ -68,7 +68,10 @@ public class Constants {
     public static final String ERROR_PRODUCT_HAS_RECEIPT = "Sản phẩm đang có hóa đơn";
     public static final String ERROR_PRODUCT_HAS_WARRANTY = "Sản phẩm đang có phiếu bảo hành";
 
+    public static final String ERROR_SALE_PRODUCT_ALREADY_EXISTS = "Sản phẩm đã tồn tại trong chương trình khuyến mãi";
     public static final String ERROR_SALE_NOT_FOUND = "Chương trình khuyến mãi không tồn tại";
+    public static final String ERROR_SALE_NAME_ALREADY_EXISTS = "Tên chương trình khuyến mãi đã tồn tại";
+    public static final String ERROR_SALE_START_DATE_AFTER_END_DATE = "Thời gian bắt đầu không được sau thời gian kết thúc";
 
     public static final String ERROR_RECEIPT_NOT_FOUND = "Hóa đơn không tồn tại";
     public static final String ERROR_RECEIPT_DETAILS_NOT_FOUND = "Chi tiết hóa đơn không tồn tại";

@@ -50,13 +50,13 @@ public class CartMapper {
 
         // Lấy giá sau khi đã giảm giá từ bảng sale và product_sale kiểm tra xem thời gian hiện tại có nằm trong thời gian sale không
         double price = cartDetails.getProductDetails().getProduct().getPrice();
-        Date now = new Date();
-        Optional<Sale> sale = saleRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now);
-        if (sale.isPresent()) {
-            Optional<SaleDetails> productSale = saleDetailsRepository.findByProductAndSale(cartDetails.getProductDetails().getProduct(), sale.get());
-            if (productSale.isPresent())
-                price = price * ((double) (100 - productSale.get().getDiscount()) / 100);
-        }
+//        Date now = new Date();
+//        Optional<Sale> sale = saleRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now);
+//        if (sale.isPresent()) {
+//            Optional<SaleDetails> productSale = saleDetailsRepository.findByProductAndSale(cartDetails.getProductDetails().getProduct(), sale.get());
+//            if (productSale.isPresent())
+//                price = price * ((double) (100 - productSale.get().getDiscount()) / 100);
+//        }
         cartDetailsResponse.setProductPrice(price);
 
         return cartDetailsResponse;

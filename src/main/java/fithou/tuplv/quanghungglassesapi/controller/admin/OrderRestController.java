@@ -1,4 +1,4 @@
-package fithou.tuplv.quanghungglassesapi.controller;
+package fithou.tuplv.quanghungglassesapi.controller.admin;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
