@@ -34,11 +34,6 @@ public class OriginServiceImpl implements OriginService {
     }
 
     @Override
-    public PaginationDTO<OriginResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(originRepository.findAll(pageable).map(originMapper::convertToResponse));
-    }
-
-    @Override
     public PaginationDTO<OriginResponse> findByNameContaining(String name, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(originRepository.findByNameContaining(name, pageable).map(originMapper::convertToResponse));
     }
@@ -69,17 +64,6 @@ public class OriginServiceImpl implements OriginService {
         if (!origin.getProducts().isEmpty())
             throw new RuntimeException(ERROR_ORIGIN_HAS_PRODUCTS);
         originRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteByIds(Long[] ids) {
-        for (Long id : ids) {
-            try {
-                originRepository.deleteById(id);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }
     }
 
     @Override

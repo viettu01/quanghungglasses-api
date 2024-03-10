@@ -10,8 +10,6 @@ import java.util.List;
 public interface ShapeService {
     List<ShapeResponse> findAll();
 
-    PaginationDTO<ShapeResponse> findAll(Pageable pageable);
-
     PaginationDTO<ShapeResponse> findByNameContaining(String name, Pageable pageable);
 
     ShapeResponse findById(Long id);
@@ -21,8 +19,6 @@ public interface ShapeService {
     ShapeResponse update(ShapeRequest shapeRequest);
 
     void deleteById(Long id);
-
-    void deleteByIds(Long[] ids);
 
     boolean existsByName(String name);
 }

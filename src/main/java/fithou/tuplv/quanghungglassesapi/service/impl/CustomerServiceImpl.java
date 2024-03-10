@@ -2,7 +2,6 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.CustomerRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.RegisterRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.VerifyEmailRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
@@ -36,11 +35,6 @@ public class CustomerServiceImpl implements CustomerService {
     final PaginationMapper paginationMapper;
     final UserMapper userMapper;
     final ModelMapper modelMapper;
-
-    @Override
-    public PaginationDTO<CustomerResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(customerRepository.findAll(pageable).map(userMapper::convertToResponse));
-    }
 
     @Override
     public PaginationDTO<CustomerResponse> findByFullnameContaining(String name, Pageable pageable) {

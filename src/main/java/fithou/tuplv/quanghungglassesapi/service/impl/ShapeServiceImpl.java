@@ -34,11 +34,6 @@ public class ShapeServiceImpl implements ShapeService {
     }
 
     @Override
-    public PaginationDTO<ShapeResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(shapeRepository.findAll(pageable).map(shapeMapper::convertToResponse));
-    }
-
-    @Override
     public PaginationDTO<ShapeResponse> findByNameContaining(String name, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(shapeRepository.findByNameContaining(name, pageable).map(shapeMapper::convertToResponse));
     }
@@ -69,17 +64,6 @@ public class ShapeServiceImpl implements ShapeService {
         if (!shape.getProducts().isEmpty())
             throw new RuntimeException(ERROR_SHAPE_HAS_PRODUCTS);
         shapeRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteByIds(Long[] ids) {
-        for (Long id : ids) {
-            try {
-                shapeRepository.deleteById(id);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }
     }
 
     @Override

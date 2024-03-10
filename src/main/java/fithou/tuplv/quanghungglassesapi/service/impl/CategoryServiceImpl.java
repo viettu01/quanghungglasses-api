@@ -40,27 +40,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByStatus(categoryStatus).stream().map(categoryMapper::convertToCategoryProductResponse).collect(Collectors.toList());
     }
 
-//    @Override
-//    public PaginationDTO<CategoryResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable) {
-//        return paginationMapper.mapToPaginationDTO(
-//                categoryRepository.findByNameContainingAndStatus(name, status, pageable).map(categoryMapper::convertToResponse)
-//        );
-//    }
-
     @Override
     public PaginationDTO<CategoryResponse> findByNameContaining(String name, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(
                 categoryRepository.findByNameContaining(name, pageable).map(categoryMapper::convertToResponse)
         );
     }
-
-//    @Override
-//    public List<CategoryResponse> findByStatus(Boolean status) {
-//        return categoryRepository.findByStatus(status)
-//                .stream()
-//                .map(categoryMapper::convertToResponse)
-//                .collect(Collectors.toList());
-//    }
 
     @Override
     public CategoryResponse findBySlug(String slug) {
@@ -99,14 +84,4 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean existsByName(String name) {
         return categoryRepository.existsByName(name);
     }
-
-//    @Override
-//    public Long countByStatus(Boolean status) {
-//        return categoryRepository.countByStatus(status);
-//    }
-//
-//    @Override
-//    public Long countAll() {
-//        return categoryRepository.count();
-//    }
 }

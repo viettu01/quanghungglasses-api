@@ -34,11 +34,6 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public PaginationDTO<MaterialResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(materialRepository.findAll(pageable).map(materialMapper::convertToResponse));
-    }
-
-    @Override
     public PaginationDTO<MaterialResponse> findByNameContaining(String name, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(materialRepository.findByNameContaining(name, pageable).map(materialMapper::convertToResponse));
     }
@@ -69,17 +64,6 @@ public class MaterialServiceImpl implements MaterialService {
         if (!material.getProducts().isEmpty())
             throw new RuntimeException(ERROR_MATERIAL_HAS_PRODUCTS);
         materialRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteByIds(Long[] ids) {
-        for (Long id : ids) {
-            try {
-                materialRepository.deleteById(id);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }
     }
 
     @Override

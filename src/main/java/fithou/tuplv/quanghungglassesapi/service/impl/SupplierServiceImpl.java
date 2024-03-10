@@ -29,16 +29,6 @@ public class SupplierServiceImpl implements SupplierService {
     final SupplierMapper supplierMapper;
 
     @Override
-    public List<SupplierResponse> findAll() {
-        return supplierRepository.findAll().stream().map(supplierMapper::convertToResponse).collect(Collectors.toList());
-    }
-
-    @Override
-    public PaginationDTO<SupplierResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(supplierRepository.findAll(pageable).map(supplierMapper::convertToResponse));
-    }
-
-    @Override
     public PaginationDTO<SupplierResponse> findByNameContaining(String name, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(supplierRepository.findByNameContaining(name, pageable).map(supplierMapper::convertToResponse));
     }
@@ -73,17 +63,6 @@ public class SupplierServiceImpl implements SupplierService {
         if (!supplier.getReceipts().isEmpty())
             throw new RuntimeException(ERROR_SUPPLIER_HAS_RECEIPT);
         supplierRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteByIds(Long[] ids) {
-        for (Long id : ids) {
-            try {
-                supplierRepository.deleteById(id);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }
     }
 
     @Override
