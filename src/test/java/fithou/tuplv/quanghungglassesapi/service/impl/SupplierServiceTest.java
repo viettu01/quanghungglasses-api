@@ -52,7 +52,7 @@ class SupplierServiceTest {
     @Test
     void findByIdWithIdExists() {
         // Arrange
-        long id = 1;
+        long id = 3;
 
         // Act
         SupplierResponse actualSupplier = supplierService.findById(id);
@@ -83,7 +83,7 @@ class SupplierServiceTest {
     @Test
     void testFindByNameContainingWithRecord() {
         // Arrange
-        String name = "Shop";
+        String name = "Công ty";
         Pageable pageable = PageRequest.of(0, 10);
 
         // Act
@@ -96,7 +96,7 @@ class SupplierServiceTest {
     @Test
     void testFindByNameContainingWithOneRecord() {
         // Arrange
-        String name = "G – Shop";
+        String name = "G – Shop 4";
         Pageable pageable = PageRequest.of(0, 10);
 
         // Act
@@ -122,7 +122,7 @@ class SupplierServiceTest {
         // Arrange
         SupplierRequest supplierRequest = new SupplierRequest();
         supplierRequest.setName("G – Shop 2");
-        supplierRequest.setPhone("0943061993");
+        supplierRequest.setPhone("0998765544");
 
         // Act
         assertThatThrownBy(() -> supplierService.create(supplierRequest)).isInstanceOf(RuntimeException.class);
@@ -146,7 +146,7 @@ class SupplierServiceTest {
         SupplierRequest supplierRequest = new SupplierRequest();
         supplierRequest.setId(2L);
         supplierRequest.setName("G – Shop");
-        supplierRequest.setPhone("0123456789");
+        supplierRequest.setPhone("0998765544");
 
         // Act
         assertThatThrownBy(() -> supplierService.update(supplierRequest)).isInstanceOf(RuntimeException.class);
@@ -158,7 +158,7 @@ class SupplierServiceTest {
         SupplierRequest supplierRequest = new SupplierRequest();
         supplierRequest.setId(2L);
         supplierRequest.setName("G – Shop 3");
-        supplierRequest.setPhone("0123456789");
+        supplierRequest.setPhone("0998765544");
 
         // Act
         assertThatThrownBy(() -> supplierService.update(supplierRequest)).isInstanceOf(RuntimeException.class);
@@ -168,9 +168,9 @@ class SupplierServiceTest {
     void updateSuccess() {
         // Arrange
         SupplierRequest supplierRequest = new SupplierRequest();
-        supplierRequest.setId(1L);
+        supplierRequest.setId(7L);
         supplierRequest.setName("G – Shop 4");
-        supplierRequest.setPhone("0966871026");
+        supplierRequest.setPhone("0998765543");
 
         // Act
         SupplierResponse actualSupplier = supplierService.create(supplierRequest);
@@ -186,13 +186,13 @@ class SupplierServiceTest {
 
     @Test
     void deleteByIdWithReceiptExists() {
-        long id = 1;
+        long id = 2;
         assertThatThrownBy(() -> supplierService.deleteById(id)).isInstanceOf(RuntimeException.class);
     }
 
     @Test
     void deleteByIdSuccess() {
-        long id = 6;
+        long id = 8;
         supplierService.deleteById(id);
         assertFalse(supplierRepository.existsById(id));
     }
