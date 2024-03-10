@@ -5,11 +5,8 @@ import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.service.AccountService;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
