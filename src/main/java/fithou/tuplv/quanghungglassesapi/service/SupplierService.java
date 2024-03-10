@@ -5,8 +5,6 @@ import fithou.tuplv.quanghungglassesapi.dto.request.SupplierRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.SupplierResponse;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface SupplierService {
 
     PaginationDTO<SupplierResponse> findByNameContaining(String name, Pageable pageable);
