@@ -1,9 +1,7 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
-import fithou.tuplv.quanghungglassesapi.dto.request.MaterialRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ShapeRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.MaterialResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ShapeResponse;
 import fithou.tuplv.quanghungglassesapi.repository.ShapeRepository;
 import fithou.tuplv.quanghungglassesapi.service.ShapeService;
@@ -25,12 +23,14 @@ class ShapeServiceImplTest {
     ShapeRepository shapeRepository;
     @Autowired
     ShapeService shapeService;
+
     @Test
     void testFindAll() {
         long actualMaterials = shapeService.findByNameContaining("", PageRequest.of(0, 10)).getTotalElements(); // Lay tong so phan tu
         long expectedMaterials = shapeRepository.count(); // Lay tong so phan tu trong database
         assertEquals(actualMaterials, expectedMaterials);
     }
+
     @Test
     void testFindAllWithPaginate() {
         // Arrange
@@ -46,6 +46,7 @@ class ShapeServiceImplTest {
         assertEquals(1, actualSupplier.getPageNumber()); // Kiểm tra trang hiện tại
         assertEquals("name", actualSupplier.getSortBy()); // Kiểm tra sắp xếp theo tên
     }
+
     @Test
     void findByIdWithIdExists() {
         // Arrange
@@ -63,6 +64,7 @@ class ShapeServiceImplTest {
         long id = 100;
         assertThatThrownBy(() -> shapeService.findById(id)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void testFindByNameContainingWithNotRecord() {
         // Arrange
@@ -70,7 +72,7 @@ class ShapeServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // Act
-        PaginationDTO<ShapeResponse> actualMaterial= shapeService.findByNameContaining(name, pageable);
+        PaginationDTO<ShapeResponse> actualMaterial = shapeService.findByNameContaining(name, pageable);
 
         // Assert
         assertEquals(0, actualMaterial.getNumberOfElements()); // Kiểm tra kết quả trả về khác null
@@ -101,10 +103,11 @@ class ShapeServiceImplTest {
         // Assert
         assertEquals(1, actualMaterial.getNumberOfElements()); // Kiểm tra kết quả trả về khác null
     }
+
     @Test
     void createSuccess() {
         // Arrange
-        ShapeRequest shapeRequest= new ShapeRequest();
+        ShapeRequest shapeRequest = new ShapeRequest();
         shapeRequest.setName("Đa giác đều");
 
         //Kiểm tra id trả về khác null hay không
@@ -113,6 +116,7 @@ class ShapeServiceImplTest {
         ShapeResponse actualMaterial = shapeService.create(shapeRequest);
         assertNotNull(actualMaterial.getId()); // Kiểm tra kết quả trả về khác null
     }
+
     @Test
     void createWhileNameExists() {
         // Arrange
@@ -122,9 +126,10 @@ class ShapeServiceImplTest {
         // Act
         assertThatThrownBy(() -> shapeService.create(shapeRequest)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void updateSuccess() {
-        ShapeRequest shapeRequest= new ShapeRequest();
+        ShapeRequest shapeRequest = new ShapeRequest();
         shapeRequest.setId(10L);
         shapeRequest.setName("Đa giác vuông");
 
@@ -132,6 +137,7 @@ class ShapeServiceImplTest {
         ShapeResponse actualMaterial = shapeService.create(shapeRequest);
         assertEquals(shapeRequest.getName(), actualMaterial.getName()); // Kiem tra ten moi duoc cap nhat co dung khong
     }
+
     @Test
     void updateWhileNameExists() {
         // Arrange
@@ -142,6 +148,7 @@ class ShapeServiceImplTest {
         // Act
         assertThatThrownBy(() -> shapeService.update(shapeRequest)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void deleteByIdWithIdNotExists() {
         long id = 100;

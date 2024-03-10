@@ -2,9 +2,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.MaterialRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.SupplierRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.MaterialResponse;
-import fithou.tuplv.quanghungglassesapi.dto.response.SupplierResponse;
 import fithou.tuplv.quanghungglassesapi.repository.MaterialRepository;
 import fithou.tuplv.quanghungglassesapi.service.MaterialService;
 import org.junit.jupiter.api.Test;
@@ -17,18 +15,21 @@ import org.springframework.data.domain.Sort;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class MaterialServiceImplTest {
     @Autowired
     MaterialRepository materialRepository;
     @Autowired
     MaterialService materialService;
+
     @Test
     void testFindAll() {
         long actualMaterials = materialService.findByNameContaining("", PageRequest.of(0, 10)).getTotalElements(); // Lay tong so phan tu
         long expectedMaterials = materialRepository.count(); // Lay tong so phan tu trong database
         assertEquals(actualMaterials, expectedMaterials);
     }
+
     @Test
     void testFindAllWithPaginate() {
         // Arrange
@@ -44,6 +45,7 @@ class MaterialServiceImplTest {
         assertEquals(1, actualSupplier.getPageNumber()); // Kiểm tra trang hiện tại
         assertEquals("name", actualSupplier.getSortBy()); // Kiểm tra sắp xếp theo tên
     }
+
     @Test
     void findByIdWithIdExists() {
         // Arrange
@@ -61,6 +63,7 @@ class MaterialServiceImplTest {
         long id = 100;
         assertThatThrownBy(() -> materialService.findById(id)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void testFindByNameContainingWithNotRecord() {
         // Arrange
@@ -68,7 +71,7 @@ class MaterialServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // Act
-        PaginationDTO<MaterialResponse> actualMaterial= materialService.findByNameContaining(name, pageable);
+        PaginationDTO<MaterialResponse> actualMaterial = materialService.findByNameContaining(name, pageable);
 
         // Assert
         assertEquals(0, actualMaterial.getNumberOfElements()); // Kiểm tra kết quả trả về khác null
@@ -99,10 +102,11 @@ class MaterialServiceImplTest {
         // Assert
         assertEquals(1, actualMaterial.getNumberOfElements()); // Kiểm tra kết quả trả về khác null
     }
+
     @Test
     void createSuccess() {
         // Arrange
-        MaterialRequest materialRequest= new MaterialRequest();
+        MaterialRequest materialRequest = new MaterialRequest();
         materialRequest.setName("G – Shop 2");
 
         //Kiểm tra id trả về khác null hay không
@@ -111,6 +115,7 @@ class MaterialServiceImplTest {
         MaterialResponse actualMaterial = materialService.create(materialRequest);
         assertNotNull(actualMaterial.getId()); // Kiểm tra kết quả trả về khác null
     }
+
     @Test
     void createWhileNameExists() {
         // Arrange
@@ -120,9 +125,10 @@ class MaterialServiceImplTest {
         // Act
         assertThatThrownBy(() -> materialService.create(materialRequest)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void updateSuccess() {
-       MaterialRequest materialRequest= new MaterialRequest();
+        MaterialRequest materialRequest = new MaterialRequest();
         materialRequest.setId(1L);
         materialRequest.setName("Hợp kim");
 
@@ -130,6 +136,7 @@ class MaterialServiceImplTest {
         MaterialResponse actualMaterial = materialService.create(materialRequest);
         assertEquals(materialRequest.getName(), actualMaterial.getName()); // Kiem tra ten moi duoc cap nhat co dung khong
     }
+
     @Test
     void updateWhileNameExists() {
         // Arrange
@@ -140,6 +147,7 @@ class MaterialServiceImplTest {
         // Act
         assertThatThrownBy(() -> materialService.update(materialRequest)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void deleteByIdWithIdNotExists() {
         long id = 100;

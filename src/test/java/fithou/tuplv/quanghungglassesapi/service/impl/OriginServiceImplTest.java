@@ -1,9 +1,7 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
-import fithou.tuplv.quanghungglassesapi.dto.request.BrandRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.OriginRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.BrandResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.OriginResponse;
 import fithou.tuplv.quanghungglassesapi.repository.OriginRepository;
 import fithou.tuplv.quanghungglassesapi.service.OriginService;
@@ -25,12 +23,14 @@ class OriginServiceImplTest {
     OriginRepository originRepository;
     @Autowired
     OriginService originService;
+
     @Test
     void testFindAll() {
         long actualMaterials = originService.findByNameContaining("", PageRequest.of(0, 10)).getTotalElements(); // Lay tong so phan tu
         long expectedMaterials = originRepository.count(); // Lay tong so phan tu trong database
         assertEquals(actualMaterials, expectedMaterials);
     }
+
     @Test
     void testFindAllWithPaginate() {
         // Arrange
@@ -46,6 +46,7 @@ class OriginServiceImplTest {
         assertEquals(1, actualOrigin.getPageNumber()); // Kiểm tra trang hiện tại
         assertEquals("name", actualOrigin.getSortBy()); // Kiểm tra sắp xếp theo tên
     }
+
     @Test
     void findByIdWithIdExists() {
         // Arrange
@@ -63,6 +64,7 @@ class OriginServiceImplTest {
         long id = 100;
         assertThatThrownBy(() -> originService.findById(id)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void testFindByNameContainingWithNotRecord() {
         // Arrange
@@ -101,10 +103,11 @@ class OriginServiceImplTest {
         // Assert
         assertEquals(1, actualOrigin.getNumberOfElements()); // Kiểm tra kết quả trả về khác null
     }
+
     @Test
     void createSuccess() {
         // Arrange
-        OriginRequest originRequest= new OriginRequest();
+        OriginRequest originRequest = new OriginRequest();
         originRequest.setName("Italy");
 
         //Kiểm tra id trả về khác null hay không
@@ -113,18 +116,20 @@ class OriginServiceImplTest {
         OriginResponse actualOrigin = originService.create(originRequest);
         assertNotNull(actualOrigin.getId()); // Kiểm tra kết quả trả về khác null
     }
+
     @Test
     void createWhileNameExists() {
         // Arrange
-        OriginRequest originRequest= new OriginRequest();
+        OriginRequest originRequest = new OriginRequest();
         originRequest.setName("Việt Nam");
         //kiểm tra có trả ra ngoại lệ hay không , nếu trả ra ngoại lệ pass
         // Act
         assertThatThrownBy(() -> originService.create(originRequest)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void updateSuccess() {
-        OriginRequest originRequest= new OriginRequest();
+        OriginRequest originRequest = new OriginRequest();
         originRequest.setId(9L);
         originRequest.setName("HongKong");
 
@@ -132,16 +137,18 @@ class OriginServiceImplTest {
         OriginResponse actualOrigin = originService.create(originRequest);
         assertEquals(originRequest.getName(), actualOrigin.getName()); // Kiem tra ten moi duoc cap nhat co dung khong
     }
+
     @Test
     void updateWhileNameExists() {
         // Arrange
-        OriginRequest originRequest= new OriginRequest();
+        OriginRequest originRequest = new OriginRequest();
         originRequest.setId(9L);
         originRequest.setName("Nhật Bản");
 
         // Act
         assertThatThrownBy(() -> originService.update(originRequest)).isInstanceOf(RuntimeException.class);
     }
+
     @Test
     void deleteByIdWithIdNotExists() {
         long id = 100;

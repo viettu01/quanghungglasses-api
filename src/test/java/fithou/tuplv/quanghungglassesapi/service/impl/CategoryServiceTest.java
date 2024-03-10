@@ -2,9 +2,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.CategoryRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.SupplierRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CategoryResponse;
-import fithou.tuplv.quanghungglassesapi.dto.response.SupplierResponse;
 import fithou.tuplv.quanghungglassesapi.repository.CategoryRepository;
 import fithou.tuplv.quanghungglassesapi.service.CategoryService;
 import org.junit.jupiter.api.Test;
@@ -76,7 +74,7 @@ class CategoryServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // Act
-        PaginationDTO<CategoryResponse> actualCategory= categoryService.findByNameContaining(name, pageable);
+        PaginationDTO<CategoryResponse> actualCategory = categoryService.findByNameContaining(name, pageable);
 
         // Assert
         assertEquals(0, actualCategory.getNumberOfElements()); // Kiểm tra kết quả trả về khác null

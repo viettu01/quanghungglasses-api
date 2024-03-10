@@ -2,9 +2,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.BrandRequest;
-import fithou.tuplv.quanghungglassesapi.dto.request.ShapeRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.BrandResponse;
-import fithou.tuplv.quanghungglassesapi.dto.response.ShapeResponse;
 import fithou.tuplv.quanghungglassesapi.repository.BrandRepository;
 import fithou.tuplv.quanghungglassesapi.service.BrandService;
 import org.junit.jupiter.api.Test;
