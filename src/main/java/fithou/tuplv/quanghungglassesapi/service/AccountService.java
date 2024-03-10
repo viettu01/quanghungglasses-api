@@ -14,4 +14,5 @@ public interface AccountService {
 
     void forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
 
+    void logout();
 }

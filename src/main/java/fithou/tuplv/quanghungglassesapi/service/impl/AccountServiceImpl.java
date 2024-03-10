@@ -101,4 +101,9 @@ public class AccountServiceImpl implements AccountService {
         account.setVerificationCodeExpiredAt(null);
         accountRepository.save(account);
     }
+
+    @Override
+    public void logout() {
+        SecurityContextHolder.clearContext();
+    }
 }
