@@ -17,5 +17,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 
     List<Sale> findByStartDateBetweenOrEndDateBetween(Date startDate, Date endDate, Date startDate2, Date endDate2);
 
+    List<Sale> findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(Date startDate, Date endDate, Date startDate2, Date endDate2, Date startDate3, Date endDate3);
+
     boolean existsByName(String name);
 }

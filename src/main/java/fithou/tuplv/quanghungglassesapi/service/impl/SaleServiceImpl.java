@@ -68,8 +68,11 @@ public class SaleServiceImpl implements SaleService {
             }
         });
 
+
+
         // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian mới tạo
-        List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetween(
+        List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                saleRequest.getStartDate(), saleRequest.getEndDate(),
                 saleRequest.getStartDate(), saleRequest.getEndDate(),
                 saleRequest.getStartDate(), saleRequest.getEndDate());
         if (!salesExists.isEmpty()) {
@@ -110,7 +113,8 @@ public class SaleServiceImpl implements SaleService {
         });
 
         // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian mới tạo
-        List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetween(
+        List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                saleRequest.getStartDate(), saleRequest.getEndDate(),
                 saleRequest.getStartDate(), saleRequest.getEndDate(),
                 saleRequest.getStartDate(), saleRequest.getEndDate());
         if (!salesExists.isEmpty()) {
