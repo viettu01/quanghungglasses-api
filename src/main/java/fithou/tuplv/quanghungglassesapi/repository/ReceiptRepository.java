@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
-    Page<Receipt> findByStaffFullnameContaining(String fullname, Pageable pageable);
+    Page<Receipt> findBySupplierNameContaining(String supplierName, Pageable pageable);
 }

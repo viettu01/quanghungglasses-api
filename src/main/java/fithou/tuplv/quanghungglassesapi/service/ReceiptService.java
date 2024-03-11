@@ -6,7 +6,7 @@ import fithou.tuplv.quanghungglassesapi.dto.response.ReceiptResponse;
 import org.springframework.data.domain.Pageable;
 
 public interface ReceiptService {
-    PaginationDTO<ReceiptResponse> findByStaffFullnameContaining(String fullname, Pageable pageable);
+    PaginationDTO<ReceiptResponse> findBySupplierNameContaining(String supplierName, Pageable pageable);
 
     ReceiptResponse findById(Long id);
 

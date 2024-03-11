@@ -34,9 +34,9 @@ public class ReceiptServiceImpl implements ReceiptService {
     final PaginationMapper paginationMapper;
 
     @Override
-    public PaginationDTO<ReceiptResponse> findByStaffFullnameContaining(String fullname, Pageable pageable) {
+    public PaginationDTO<ReceiptResponse> findBySupplierNameContaining(String supplierName, Pageable pageable) {
         return paginationMapper
-                .mapToPaginationDTO(receiptRepository.findByStaffFullnameContaining(fullname, pageable)
+                .mapToPaginationDTO(receiptRepository.findBySupplierNameContaining(supplierName, pageable)
                         .map(receiptMapper::convertToResponse));
     }
 
