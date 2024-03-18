@@ -158,18 +158,18 @@ public class QuangHungGlassesApiApplication {
                 brandService.create(new BrandRequest(null, "Dolce & Gabbana"));
             // endregion
             // region Supplier
-//            if (!supplierService.existsByName("G – Shop"))
-//                supplierService.create(new SupplierRequest(null, "G – Shop", "0943061993", "Số nhà 154 ngõ Văn Chương, Đống Đa, Hà Nội"));
-//            if (!supplierService.existsByName("Anna Eyewear"))
-//                supplierService.create(new SupplierRequest(null, "Anna Eyewear", "0966886634", "Số 75A ngõ 61 Lê Văn Lương, Hà Nội"));
-//            if (!supplierService.existsByName("Hiệu Kính Thành Luân"))
-//                supplierService.create(new SupplierRequest(null, "Hiệu Kính Thành Luân", "0382897422", "Số 58 Lương Văn Can, Hà Nội"));
-//            if (!supplierService.existsByName("Công Ty TNHH Kính Mắt Thiên Vũ"))
-//                supplierService.create(new SupplierRequest(null, "Công Ty TNHH Kính Mắt Thiên Vũ", "0983675413", "151B Lê Duẩn, Hoàn Kiếm, Hà Nội"));
-//            if (!supplierService.existsByName("Vanila Shop"))
-//                supplierService.create(new SupplierRequest(null, "Vanila Shop", "0912101011", "Số 8 ngõ 381/55/4 Nguyễn Khang, Cầu Giấy, Hà Nội"));
-//            if (!supplierService.existsByName("Công Ty TNHH Kính Mắt Thành Đô"))
-//                supplierService.create(new SupplierRequest(null, "Công Ty TNHH Kính Mắt Thành Đô", "0975151118", "Số 17D ngõ 141/236 Giáp Nhị, Thịnh Liệt, Hoàng Mai, Hà Nội"));
+            if (!supplierService.existsByName("G – Shop"))
+                supplierService.create(new SupplierRequest(null, "G – Shop", "0943061993", "Số nhà 154 ngõ Văn Chương, Đống Đa, Hà Nội"));
+            if (!supplierService.existsByName("Anna Eyewear"))
+                supplierService.create(new SupplierRequest(null, "Anna Eyewear", "0966886634", "Số 75A ngõ 61 Lê Văn Lương, Hà Nội"));
+            if (!supplierService.existsByName("Hiệu Kính Thành Luân"))
+                supplierService.create(new SupplierRequest(null, "Hiệu Kính Thành Luân", "0382897422", "Số 58 Lương Văn Can, Hà Nội"));
+            if (!supplierService.existsByName("Công Ty TNHH Kính Mắt Thiên Vũ"))
+                supplierService.create(new SupplierRequest(null, "Công Ty TNHH Kính Mắt Thiên Vũ", "0983675413", "151B Lê Duẩn, Hoàn Kiếm, Hà Nội"));
+            if (!supplierService.existsByName("Vanila Shop"))
+                supplierService.create(new SupplierRequest(null, "Vanila Shop", "0912101011", "Số 8 ngõ 381/55/4 Nguyễn Khang, Cầu Giấy, Hà Nội"));
+            if (!supplierService.existsByName("Công Ty TNHH Kính Mắt Thành Đô"))
+                supplierService.create(new SupplierRequest(null, "Công Ty TNHH Kính Mắt Thành Đô", "0975151118", "Số 17D ngõ 141/236 Giáp Nhị, Thịnh Liệt, Hoàng Mai, Hà Nội"));
             // endregion
         };
     }

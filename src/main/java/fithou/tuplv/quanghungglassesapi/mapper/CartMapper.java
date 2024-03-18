@@ -14,9 +14,11 @@ import fithou.tuplv.quanghungglassesapi.repository.SaleDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.SaleRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -64,7 +66,9 @@ public class CartMapper {
 
     public CartDetails convertToEntity(CartDetailsRequest cartDetailsRequest) {
         CartDetails cartDetails = modelMapper.map(cartDetailsRequest, CartDetails.class);
-        cartDetails.setCart(cartRepository.findById(cartDetailsRequest.getCartId()).orElse(null));
+        cartDetails.setCart(Objects.requireNonNull(customerRepository
+                .findByAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null))
+                .getCart());
         return cartDetails;
     }
 }

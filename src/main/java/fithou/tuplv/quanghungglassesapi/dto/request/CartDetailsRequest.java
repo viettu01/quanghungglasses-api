@@ -20,8 +20,8 @@ public class CartDetailsRequest implements Serializable {
     @DecimalMin(value = "0", inclusive = false, message = "Giá phải lớn hơn 0")
     private Integer quantity;
 
-    @NotNull(message = "Mã giỏ hàng không được để trống")
-    private Long cartId;
+//    @NotNull(message = "Mã giỏ hàng không được để trống")
+//    private Long cartId;
 
     @NotNull(message = "Mã sản phẩm không được để trống")
     private Long productDetailsId;

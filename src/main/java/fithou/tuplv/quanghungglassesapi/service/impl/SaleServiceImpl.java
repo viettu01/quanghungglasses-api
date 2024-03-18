@@ -69,7 +69,6 @@ public class SaleServiceImpl implements SaleService {
         });
 
 
-
         // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian mới tạo
         List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(
                 saleRequest.getStartDate(), saleRequest.getEndDate(),

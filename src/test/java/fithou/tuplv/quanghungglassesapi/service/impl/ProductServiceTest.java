@@ -185,38 +185,74 @@ class ProductServiceTest {
     @Test
     void createSuccess() throws IOException {
         // Arrange
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setName("test3");
-        productRequest.setSlug("test3");
-        productRequest.setPrice(100000.0);
-        productRequest.setCategoryId(1L);
-        productRequest.setOriginId(1L);
-        productRequest.setBrandId(1L);
-        productRequest.setShapeId(1L);
-        productRequest.setMaterialId(1L);
-        productRequest.setTimeWarranty(12);
-        productRequest.setStatus(true);
-        productRequest.setDescription("test3");
+        for (int i = 1; i <= 20; i++) {
+            ProductRequest productRequest = new ProductRequest();
+            productRequest.setName("Gọng kính " + i);
+            productRequest.setSlug("gong-kinh-" + i);
+            productRequest.setPrice(100000.0 * i);
+            if (i < 5) {
+                productRequest.setCategoryId(1L);
+                productRequest.setOriginId(1L);
+                productRequest.setBrandId(1L);
+                productRequest.setShapeId(1L);
+                productRequest.setMaterialId(1L);
+            } else if (i < 10) {
+                productRequest.setCategoryId(2L);
+                productRequest.setOriginId(2L);
+                productRequest.setBrandId(2L);
+                productRequest.setShapeId(2L);
+                productRequest.setMaterialId(2L);
+            } else if (i < 15) {
+                productRequest.setCategoryId(3L);
+                productRequest.setOriginId(3L);
+                productRequest.setBrandId(3L);
+                productRequest.setShapeId(3L);
+                productRequest.setMaterialId(3L);
+            } else {
+                productRequest.setCategoryId(4L);
+                productRequest.setOriginId(4L);
+                productRequest.setBrandId(4L);
+                productRequest.setShapeId(4L);
+                productRequest.setMaterialId(4L);
+            }
 
-        List<ProductDetailsRequest> productDetailsRequests = List.of(
-                new ProductDetailsRequest(null, "color 1", 1),
-                new ProductDetailsRequest(null, "color 2", 1)
-        );
-        productRequest.setProductDetails(productDetailsRequests);
+            productRequest.setTimeWarranty(12);
+            productRequest.setStatus(true);
+            productRequest.setDescription("Gọng kính " + i);
 
-        // Khoi tao file anh voi duong dan trong thu muc resources
-        MultipartFile multipartFile = new MockMultipartFile(
-                "test.jpg",
-                "test.jpg",
-                "image/jpeg",
-                Files.readAllBytes(new File("src/main/resources/static/images/anh1.jpeg").toPath())
-        );
-        productRequest.setThumbnailFile(multipartFile);
-        productRequest.setImageFiles(List.of(multipartFile));
+            List<ProductDetailsRequest> productDetailsRequests = List.of(
+                    new ProductDetailsRequest(null, "Màu 1", 1),
+                    new ProductDetailsRequest(null, "Màu 2", 1)
+            );
+            productRequest.setProductDetails(productDetailsRequests);
 
-        ProductResponse actualProduct = productService.create(productRequest);
+            // Khoi tao file anh voi duong dan trong thu muc resources
+            MultipartFile multipartFile = new MockMultipartFile(
+                    "test.jpeg",
+                    "test.jpeg",
+                    "image/jpeg",
+                    Files.readAllBytes(new File("src/main/resources/static/images/anh1.jpeg").toPath())
+            );
+            productRequest.setThumbnailFile(multipartFile);
+            productRequest.setImageFiles(List.of(
+                    new MockMultipartFile(
+                            "test.jpeg",
+                            "test.jpeg",
+                            "image/jpeg",
+                            Files.readAllBytes(new File("src/main/resources/static/images/anh1.jpeg").toPath())
+                    ),
+                    new MockMultipartFile(
+                            "test.jpeg",
+                            "test.jpeg",
+                            "image/jpeg",
+                            Files.readAllBytes(new File("src/main/resources/static/images/anh2.jpeg").toPath())
+                    )
+            ));
 
-        assertNotNull(actualProduct.getId()); // Kiểm tra kết quả trả về khác null
+            ProductResponse actualProduct = productService.create(productRequest);
+
+            assertNotNull(actualProduct.getId()); // Kiểm tra kết quả trả về khác null
+        }
     }
 
     @Test

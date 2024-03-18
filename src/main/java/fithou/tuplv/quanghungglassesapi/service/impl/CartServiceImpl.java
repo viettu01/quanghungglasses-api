@@ -7,12 +7,15 @@ import fithou.tuplv.quanghungglassesapi.entity.CartDetails;
 import fithou.tuplv.quanghungglassesapi.mapper.CartMapper;
 import fithou.tuplv.quanghungglassesapi.repository.CartDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CartRepository;
+import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.service.CartService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -23,6 +26,7 @@ public class CartServiceImpl implements CartService {
     final CartRepository cartRepository;
     final CartDetailsRepository cartDetailsRepository;
     final CartMapper cartMapper;
+    final CustomerRepository customerRepository;
 
     @Override
     public CartResponse getCartByUserEmail(String email) {
@@ -32,7 +36,10 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDetailsResponse addProductToCart(CartDetailsRequest cartDetailsRequest) {
         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-        Optional<CartDetails> cartDetails = cartDetailsRepository.findByCartIdAndProductDetailsId(cartDetailsRequest.getCartId(), cartDetailsRequest.getProductDetailsId());
+        Optional<CartDetails> cartDetails = cartDetailsRepository
+                .findByCartAndProductDetailsId(
+                        Objects.requireNonNull(customerRepository.findByAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null)).getCart(),
+                        cartDetailsRequest.getProductDetailsId());
         if (cartDetails.isPresent()) {
             // Nếu có rồi thì tăng số lượng lên 1
             cartDetails.get().setQuantity(cartDetails.get().getQuantity() + 1);

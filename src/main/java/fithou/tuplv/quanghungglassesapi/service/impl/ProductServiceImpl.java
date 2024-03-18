@@ -14,6 +14,7 @@ import fithou.tuplv.quanghungglassesapi.repository.ProductRepository;
 import fithou.tuplv.quanghungglassesapi.service.ProductService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,9 +56,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationDTO<ProductResponse> findByCategorySlug(String slug, Pageable pageable) {
+    public PaginationDTO<ProductResponse> findByCategorySlug(String slug,
+                                                             String originName,
+                                                             String brandName,
+                                                             String materialName,
+                                                             String shapeName,
+                                                             Integer timeWarranty,
+                                                             Pageable pageable) {
+
+        if (ObjectUtils.isNotEmpty(timeWarranty))
+            return paginationMapper.mapToPaginationDTO(
+                    productRepository.findByCategorySlugAndOriginNameContainingAndBrandNameContainingAndMaterialNameContainingAndShapeNameContainingAndTimeWarranty(
+                            slug,
+                            originName,
+                            brandName,
+                            materialName,
+                            shapeName,
+                            timeWarranty,
+                            pageable).map(productMapper::convertToResponse));
+
         return paginationMapper.mapToPaginationDTO(
-                productRepository.findByCategorySlug(slug, pageable).map(productMapper::convertToResponse)
+                productRepository.findByCategorySlugAndOriginNameContainingAndBrandNameContainingAndMaterialNameContainingAndShapeNameContaining(
+                        slug,
+                        originName,
+                        brandName,
+                        materialName,
+                        shapeName,
+                        pageable).map(productMapper::convertToResponse)
         );
     }
 

@@ -7,14 +7,13 @@ import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Product;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
 import fithou.tuplv.quanghungglassesapi.entity.Sale;
-import fithou.tuplv.quanghungglassesapi.entity.SaleDetails;
 import fithou.tuplv.quanghungglassesapi.repository.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -44,17 +43,21 @@ public class ProductMapper {
         productResponse.setBrandName(product.getBrand().getName());
 
         // Lấy giá sau khi đã giảm giá từ bảng sale và product_sale kiểm tra xem thời gian hiện tại có nằm trong thời gian sale không
-        double price = product.getPrice();
+//        double price = product.getPrice();
         Date now = new Date();
-//        Optional<Sale> sale = saleRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now);
-//        if (sale.isPresent()) {
-//            Optional<SaleDetails> productSale = saleDetailsRepository.findByProductAndSale(product, sale.get());
-//            if (productSale.isPresent()) {
-//                productResponse.setDiscount(productSale.get().getDiscount());
-//                price = price * ((100 - productSale.get().getDiscount()) / 100);
-//            }
-//        }
-        productResponse.setPriceDiscount(price);
+        // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian
+        List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now, now, now, now, now);
+        salesExists.forEach(sale -> {
+            sale.getSaleDetails().forEach(saleDetails -> {
+                if (saleDetails.getProduct().getId().equals(product.getId())) {
+                    productResponse.setDiscount(saleDetails.getDiscount());
+                    Double priceDiscount = product.getPrice() * ((100 - saleDetails.getDiscount()) / 100);
+                    productResponse.setPriceDiscount(priceDiscount);
+//                    price = price * ((100 - saleDetails.getDiscount()) / 100);
+                }
+            });
+        });
+//        productResponse.setPriceDiscount(price);
         return productResponse;
     }
 

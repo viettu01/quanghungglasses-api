@@ -16,7 +16,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByCategoryIdAndMaterialIdAndOriginIdAndShapeIdAndBrandIdAndPriceBetween(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable);
 
-    Page<Product> findByCategorySlug(String slug, Pageable pageable);
+    Page<Product> findByCategorySlugAndOriginNameContainingAndBrandNameContainingAndMaterialNameContainingAndShapeNameContaining(String slug,
+                                                                                         String originName,
+                                                                                         String brandName,
+                                                                                         String materialName,
+                                                                                         String shapeName,
+                                                                                         Pageable pageable);
+
+    Page<Product> findByCategorySlugAndOriginNameContainingAndBrandNameContainingAndMaterialNameContainingAndShapeNameContainingAndTimeWarranty(String slug,
+                                                                                                        String originName,
+                                                                                                        String brandName,
+                                                                                                        String materialName,
+                                                                                                        String shapeName,
+                                                                                                        Integer timeWarranty,
+                                                                                                        Pageable pageable);
 
     boolean existsByName(String name);
 
