@@ -16,6 +16,12 @@ public class ProductDetailsResponse implements Serializable {
     private Long id;
     private String color;
     private Integer quantity;
+    private String thumbnails;
+    private String slug;
+    private String name;
+    private Double price;
+    private Double discount;
+    private Double priceDiscount;
     private Date createdDate;
     private Date updatedDate;
 }

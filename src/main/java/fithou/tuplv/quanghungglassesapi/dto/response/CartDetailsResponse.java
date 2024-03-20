@@ -11,10 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CartDetailsResponse {
     private Long id;
-    private Long cartId;
     private Long productDetailsId;
-    private String productDetailsImage;
+    private String productDetailsThumbnails;
     private String productName;
+    private String productSlug;
     private String productColor;
     private Double productPrice;
     private Integer quantity;

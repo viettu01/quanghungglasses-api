@@ -5,11 +5,15 @@ import fithou.tuplv.quanghungglassesapi.dto.response.CartDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.CartResponse;
 
 public interface CartService {
-    CartResponse getCartByUserEmail(String email);
+    CartResponse getCartByUserEmail();
 
-    CartDetailsResponse addProductToCart(CartDetailsRequest cartDetailsRequest);
+    CartResponse addProductToCart(CartDetailsRequest cartDetailsRequest);
 
-    void deleteCartDetails(Long[] cartDetailsId);
+    void deleteCartDetails(Long cartDetailsId);
 
-    CartDetailsResponse updateProductQuantity(CartDetailsRequest cartDetailsRequest);
+    void updateProductQuantity(CartDetailsRequest cartDetailsRequest);
+
+    void plusProductQuantity(Long cartDetailsId);
+
+    void minusProductQuantity(Long cartDetailsId);
 }

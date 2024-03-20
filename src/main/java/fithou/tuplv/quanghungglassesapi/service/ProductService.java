@@ -3,6 +3,7 @@ package fithou.tuplv.quanghungglassesapi.service;
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsInvoiceResponse;
+import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -22,6 +23,8 @@ public interface ProductService {
                                                       Pageable pageable);
 
     ProductDetailsInvoiceResponse findProductDetailsById(Long id);
+
+    ProductDetailsResponse findProductDetailsByIdInCart(Long id);
 
     ProductResponse findBySlug(String slug);
 

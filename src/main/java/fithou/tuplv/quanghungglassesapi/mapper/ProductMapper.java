@@ -3,6 +3,7 @@ package fithou.tuplv.quanghungglassesapi.mapper;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ProductRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsInvoiceResponse;
+import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Product;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
@@ -79,5 +80,16 @@ public class ProductMapper {
         ProductDetailsInvoiceResponse productDetailsInvoiceResponse = modelMapper.map(productDetails, ProductDetailsInvoiceResponse.class);
         productDetailsInvoiceResponse.setName(productDetails.getProduct().getName());
         return productDetailsInvoiceResponse;
+    }
+
+    public ProductDetailsResponse convertToProductDetailsResponse(ProductDetails productDetails) {
+        ProductDetailsResponse productDetailsResponse = modelMapper.map(productDetails, ProductDetailsResponse.class);
+        productDetailsResponse.setName(productDetails.getProduct().getName());
+        productDetailsResponse.setSlug(productDetails.getProduct().getSlug());
+        productDetailsResponse.setPrice(productDetails.getProduct().getPrice());
+        productDetailsResponse.setThumbnails(productDetails.getProduct().getThumbnail());
+//        productDetailsResponse.setDiscount(productDetails.getProduct().getDiscount());
+//        productDetailsResponse.setPriceDiscount(productDetails.getProduct().getPriceDiscount());
+        return productDetailsResponse;
     }
 }

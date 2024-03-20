@@ -5,10 +5,12 @@ import fithou.tuplv.quanghungglassesapi.dto.request.CustomerRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.VerifyEmailRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
+import fithou.tuplv.quanghungglassesapi.entity.Cart;
 import fithou.tuplv.quanghungglassesapi.entity.Customer;
 import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.UserMapper;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
+import fithou.tuplv.quanghungglassesapi.repository.CartRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
@@ -30,11 +32,13 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     final StorageService storageService;
+    final CartRepository cartRepository;
     final AccountRepository accountRepository;
     final CustomerRepository customerRepository;
     final PaginationMapper paginationMapper;
     final UserMapper userMapper;
     final ModelMapper modelMapper;
+
 
     @Override
     public PaginationDTO<CustomerResponse> findByFullnameContaining(String name, Pageable pageable) {
@@ -190,6 +194,8 @@ public class CustomerServiceImpl implements CustomerService {
 //            if (account.getAvatar() != null)
 //                storageService.deleteFile(account.getAvatar());
         }
+        if (customer.getCart() == null)
+            cartRepository.save(new Cart(null, customer, null));
         customer.setAccount(account);
     }
 }

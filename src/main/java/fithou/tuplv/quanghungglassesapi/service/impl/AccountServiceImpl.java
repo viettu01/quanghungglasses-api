@@ -12,6 +12,7 @@ import fithou.tuplv.quanghungglassesapi.security.jwt.JwtTokenProvider;
 import fithou.tuplv.quanghungglassesapi.service.AccountService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -26,6 +27,7 @@ import java.util.Date;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -53,6 +55,7 @@ public class AccountServiceImpl implements AccountService {
 
             // Trả về jwt cho người dùng.
             String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
+            log.info("jwt: {}", SecurityContextHolder.getContext().getAuthentication().getName());
             return new LoginResponse(jwt);
         } catch (LockedException ex) {
             // Người dùng bị khóa

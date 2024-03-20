@@ -67,4 +67,13 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<?> getProductDetailsById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(productService.findProductDetailsByIdInCart(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
