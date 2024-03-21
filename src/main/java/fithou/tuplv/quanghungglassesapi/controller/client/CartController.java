@@ -30,7 +30,11 @@ public class CartController {
             result.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
-        return ResponseEntity.ok(cartService.addProductToCart(cartDetailsRequest));
+        try {
+            return ResponseEntity.ok(cartService.addProductToCart(cartDetailsRequest));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/update-product-quantity")

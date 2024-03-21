@@ -20,7 +20,7 @@ public class ProductDetailsResponse implements Serializable {
     private String slug;
     private String name;
     private Double price;
-    private Double discount;
+    private Float discount;
     private Double priceDiscount;
     private Date createdDate;
     private Date updatedDate;
