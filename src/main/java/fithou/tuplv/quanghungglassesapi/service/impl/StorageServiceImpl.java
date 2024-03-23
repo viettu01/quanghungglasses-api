@@ -1,25 +1,20 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class StorageServiceImpl implements StorageService {
     @Override
     public String saveImageFile(String dir, MultipartFile file) {
@@ -51,7 +46,7 @@ public class StorageServiceImpl implements StorageService {
         try {
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

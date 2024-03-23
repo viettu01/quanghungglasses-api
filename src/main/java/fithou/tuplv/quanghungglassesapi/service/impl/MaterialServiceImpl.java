@@ -9,7 +9,6 @@ import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.MaterialRepository;
 import fithou.tuplv.quanghungglassesapi.service.MaterialService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
-@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor

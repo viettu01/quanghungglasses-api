@@ -1,9 +1,7 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.CartDetailsRequest;
-import fithou.tuplv.quanghungglassesapi.dto.response.CartDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.CartResponse;
-import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.entity.CartDetails;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
 import fithou.tuplv.quanghungglassesapi.mapper.CartMapper;
@@ -13,7 +11,6 @@ import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.service.CartService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,7 +23,6 @@ import java.util.Optional;
 @Service
 @Transactional
 @AllArgsConstructor
-@Slf4j
 @Component
 public class CartServiceImpl implements CartService {
     private final ProductDetailsRepository productDetailsRepository;

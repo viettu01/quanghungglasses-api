@@ -9,14 +9,12 @@ import fithou.tuplv.quanghungglassesapi.mapper.SupplierMapper;
 import fithou.tuplv.quanghungglassesapi.repository.SupplierRepository;
 import fithou.tuplv.quanghungglassesapi.service.SupplierService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
-@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor

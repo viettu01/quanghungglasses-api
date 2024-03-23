@@ -3,7 +3,6 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
 import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.security.CustomUserDetails;
-import fithou.tuplv.quanghungglassesapi.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +15,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_USER_NOT_FO
 @Service
 @Transactional
 @AllArgsConstructor
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserDetailsService {
     final AccountRepository accountRepository;
 
     @Override

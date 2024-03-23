@@ -1,7 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
-import fithou.tuplv.quanghungglassesapi.entity.Customer;
 import fithou.tuplv.quanghungglassesapi.service.EmailService;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;

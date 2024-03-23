@@ -12,7 +12,6 @@ import fithou.tuplv.quanghungglassesapi.repository.SaleDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.SaleRepository;
 import fithou.tuplv.quanghungglassesapi.service.SaleService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
-@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -78,13 +76,11 @@ public class SaleServiceImpl implements SaleService {
             // Kiem tra danh sach san pham cua chuong trinh khuyen mai moi tao co trung voi chuong trinh khuyen mai dang dien ra khong
             Set<Long> productIds = new HashSet<>();
             saleRequest.getSaleDetails().forEach(saleDetailsRequest -> productIds.add(saleDetailsRequest.getProductId()));
-            salesExists.forEach(sale -> {
-                sale.getSaleDetails().forEach(saleDetails -> {
-                    if (productIds.contains(saleDetails.getProduct().getId())) {
-                        throw new RuntimeException("Sản phẩm '" + saleDetails.getProduct().getName() + "' đã tồn tại trong chương trình khuyến mãi đang diễn ra");
-                    }
-                });
-            });
+            salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails -> {
+                if (productIds.contains(saleDetails.getProduct().getId())) {
+                    throw new RuntimeException("Sản phẩm '" + saleDetails.getProduct().getName() + "' đã tồn tại trong chương trình khuyến mãi đang diễn ra");
+                }
+            }));
         }
 
         Sale sale = saleRepository.save(saleMapper.convertToEntity(saleRequest));
@@ -124,13 +120,11 @@ public class SaleServiceImpl implements SaleService {
             saleRequest.getSaleDetails().forEach(saleDetailsRequest2 -> productIdsRequest.add(saleDetailsRequest2.getProductId()));
             productIdsRequest.forEach(productIdRequest -> {
                 if (!productIdsExists.contains(productIdRequest)) {
-                    salesExists.forEach(sale -> {
-                        sale.getSaleDetails().forEach(saleDetails2 -> {
-                            if (saleDetails2.getProduct().getId().equals(productIdRequest)) {
-                                throw new RuntimeException("Sản phẩm '" + saleDetails2.getProduct().getName() + "' đã tồn tại trong chương trình khuyến mãi đang diễn ra");
-                            }
-                        });
-                    });
+                    salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails2 -> {
+                        if (saleDetails2.getProduct().getId().equals(productIdRequest)) {
+                            throw new RuntimeException("Sản phẩm '" + saleDetails2.getProduct().getName() + "' đã tồn tại trong chương trình khuyến mãi đang diễn ra");
+                        }
+                    }));
                 }
             });
         }

@@ -49,6 +49,16 @@ public class AuthRestController {
         }
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        try {
+            accountService.logout();
+            return ResponseEntity.ok().body(Map.of("message", "Đăng xuất thành công"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 //    @PostMapping("/register")
 //    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest, BindingResult result) {
 //        if (result.hasErrors()) {

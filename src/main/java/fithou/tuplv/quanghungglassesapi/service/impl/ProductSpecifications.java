@@ -1,4 +1,4 @@
-package fithou.tuplv.quanghungglassesapi.service;
+package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.entity.Product;
 import org.springframework.data.jpa.domain.Specification;

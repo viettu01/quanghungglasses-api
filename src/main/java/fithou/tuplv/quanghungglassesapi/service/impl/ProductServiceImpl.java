@@ -13,7 +13,6 @@ import fithou.tuplv.quanghungglassesapi.mapper.ProductMapper;
 import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductRepository;
 import fithou.tuplv.quanghungglassesapi.service.ProductService;
-import fithou.tuplv.quanghungglassesapi.service.ProductSpecifications;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;

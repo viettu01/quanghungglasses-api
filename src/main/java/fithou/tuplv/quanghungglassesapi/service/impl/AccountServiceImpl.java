@@ -70,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void changePassword(ChangePasswordRequest changePasswordRequest) {
-        Account account = accountRepository.findByEmail(changePasswordRequest.getEmail())
+        Account account = accountRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
                 .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND));
         if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword()))
             throw new RuntimeException(ERROR_PASSWORD_CONFIRM_MUST_MATCH_NEW);
