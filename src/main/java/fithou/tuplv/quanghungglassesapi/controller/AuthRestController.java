@@ -2,7 +2,6 @@ package fithou.tuplv.quanghungglassesapi.controller;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.*;
 import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
-import fithou.tuplv.quanghungglassesapi.security.jwt.JwtTokenProvider;
 import fithou.tuplv.quanghungglassesapi.service.AccountService;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
 import fithou.tuplv.quanghungglassesapi.service.EmailService;
@@ -11,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;

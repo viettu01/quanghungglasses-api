@@ -30,9 +30,7 @@ public class CartMapper {
         CartResponse cartResponse = modelMapper.map(cart, CartResponse.class);
         cartResponse.getCartDetails().clear();
         cartResponse.setTotalProduct(cart.getCartDetails().size());
-        cart.getCartDetails().forEach(cartDetails -> {
-            cartResponse.getCartDetails().add(convertToResponse(cartDetails));
-        });
+        cart.getCartDetails().forEach(cartDetails -> cartResponse.getCartDetails().add(convertToResponse(cartDetails)));
         return cartResponse;
     }
 
@@ -50,14 +48,12 @@ public class CartMapper {
         Date now = new Date();
         // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian
         List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now, now, now, now, now);
-        salesExists.forEach(sale -> {
-            sale.getSaleDetails().forEach(saleDetails -> {
-                if (saleDetails.getProduct().getId().equals(cartDetails.getProductDetails().getProduct().getId())) {
-                    Double priceDiscount = saleDetails.getProduct().getPrice() * ((100 - saleDetails.getDiscount()) / 100);
-                    cartDetailsResponse.setProductPrice(priceDiscount);
-                }
-            });
-        });
+        salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails -> {
+            if (saleDetails.getProduct().getId().equals(cartDetails.getProductDetails().getProduct().getId())) {
+                Double priceDiscount = saleDetails.getProduct().getPrice() * ((100 - saleDetails.getDiscount()) / 100);
+                cartDetailsResponse.setProductPrice(priceDiscount);
+            }
+        }));
 
 
         return cartDetailsResponse;

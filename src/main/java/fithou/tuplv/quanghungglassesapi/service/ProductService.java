@@ -7,19 +7,21 @@ import fithou.tuplv.quanghungglassesapi.dto.response.ProductDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.ProductResponse;
 import org.springframework.data.domain.Pageable;
 
-public interface ProductService {
-    PaginationDTO<ProductResponse> findAll(Pageable pageable);
+import java.util.List;
 
+public interface ProductService {
     PaginationDTO<ProductResponse> findByNameContaining(String name, Pageable pageable);
 
     PaginationDTO<ProductResponse> findByNameContainingAndStatus(String name, Boolean status, Pageable pageable);
 
     PaginationDTO<ProductResponse> findByCategorySlug(String slug,
-                                                      String originName,
-                                                      String brandName,
-                                                      String materialName,
-                                                      String shapeName,
-                                                      Integer timeWarranty,
+                                                      List<String> originNames,
+                                                      List<String> brandNames,
+                                                      List<String> materialNames,
+                                                      List<String> shapeNames,
+                                                      List<Integer> timeWarranties,
+                                                      Double priceMin,
+                                                      Double priceMax,
                                                       Pageable pageable);
 
     ProductDetailsInvoiceResponse findProductDetailsById(Long id);
@@ -29,8 +31,6 @@ public interface ProductService {
     ProductResponse findBySlug(String slug);
 
     ProductResponse findById(Long id);
-
-    PaginationDTO<ProductResponse> filter(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable);
 
     ProductResponse create(ProductRequest productRequest);
 

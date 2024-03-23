@@ -69,16 +69,18 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerRepository.existsByPhone(customerRequest.getPhone()))
             throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);
         Customer customer = userMapper.convertToEntity(customerRequest);
+        customer.setAccount(null);
+        customerRepository.save(customer);
         if (customerRequest.getAccount() != null) {
             saveAccount(customerRequest, customer);
         }
 
-        try {
-            customerRepository.save(customer);
-        } catch (Exception e) {
-//            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
-//                storageService.deleteFile(customer.getAccount().getAvatar());
-        }
+//        try {
+//            customerRepository.save(customer);
+//        } catch (Exception e) {
+////            if (customer.getAccount() != null && customer.getAccount().getAvatar() != null)
+////                storageService.deleteFile(customer.getAccount().getAvatar());
+//        }
 
         return userMapper.convertToResponse(customer);
     }
@@ -194,8 +196,9 @@ public class CustomerServiceImpl implements CustomerService {
 //            if (account.getAvatar() != null)
 //                storageService.deleteFile(account.getAvatar());
         }
+        customer.setAccount(account);
         if (customer.getCart() == null)
             cartRepository.save(new Cart(null, customer, null));
-        customer.setAccount(account);
+        customerRepository.save(customer);
     }
 }

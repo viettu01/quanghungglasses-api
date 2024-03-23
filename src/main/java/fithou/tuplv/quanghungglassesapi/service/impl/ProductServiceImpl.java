@@ -13,14 +13,15 @@ import fithou.tuplv.quanghungglassesapi.mapper.ProductMapper;
 import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductRepository;
 import fithou.tuplv.quanghungglassesapi.service.ProductService;
+import fithou.tuplv.quanghungglassesapi.service.ProductSpecifications;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
@@ -34,13 +35,6 @@ public class ProductServiceImpl implements ProductService {
     final ProductRepository productRepository;
     final ProductDetailsRepository productDetailsRepository;
     final StorageService storageService;
-
-    @Override
-    public PaginationDTO<ProductResponse> findAll(Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(
-                productRepository.findAll(pageable).map(productMapper::convertToResponse)
-        );
-    }
 
     @Override
     public PaginationDTO<ProductResponse> findByNameContaining(String name, Pageable pageable) {
@@ -57,33 +51,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationDTO<ProductResponse> findByCategorySlug(String slug,
-                                                             String originName,
-                                                             String brandName,
-                                                             String materialName,
-                                                             String shapeName,
-                                                             Integer timeWarranty,
-                                                             Pageable pageable) {
-
-        if (ObjectUtils.isNotEmpty(timeWarranty))
-            return paginationMapper.mapToPaginationDTO(
-                    productRepository.findByCategorySlugAndOriginNameContainingAndBrandNameContainingAndMaterialNameContainingAndShapeNameContainingAndTimeWarranty(
-                            slug,
-                            originName,
-                            brandName,
-                            materialName,
-                            shapeName,
-                            timeWarranty,
-                            pageable).map(productMapper::convertToResponse));
-
+    public PaginationDTO<ProductResponse> findByCategorySlug(String categorySlug, List<String> originNames, List<String> brandNames,
+                                                             List<String> materialNames, List<String> shapeNames, List<Integer> timeWarranties,
+                                                             Double priceMin, Double priceMax, Pageable pageable) {
         return paginationMapper.mapToPaginationDTO(
-                productRepository.findByCategorySlugAndOriginNameContainingAndBrandNameContainingAndMaterialNameContainingAndShapeNameContaining(
-                        slug,
-                        originName,
-                        brandName,
-                        materialName,
-                        shapeName,
-                        pageable).map(productMapper::convertToResponse)
+                productRepository.findAll(
+                                ProductSpecifications.filterProducts(
+                                        categorySlug,
+                                        originNames,
+                                        brandNames,
+                                        materialNames,
+                                        shapeNames,
+                                        timeWarranties,
+                                        priceMin,
+                                        priceMax
+                                ), pageable)
+                        .map(productMapper::convertToResponse)
         );
     }
 
@@ -115,15 +98,6 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse findById(Long id) {
         return productMapper.convertToResponse(productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND)));
-    }
-
-    @Override
-    public PaginationDTO<ProductResponse> filter(Long categoryId, Long materialId, Long originId, Long shapeId, Long brandId, Double priceMin, Double priceMax, Pageable pageable) {
-        return paginationMapper.mapToPaginationDTO(
-                productRepository
-                        .findByCategoryIdAndMaterialIdAndOriginIdAndShapeIdAndBrandIdAndPriceBetween(categoryId, materialId, originId, shapeId, brandId, priceMin, priceMax, pageable)
-                        .map(productMapper::convertToResponse)
-        );
     }
 
     @Override

@@ -48,16 +48,14 @@ public class ProductMapper {
         Date now = new Date();
         // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian
         List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now, now, now, now, now);
-        salesExists.forEach(sale -> {
-            sale.getSaleDetails().forEach(saleDetails -> {
-                if (saleDetails.getProduct().getId().equals(product.getId())) {
-                    productResponse.setDiscount(saleDetails.getDiscount());
-                    Double priceDiscount = product.getPrice() * ((100 - saleDetails.getDiscount()) / 100);
-                    productResponse.setPriceDiscount(priceDiscount);
+        salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails -> {
+            if (saleDetails.getProduct().getId().equals(product.getId())) {
+                productResponse.setDiscount(saleDetails.getDiscount());
+                Double priceDiscount = product.getPrice() * ((100 - saleDetails.getDiscount()) / 100);
+                productResponse.setPriceDiscount(priceDiscount);
 //                    price = price * ((100 - saleDetails.getDiscount()) / 100);
-                }
-            });
-        });
+            }
+        }));
 //        productResponse.setPriceDiscount(price);
         return productResponse;
     }
@@ -91,16 +89,14 @@ public class ProductMapper {
         Date now = new Date();
         // Hàm trả về danh sách chương trình khuyến mãi nào đang diễn ra trong khoảng thời gian
         List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now, now, now, now, now);
-        salesExists.forEach(sale -> {
-            sale.getSaleDetails().forEach(saleDetails -> {
-                if (saleDetails.getProduct().getId().equals(productDetails.getProduct().getId())) {
-                    productDetailsResponse.setDiscount(saleDetails.getDiscount());
-                    Double priceDiscount = productDetails.getProduct().getPrice() * ((100 - saleDetails.getDiscount()) / 100);
-                    productDetailsResponse.setPriceDiscount(priceDiscount);
+        salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails -> {
+            if (saleDetails.getProduct().getId().equals(productDetails.getProduct().getId())) {
+                productDetailsResponse.setDiscount(saleDetails.getDiscount());
+                Double priceDiscount = productDetails.getProduct().getPrice() * ((100 - saleDetails.getDiscount()) / 100);
+                productDetailsResponse.setPriceDiscount(priceDiscount);
 //                    price = price * ((100 - saleDetails.getDiscount()) / 100);
-                }
-            });
-        });
+            }
+        }));
 //        productDetailsResponse.setDiscount(productDetails.getProduct().getDiscount());
 //        productDetailsResponse.setPriceDiscount(productDetails.getProduct().getPriceDiscount());
         return productDetailsResponse;

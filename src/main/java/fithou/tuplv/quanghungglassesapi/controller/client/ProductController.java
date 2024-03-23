@@ -7,8 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
@@ -29,19 +30,18 @@ public class ProductController {
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        if (StringUtils.hasText(name))
-            return ResponseEntity.ok().body(productService.findByNameContaining(name, pageable));
-
-        return ResponseEntity.ok().body(productService.findAll(pageable));
+        return ResponseEntity.ok().body(productService.findByNameContainingAndStatus(name, true, pageable));
     }
 
     @GetMapping("/category/{category-slug}")
     public ResponseEntity<?> getByCategorySlug(@PathVariable(value = "category-slug") String categorySlug,
-                                               @RequestParam(value = "origin-name", defaultValue = "", required = false) String originName,
-                                               @RequestParam(value = "brand-name", defaultValue = "", required = false) String brandName,
-                                               @RequestParam(value = "material-name", defaultValue = "", required = false) String materialName,
-                                               @RequestParam(value = "shape-name", defaultValue = "", required = false) String shapeName,
-                                               @RequestParam(value = "time-warranty", required = false) Integer timeWarranty,
+                                               @RequestParam(value = "origin-name", defaultValue = "", required = false) List<String> originName,
+                                               @RequestParam(value = "brand-name", defaultValue = "", required = false) List<String> brandName,
+                                               @RequestParam(value = "material-name", defaultValue = "", required = false) List<String> materialName,
+                                               @RequestParam(value = "shape-name", defaultValue = "", required = false) List<String> shapeName,
+                                               @RequestParam(value = "time-warranty", required = false) List<Integer> timeWarranty,
+                                               @RequestParam(value = "price-min", required = false) Double priceMin,
+                                               @RequestParam(value = "price-max", required = false) Double priceMax,
                                                @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                                @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
                                                @RequestParam(value = "sort-direction", defaultValue = SORT_DESC, required = false) String sortDir,
@@ -56,6 +56,8 @@ public class ProductController {
                 materialName,
                 shapeName,
                 timeWarranty,
+                priceMin,
+                priceMax,
                 pageable));
     }
 
