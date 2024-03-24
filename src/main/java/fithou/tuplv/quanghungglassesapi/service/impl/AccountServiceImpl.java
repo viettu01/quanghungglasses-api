@@ -3,6 +3,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 import fithou.tuplv.quanghungglassesapi.dto.request.ChangePasswordRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.ForgotPasswordRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.LoginRequest;
+import fithou.tuplv.quanghungglassesapi.dto.response.CustomerResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.LoginResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Account;
 import fithou.tuplv.quanghungglassesapi.mapper.UserMapper;
@@ -10,8 +11,12 @@ import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.security.CustomUserDetails;
 import fithou.tuplv.quanghungglassesapi.security.jwt.JwtTokenProvider;
 import fithou.tuplv.quanghungglassesapi.service.AccountService;
+import fithou.tuplv.quanghungglassesapi.service.CustomerService;
+import fithou.tuplv.quanghungglassesapi.service.EmailService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -21,13 +26,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @Service
-@Transactional
 @AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
     final AuthenticationManager authenticationManager;
@@ -36,12 +42,21 @@ public class AccountServiceImpl implements AccountService {
     final JwtTokenProvider tokenProvider;
     final StorageService storageService;
     final UserMapper userMapper;
+    final EmailService emailService;
+    final CustomerService customerService;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         try {
-            if (!accountRepository.existsByEmail(loginRequest.getEmail()))
-                throw new RuntimeException(ERROR_USER_NOT_FOUND);
+            Account account = accountRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException(ERROR_USER_NOT_FOUND));
+            if (!account.getIsVerifiedEmail()) {
+                account.setVerificationCode(RandomStringUtils.randomNumeric(6));
+                account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
+                accountRepository.save(account);
+
+                emailService.sendVerificationCode(customerService.findByAccountEmail(loginRequest.getEmail()));
+                throw new RuntimeException(ERROR_EMAIL_NOT_VERIFIED);
+            }
 
             // Xác thực từ username và password.
             Authentication authentication = authenticationManager.authenticate(
@@ -60,6 +75,8 @@ public class AccountServiceImpl implements AccountService {
         } catch (BadCredentialsException ex) {
             // Người dùng nhập sai mật khẩu
             throw new BadCredentialsException(ERROR_PASSWORD_INVALID);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -69,6 +86,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public void changePassword(ChangePasswordRequest changePasswordRequest) {
         Account account = accountRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
                 .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND));
@@ -83,6 +101,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public void forgotPassword(ForgotPasswordRequest forgotPasswordRequest) {
         Account account = accountRepository.findByEmail(forgotPasswordRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException(ERROR_EMAIL_NOT_FOUND));

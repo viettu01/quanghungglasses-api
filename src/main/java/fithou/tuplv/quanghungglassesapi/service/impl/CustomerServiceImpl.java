@@ -13,6 +13,7 @@ import fithou.tuplv.quanghungglassesapi.repository.AccountRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CartRepository;
 import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
 import fithou.tuplv.quanghungglassesapi.service.CustomerService;
+import fithou.tuplv.quanghungglassesapi.service.EmailService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,7 +22,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Date;
 
@@ -38,6 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     final PaginationMapper paginationMapper;
     final UserMapper userMapper;
     final ModelMapper modelMapper;
+    final EmailService emailService;
 
 
     @Override
@@ -83,6 +87,23 @@ public class CustomerServiceImpl implements CustomerService {
 //        }
 
         return userMapper.convertToResponse(customer);
+    }
+
+    @Override
+    public CustomerResponse register(CustomerRequest customerRequest) {
+        if (customerRepository.existsByPhone(customerRequest.getPhone()))
+            throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);
+        Customer customer = userMapper.convertToEntity(customerRequest);
+        customer.setAccount(null);
+        customerRepository.save(customer);
+        saveAccountRegister(customerRequest, customer);
+        CustomerResponse customerResponse = userMapper.convertToResponse(customer);
+        try {
+            emailService.sendVerificationCode(customerResponse);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        return customerResponse;
     }
 
     @Override
@@ -197,6 +218,21 @@ public class CustomerServiceImpl implements CustomerService {
 //                storageService.deleteFile(account.getAvatar());
         }
         customer.setAccount(account);
+        if (customer.getCart() == null)
+            cartRepository.save(new Cart(null, customer, null));
+        customerRepository.save(customer);
+    }
+
+    private void saveAccountRegister(CustomerRequest customerRequest, Customer customer) {
+        if (accountRepository.existsByEmail(customerRequest.getAccount().getEmail()))
+            throw new RuntimeException(ERROR_EMAIL_ALREADY_EXISTS);
+
+        customerRequest.getAccount().setRoleIds(Collections.singletonList(3L));
+        Account account = userMapper.convertToEntity(customerRequest.getAccount());
+        account.setIsVerifiedEmail(false);
+        account.setVerificationCode(RandomStringUtils.randomNumeric(6));
+        account.setVerificationCodeExpiredAt(new Date(new Date().getTime() + 5 * 60 * 1000));
+        customer.setAccount(accountRepository.save(account));
         if (customer.getCart() == null)
             cartRepository.save(new Cart(null, customer, null));
         customerRepository.save(customer);

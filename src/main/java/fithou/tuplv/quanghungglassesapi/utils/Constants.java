@@ -16,6 +16,7 @@ public class Constants {
     public static final String ERROR_PHONE_ALREADY_EXISTS = "Số điện thoại đã tồn tại";
     public static final String ERROR_EMAIL_ALREADY_EXISTS = "Email đã tồn tại";
     public static final String ERROR_EMAIL_NOT_FOUND = "Email không tồn tại";
+    public static final String ERROR_EMAIL_NOT_VERIFIED = "Vui lòng xác minh email";
     public static final String ERROR_VERIFICATION_CODE_INVALID = "Mã xác minh không hợp lệ";
     public static final String ERROR_VERIFICATION_CODE_EXPIRED = "Mã xác minh đã hết hạn";
     public static final String SUCCESS_REGISTER = "Đăng ký tài khoản thành công";

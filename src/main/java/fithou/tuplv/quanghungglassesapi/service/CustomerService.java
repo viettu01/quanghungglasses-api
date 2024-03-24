@@ -16,6 +16,8 @@ public interface CustomerService {
 
     CustomerResponse create(CustomerRequest customerRequest);
 
+    CustomerResponse register(CustomerRequest customerRequest);
+
     CustomerResponse update(CustomerRequest customerRequest);
 
     void deleteById(Long id);

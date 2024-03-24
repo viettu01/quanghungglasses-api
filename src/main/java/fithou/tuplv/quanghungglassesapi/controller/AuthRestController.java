@@ -84,8 +84,8 @@ public class AuthRestController {
             return ResponseEntity.badRequest().body(errors);
         }
         try {
-            customerService.create(customerRequest);
-            return ResponseEntity.ok().body(Map.of("message", SUCCESS_REGISTER));
+            customerService.register(customerRequest);
+            return ResponseEntity.ok().body(Map.of("message", ERROR_EMAIL_NOT_VERIFIED));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
