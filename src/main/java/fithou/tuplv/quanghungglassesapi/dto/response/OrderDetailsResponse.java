@@ -12,10 +12,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetailsResponse implements Serializable {
+    private Long id;
     private String productName;
     private String productColor;
     private Double productPrice;
-    private String productDetailsImage;
+    private String productThumbnail;
     private Double price;
     private Integer quantity;
 }

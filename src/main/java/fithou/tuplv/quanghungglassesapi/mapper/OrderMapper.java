@@ -4,6 +4,7 @@ import fithou.tuplv.quanghungglassesapi.dto.request.OrderDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.OrderRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.OrderDetailsResponse;
 import fithou.tuplv.quanghungglassesapi.dto.response.OrderResponse;
+import fithou.tuplv.quanghungglassesapi.entity.Customer;
 import fithou.tuplv.quanghungglassesapi.entity.Order;
 import fithou.tuplv.quanghungglassesapi.entity.OrderDetails;
 import fithou.tuplv.quanghungglassesapi.repository.CustomerRepository;
@@ -12,7 +13,13 @@ import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.StaffRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_PRODUCT_NOT_FOUND;
 
 @Component
 @AllArgsConstructor
@@ -26,16 +33,38 @@ public class OrderMapper {
     // OrderMapper
     public OrderResponse convertToResponse(Order order) {
         OrderResponse orderResponse = modelMapper.map(order, OrderResponse.class);
-        orderResponse.setEmail(order.getCustomer().getAccount().getEmail());
+        if (Objects.nonNull(order.getCustomer().getAccount()))
+            orderResponse.setEmail(order.getCustomer().getAccount().getEmail());
+        orderResponse.getOrderDetails().clear();
         order.getOrderDetails().forEach(orderDetails -> orderResponse.getOrderDetails().add(convertToResponse(orderDetails)));
         return orderResponse;
     }
 
     public Order convertToEntity(OrderRequest orderRequest) {
+        orderRequest.getOrderDetails().forEach(orderDetailsRequest -> {
+            if (!productDetailsRepository.existsById(orderDetailsRequest.getProductDetailsId()))
+                throw new RuntimeException(ERROR_PRODUCT_NOT_FOUND);
+        });
         Order order = modelMapper.map(orderRequest, Order.class);
-        order.setCustomer(customerRepository.findById(orderRequest.getUserId()).orElse(null));
-        order.setStaff(staffRepository.findById(orderRequest.getStaffId()).orElse(null));
-        orderRequest.getOrderDetails().forEach(orderDetailsRequest -> order.getOrderDetails().add(convertToEntity(orderDetailsRequest)));
+        order.getOrderDetails().clear();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        authentication.getAuthorities().forEach(authority -> {
+            if (authority.getAuthority().equals("ROLE_ADMIN") || authority.getAuthority().equals("ROLE_STAFF")) {
+                Customer customer = customerRepository.findByPhone(orderRequest.getPhone()).orElse(null);
+                if (customer == null) {
+                    customer = new Customer();
+                    customer.setPhone(orderRequest.getPhone());
+                    customer.setFullname(orderRequest.getFullname());
+                    customer.setAddress(orderRequest.getAddress());
+                    customerRepository.save(customer);
+                }
+                order.setCustomer(customer);
+                order.setStaff(staffRepository.findByAccountEmail(authentication.getName()).orElse(null));
+            } else if (authority.getAuthority().equals("ROLE_USER")) {
+                System.out.println("vaoday");
+                order.setCustomer(customerRepository.findByAccountEmail(authentication.getName()).orElse(null));
+            }
+        });
         return order;
     }
 
@@ -45,13 +74,12 @@ public class OrderMapper {
         orderDetailsResponse.setProductName(orderDetails.getProductDetails().getProduct().getName());
         orderDetailsResponse.setProductColor(orderDetails.getProductDetails().getColor());
         orderDetailsResponse.setProductPrice(orderDetails.getProductDetails().getProduct().getPrice());
-//        orderDetailsResponse.setProductDetailsImage(orderDetails.getProductDetails().getImage());
+        orderDetailsResponse.setProductThumbnail(orderDetails.getProductDetails().getProduct().getThumbnail());
         return orderDetailsResponse;
     }
 
     public OrderDetails convertToEntity(OrderDetailsRequest orderDetailsRequest) {
         OrderDetails orderDetails = modelMapper.map(orderDetailsRequest, OrderDetails.class);
-        orderDetails.setOrder(orderRepository.findById(orderDetailsRequest.getOrderId()).orElse(null));
         orderDetails.setProductDetails(productDetailsRepository.findById(orderDetailsRequest.getProductDetailsId()).orElse(null));
         return orderDetails;
     }

@@ -14,6 +14,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetailsRequest implements Serializable {
+    @NotNull(message = "Mã sản phẩm không được để trống")
+    private Long productDetailsId;
+
     @NotNull(message = "Giá sản phẩm không được để trống")
     @DecimalMin(value = "0", inclusive = false, message = "Giá phải lớn hơn 0")
     private Double price;
@@ -21,10 +24,4 @@ public class OrderDetailsRequest implements Serializable {
     @NotNull(message = "Số lượng sản phẩm không được để trống")
     @DecimalMin(value = "0", inclusive = false, message = "Số lượng phải lớn hơn 0")
     private Integer quantity;
-
-    @NotNull(message = "Mã đơn hàng không được để trống")
-    private Long orderId;
-
-    @NotNull(message = "Mã sản phẩm không được để trống")
-    private Long productDetailsId;
 }

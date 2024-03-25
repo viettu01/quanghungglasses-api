@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity(name = "`order`")
+@Entity(name = "orders")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
@@ -42,7 +42,7 @@ public class Order {
     private Date paymentDate; // ngày thanh toán đơn hàng
 
     @Column(nullable = false)
-    private String paymentMethod; // phương thức thanh toán
+    private Integer paymentMethod; // phương thức thanh toán (0: tiền mặt, 1: VNPAY)
 
     @Column(nullable = false)
     private Boolean paymentStatus; // trạng thái thanh toán (0: chưa thanh toán, 1: đã thanh toán)

@@ -78,10 +78,14 @@ public class Constants {
     public static final String ERROR_RECEIPT_DETAILS_NOT_FOUND = "Chi tiết hóa đơn không tồn tại";
     public static final String ERROR_RECEIPT_PRODUCT_DETAILS_EXIST = "Sản phẩm đã tồn tại trong hóa đơn";
 
+    public static final String ERROR_ORDER_NOT_FOUND = "Đơn hàng không tồn tại";
+    public static final String ERROR_ORDER_CUSTOMER_PHONE_NOT_REQUIRED = "Số điện thoại khách hàng không được để trống";
+
     public static final String DIR_FILE_BANNER = "banners";
     public static final String DIR_FILE_PRODUCT = "products";
     public static final String DIR_FILE_STAFF = "staffs";
     public static final String DIR_FILE_CUSTOMER = "customers";
+    public static final String DIR_FILE_ORDER = "orders/eyeglass_prescription";
 
     public static final String SORT_ASC = "asc";
     public static final String SORT_DESC = "desc";

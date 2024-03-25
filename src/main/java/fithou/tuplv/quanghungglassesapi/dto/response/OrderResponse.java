@@ -24,6 +24,7 @@ public class OrderResponse implements Serializable {
     private String paymentMethod;
     private Boolean paymentStatus;
     private Date completedDate;
+    private String eyeglassPrescription;
     private String note;
     private Integer orderStatus;
 
