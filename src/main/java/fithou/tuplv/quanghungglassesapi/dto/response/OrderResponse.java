@@ -20,8 +20,9 @@ public class OrderResponse implements Serializable {
     private String email;
     private String address;
     private String phone;
+    private Date createdDate;
     private Date paymentDate;
-    private String paymentMethod;
+    private Integer paymentMethod;
     private Boolean paymentStatus;
     private Date completedDate;
     private String eyeglassPrescription;

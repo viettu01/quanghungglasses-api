@@ -70,6 +70,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public PaginationDTO<ProductResponse> search(String name, List<String> originNames,
+                                                 List<String> brandNames, List<String> materialNames,
+                                                 List<String> shapeNames, List<Integer> timeWarranties,
+                                                 Double priceMin, Double priceMax, Pageable pageable) {
+        return paginationMapper.mapToPaginationDTO(
+                productRepository.findAll(
+                                ProductSpecifications.search(
+                                        name,
+                                        originNames,
+                                        brandNames,
+                                        materialNames,
+                                        shapeNames,
+                                        timeWarranties,
+                                        priceMin,
+                                        priceMax
+                                ), pageable)
+                        .map(productMapper::convertToResponse)
+        );
+    }
+
+    @Override
     public ProductDetailsInvoiceResponse findProductDetailsById(Long id) {
         return productMapper.convertToProductDetailsInvoiceResponse(
                 productDetailsRepository

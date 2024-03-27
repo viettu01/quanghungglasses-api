@@ -19,8 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_PRODUCT_NOT_FOUND;
-
 @Component
 @AllArgsConstructor
 public class OrderMapper {
@@ -41,10 +39,6 @@ public class OrderMapper {
     }
 
     public Order convertToEntity(OrderRequest orderRequest) {
-        orderRequest.getOrderDetails().forEach(orderDetailsRequest -> {
-            if (!productDetailsRepository.existsById(orderDetailsRequest.getProductDetailsId()))
-                throw new RuntimeException(ERROR_PRODUCT_NOT_FOUND);
-        });
         Order order = modelMapper.map(orderRequest, Order.class);
         order.getOrderDetails().clear();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

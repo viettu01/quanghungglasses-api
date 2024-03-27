@@ -6,7 +6,7 @@ import fithou.tuplv.quanghungglassesapi.dto.response.OrderResponse;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
-    PaginationDTO<OrderResponse> findByCustomerFullname(String fullname, Pageable pageable);
+    PaginationDTO<OrderResponse> findByOrderCustomerFullname(String fullname, Pageable pageable);
 
     PaginationDTO<OrderResponse> findByCustomerAccountEmail(Pageable pageable);
 

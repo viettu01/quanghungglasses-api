@@ -9,7 +9,6 @@ import fithou.tuplv.quanghungglassesapi.service.StaffService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
@@ -144,16 +143,30 @@ public class AuthRestController {
         }
     }
 
-    @GetMapping("/profile/{email}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF') or #email == authentication.name")
-    public ResponseEntity<?> getProfile(@PathVariable String email) {
+//    @GetMapping("/profile/{email}")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF') or #email == authentication.name")
+//    public ResponseEntity<?> getProfile(@PathVariable String email) {
+//        try {
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            for (GrantedAuthority authority : authentication.getAuthorities()) {
+//                if (authority.getAuthority().equals("ROLE_ADMIN") || authority.getAuthority().equals("ROLE_STAFF"))
+//                    return ResponseEntity.ok().body(staffService.findByAccountEmail(email));
+//            }
+//            return ResponseEntity.ok().body(customerService.findByAccountEmail(email));
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             for (GrantedAuthority authority : authentication.getAuthorities()) {
                 if (authority.getAuthority().equals("ROLE_ADMIN") || authority.getAuthority().equals("ROLE_STAFF"))
-                    return ResponseEntity.ok().body(staffService.findByAccountEmail(email));
+                    return ResponseEntity.ok().body(staffService.findByAccountEmail(authentication.getName()));
             }
-            return ResponseEntity.ok().body(customerService.findByAccountEmail(email));
+            return ResponseEntity.ok().body(customerService.findByAccountEmail(authentication.getName()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

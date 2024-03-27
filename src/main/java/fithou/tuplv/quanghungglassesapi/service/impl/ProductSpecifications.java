@@ -54,4 +54,49 @@ public class ProductSpecifications {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<Product> search(String name,
+                                                List<String> originName,
+                                                List<String> brandName,
+                                                List<String> materialName,
+                                                List<String> shapeName,
+                                                List<Integer> timeWarranty,
+                                                Double priceMin,
+                                                Double priceMax) {
+        return (Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+//?#{escape([0])}
+            // tim kiem ma co ky tu dac biet su dung ham ?#{escape([0])}
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+
+            predicates.add(criteriaBuilder.equal(root.get("status"), true));
+
+            if (brandName != null && !brandName.isEmpty()) {
+                predicates.add(root.get("brand").get("name").in(brandName));
+            }
+            if (materialName != null && !materialName.isEmpty()) {
+                predicates.add(root.get("material").get("name").in(materialName));
+            }
+            if (shapeName != null && !shapeName.isEmpty()) {
+                predicates.add(root.get("shape").get("name").in(shapeName));
+            }
+            if (originName != null && !originName.isEmpty()) {
+                predicates.add(root.get("origin").get("name").in(originName));
+            }
+            if (timeWarranty != null && !timeWarranty.isEmpty()) {
+                predicates.add(root.get("timeWarranty").in(timeWarranty));
+            }
+            if (Objects.nonNull(priceMin) && Objects.isNull(priceMax)) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), priceMin));
+            }
+            if (Objects.isNull(priceMin) && Objects.nonNull(priceMax)) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceMax));
+            }
+            if (Objects.nonNull(priceMin) && Objects.nonNull(priceMax)) {
+                predicates.add(criteriaBuilder.between(root.get("price"), priceMin, priceMax));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
 }

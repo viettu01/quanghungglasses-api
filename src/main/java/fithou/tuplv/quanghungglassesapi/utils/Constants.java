@@ -80,6 +80,7 @@ public class Constants {
 
     public static final String ERROR_ORDER_NOT_FOUND = "Đơn hàng không tồn tại";
     public static final String ERROR_ORDER_CUSTOMER_PHONE_NOT_REQUIRED = "Số điện thoại khách hàng không được để trống";
+    public static final String ERROR_ORDER_CUSTOMER_PRODUCT_QUANTITY_NOT_ENOUGH = "Số lượng sản phẩm không đủ";
 
     public static final String DIR_FILE_BANNER = "banners";
     public static final String DIR_FILE_PRODUCT = "products";

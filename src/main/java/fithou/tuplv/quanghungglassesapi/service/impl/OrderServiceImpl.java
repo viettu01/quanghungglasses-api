@@ -5,6 +5,7 @@ import fithou.tuplv.quanghungglassesapi.dto.request.OrderRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.OrderResponse;
 import fithou.tuplv.quanghungglassesapi.entity.Order;
 import fithou.tuplv.quanghungglassesapi.entity.OrderDetails;
+import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
 import fithou.tuplv.quanghungglassesapi.mapper.OrderMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.OrderDetailsRepository;
@@ -20,8 +21,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.DIR_FILE_ORDER;
-import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_ORDER_NOT_FOUND;
+import java.util.Objects;
+
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @Service
 @Transactional
@@ -35,9 +37,9 @@ public class OrderServiceImpl implements OrderService {
     final StorageService storageService;
 
     @Override
-    public PaginationDTO<OrderResponse> findByCustomerFullname(String fullname, Pageable pageable) {
+    public PaginationDTO<OrderResponse> findByOrderCustomerFullname(String fullname, Pageable pageable) {
         return paginationMapper
-                .mapToPaginationDTO(orderRepository.findByCustomerFullnameContaining(fullname, pageable)
+                .mapToPaginationDTO(orderRepository.findByFullnameContaining(fullname, pageable)
                         .map(orderMapper::convertToResponse));
     }
 
@@ -67,6 +69,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse create(OrderRequest orderRequest) {
+        orderRequest.getOrderDetails().forEach(orderDetailsRequest -> {
+            ProductDetails productDetails = productDetailsRepository
+                    .findById(orderDetailsRequest.getProductDetailsId())
+                    .orElseThrow(() -> new RuntimeException(ERROR_PRODUCT_NOT_FOUND));
+            if (productDetails.getQuantity() < orderDetailsRequest.getQuantity())
+                throw new RuntimeException(ERROR_ORDER_CUSTOMER_PRODUCT_QUANTITY_NOT_ENOUGH);
+        });
         Order order = orderMapper.convertToEntity(orderRequest);
         if (orderRequest.getEyeglassPrescriptionImage() != null && !orderRequest.getEyeglassPrescriptionImage().isEmpty())
             order.setEyeglassPrescription(storageService.saveImageFile(DIR_FILE_ORDER, orderRequest.getEyeglassPrescriptionImage()));
@@ -90,6 +99,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse update(OrderRequest orderRequest) {
         Order order = orderRepository.findById(orderRequest.getId()).orElseThrow(() -> new RuntimeException(ERROR_ORDER_NOT_FOUND));
+        if (Objects.nonNull(order.getCompletedDate()))
+            throw new RuntimeException("Đơn hàng đã hoàn thành không thể cập nhật");
 
         return null;
     }

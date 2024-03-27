@@ -24,6 +24,16 @@ public interface ProductService {
                                                       Double priceMax,
                                                       Pageable pageable);
 
+    PaginationDTO<ProductResponse> search(String name,
+                                          List<String> originName,
+                                          List<String> brandName,
+                                          List<String> materialName,
+                                          List<String> shapeName,
+                                          List<Integer> timeWarranty,
+                                          Double priceMin,
+                                          Double priceMax,
+                                          Pageable pageable);
+
     ProductDetailsInvoiceResponse findProductDetailsById(Long id);
 
     ProductDetailsResponse findProductDetailsByIdInCart(Long id);

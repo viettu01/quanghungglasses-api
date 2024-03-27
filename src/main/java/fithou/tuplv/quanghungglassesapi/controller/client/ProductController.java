@@ -33,6 +33,34 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.findByNameContainingAndStatus(name, true, pageable));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam(value = "name") String name,
+                                    @RequestParam(value = "origin-name", defaultValue = "", required = false) List<String> originName,
+                                    @RequestParam(value = "brand-name", defaultValue = "", required = false) List<String> brandName,
+                                    @RequestParam(value = "material-name", defaultValue = "", required = false) List<String> materialName,
+                                    @RequestParam(value = "shape-name", defaultValue = "", required = false) List<String> shapeName,
+                                    @RequestParam(value = "time-warranty", required = false) List<Integer> timeWarranty,
+                                    @RequestParam(value = "price-min", required = false) Double priceMin,
+                                    @RequestParam(value = "price-max", required = false) Double priceMax,
+                                    @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
+                                    @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
+                                    @RequestParam(value = "sort-direction", defaultValue = SORT_DESC, required = false) String sortDir,
+                                    @RequestParam(value = "sort-by", defaultValue = "id", required = false) String sortBy) {
+        pageNumber = (pageNumber <= 0) ? 0 : (pageNumber - 1); // Nếu page <= 0 thì trả về page đầu tiên
+        Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        return ResponseEntity.ok().body(productService.search(
+                name,
+                originName,
+                brandName,
+                materialName,
+                shapeName,
+                timeWarranty,
+                priceMin,
+                priceMax,
+                pageable));
+    }
+
     @GetMapping("/category/{category-slug}")
     public ResponseEntity<?> getByCategorySlug(@PathVariable(value = "category-slug") String categorySlug,
                                                @RequestParam(value = "origin-name", defaultValue = "", required = false) List<String> originName,
