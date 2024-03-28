@@ -20,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
+import java.util.Date;
 import java.util.Objects;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
@@ -97,11 +97,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse update(OrderRequest orderRequest) {
-        Order order = orderRepository.findById(orderRequest.getId()).orElseThrow(() -> new RuntimeException(ERROR_ORDER_NOT_FOUND));
+    public OrderResponse update(Long id, Integer orderStatus) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_ORDER_NOT_FOUND));
         if (Objects.nonNull(order.getCompletedDate()))
             throw new RuntimeException("Đơn hàng đã hoàn thành không thể cập nhật");
+        if (order.getOrderStatus() == 4)
+            throw new RuntimeException("Đơn hàng đã hủy không thể cập nhật");
 
-        return null;
+        order.setOrderStatus(orderStatus);
+        if (order.getOrderStatus() == 3) {
+            Date now = new Date();
+            order.setCompletedDate(now);
+            order.setPaymentStatus(true);
+            if (order.getPaymentDate() == null)
+                order.setPaymentDate(now);
+        }
+
+        return orderMapper.convertToResponse(orderRepository.save(order));
     }
 }

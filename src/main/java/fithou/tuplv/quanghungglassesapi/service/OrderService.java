@@ -14,5 +14,5 @@ public interface OrderService {
 
     OrderResponse create(OrderRequest orderRequest);
 
-    OrderResponse update(OrderRequest orderRequest);
+    OrderResponse update(Long id, Integer orderStatus);
 }

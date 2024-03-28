@@ -58,15 +58,10 @@ public class OrderRestController {
         }
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> update(@Valid @ModelAttribute OrderRequest orderRequest, BindingResult result) {
-        if (result.hasErrors()) {
-            HashMap<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
+    @PutMapping("/{id}/{orderStatus}")
+    public ResponseEntity<?> update(@PathVariable Long id, @PathVariable Integer orderStatus) {
         try {
-            return ResponseEntity.ok().body(orderService.update(orderRequest));
+            return ResponseEntity.ok().body(orderService.update(id, orderStatus));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
