@@ -54,7 +54,22 @@ public class Order {
     private String note; // ghi chú
 
     @Column(nullable = false)
-    private Integer orderStatus; // trạng thái đơn hàng (0: chờ xác nhận, 1: đã xác nhận, 2: đang giao hàng, 3: đã giao hàng, 4: đã hủy)
+    private Integer orderStatus; // trạng thái đơn hàng (0: chờ xác nhận, 1: đã xác nhận, 2: đang giao hàng, 3: đã giao hàng, 4: đã hoàn thành, 5: đã hủy)
+
+    @Column
+    private Date confirmDate; // ngày xác nhận đơn hàng
+
+    @Column
+    private Date deliveryDate; // ngày giao hàng
+
+    @Column
+    private Date receiveDate; // ngày nhận hàng
+
+    @Column
+    private Date cancelDate; // ngày hủy đơn hàng
+
+    @Column
+    private String cancelReason; // lý do hủy đơn hàng
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)

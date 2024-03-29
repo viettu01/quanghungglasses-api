@@ -28,6 +28,11 @@ public class OrderResponse implements Serializable {
     private String eyeglassPrescription;
     private String note;
     private Integer orderStatus;
+    private Date confirmDate; // ngày xác nhận đơn hàng
+    private Date deliveryDate; // ngày giao hàng
+    private Date receiveDate; // ngày nhận hàng
+    private Date cancelDate; // ngày hủy đơn hàng
+    private String cancelReason; // lý do hủy đơn hàng
 
     private List<OrderDetailsResponse> orderDetails = new ArrayList<>();
 }

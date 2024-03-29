@@ -44,10 +44,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PaginationDTO<OrderResponse> findByCustomerAccountEmail(Pageable pageable) {
+    public PaginationDTO<OrderResponse> findByCustomerAccountEmail(Long id, Pageable pageable) {
+        if (Objects.isNull(id))
+            return paginationMapper
+                    .mapToPaginationDTO(orderRepository
+                            .findByCustomerAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName(), pageable)
+                            .map(orderMapper::convertToResponse)
+                    );
         return paginationMapper
                 .mapToPaginationDTO(orderRepository
-                        .findByCustomerAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName(), pageable)
+                        .findByCustomerAccountEmailAndId(SecurityContextHolder.getContext().getAuthentication().getName(), id, pageable)
                         .map(orderMapper::convertToResponse)
                 );
     }
@@ -101,16 +107,53 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_ORDER_NOT_FOUND));
         if (Objects.nonNull(order.getCompletedDate()))
             throw new RuntimeException("Đơn hàng đã hoàn thành không thể cập nhật");
-        if (order.getOrderStatus() == 4)
+        if (order.getOrderStatus() == 5)
             throw new RuntimeException("Đơn hàng đã hủy không thể cập nhật");
 
         order.setOrderStatus(orderStatus);
+        Date now = new Date();
+        if (order.getOrderStatus() == 1)
+            order.setConfirmDate(now);
+
+        if (order.getOrderStatus() == 2) {
+            order.setDeliveryDate(now);
+            if (order.getConfirmDate() == null)
+                order.setConfirmDate(now);
+        }
+
         if (order.getOrderStatus() == 3) {
-            Date now = new Date();
-            order.setCompletedDate(now);
             order.setPaymentStatus(true);
+            order.setReceiveDate(now);
             if (order.getPaymentDate() == null)
                 order.setPaymentDate(now);
+            if (order.getConfirmDate() == null)
+                order.setConfirmDate(now);
+            if (order.getDeliveryDate() == null)
+                order.setDeliveryDate(now);
+        }
+
+        if (order.getOrderStatus() == 4) {
+            order.setPaymentStatus(true);
+            order.setCompletedDate(now);
+            if (order.getConfirmDate() == null)
+                order.setConfirmDate(now);
+            if (order.getPaymentDate() == null)
+                order.setPaymentDate(now);
+            if (order.getDeliveryDate() == null)
+                order.setDeliveryDate(now);
+            if (order.getReceiveDate() == null)
+                order.setReceiveDate(now);
+        }
+
+        if (order.getOrderStatus() == 5) {
+            order.setPaymentStatus(false);
+            order.setCompletedDate(null);
+            order.setPaymentDate(null);
+            // Cap nhat lai so luong san pham
+            order.getOrderDetails().forEach(orderDetails -> {
+                orderDetails.getProductDetails().setQuantity(orderDetails.getProductDetails().getQuantity() + orderDetails.getQuantity());
+                productDetailsRepository.save(orderDetails.getProductDetails());
+            });
         }
 
         return orderMapper.convertToResponse(orderRepository.save(order));

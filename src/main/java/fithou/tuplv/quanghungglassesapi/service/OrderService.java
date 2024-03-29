@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface OrderService {
     PaginationDTO<OrderResponse> findByOrderCustomerFullname(String fullname, Pageable pageable);
 
-    PaginationDTO<OrderResponse> findByCustomerAccountEmail(Pageable pageable);
+    PaginationDTO<OrderResponse> findByCustomerAccountEmail(Long id, Pageable pageable);
 
     OrderResponse findById(Long id);
 

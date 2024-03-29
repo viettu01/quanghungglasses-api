@@ -54,6 +54,8 @@ public class OrderRequest implements Serializable {
     @NotNull(message = "Trạng thái đơn hàng không được để trống")
     private Integer orderStatus; // trạng thái đơn hàng (0: chờ xác nhận, 1: đã xác nhận, 2: đang giao hàng, 3: đã giao hàng, 4: đã hủy)
 
+    private String cancelReason; // lý do hủy đơn hàng
+
     @NotEmpty(message = "Danh sách sản phẩm không được để trống")
     @Valid
     private List<OrderDetailsRequest> orderDetails = new ArrayList<>(); // danh sách sản phẩm
