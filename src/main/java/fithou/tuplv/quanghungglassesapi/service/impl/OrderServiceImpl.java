@@ -103,7 +103,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse update(Long id, Integer orderStatus) {
+    public OrderResponse update(Long id, Integer orderStatus, String cancelReason) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_ORDER_NOT_FOUND));
         if (Objects.nonNull(order.getCompletedDate()))
             throw new RuntimeException("Đơn hàng đã hoàn thành không thể cập nhật");
@@ -149,6 +149,8 @@ public class OrderServiceImpl implements OrderService {
             order.setPaymentStatus(false);
             order.setCompletedDate(null);
             order.setPaymentDate(null);
+            order.setCancelDate(now);
+            order.setCancelReason(cancelReason);
             // Cap nhat lai so luong san pham
             order.getOrderDetails().forEach(orderDetails -> {
                 orderDetails.getProductDetails().setQuantity(orderDetails.getProductDetails().getQuantity() + orderDetails.getQuantity());

@@ -58,10 +58,19 @@ public class OrderRestController {
         }
     }
 
-    @PutMapping("/{id}/{orderStatus}")
-    public ResponseEntity<?> update(@PathVariable Long id, @PathVariable Integer orderStatus) {
+//    @PutMapping("/{id}/{orderStatus}")
+//    public ResponseEntity<?> update(@PathVariable Long id, @PathVariable Integer orderStatus) {
+//        try {
+//            return ResponseEntity.ok().body(orderService.update(id, orderStatus));
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+
+    @PutMapping("")
+    public ResponseEntity<?> update(@ModelAttribute OrderRequest orderRequest) {
         try {
-            return ResponseEntity.ok().body(orderService.update(id, orderStatus));
+            return ResponseEntity.ok().body(orderService.update(orderRequest.getId(), orderRequest.getOrderStatus(), orderRequest.getCancelReason()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
