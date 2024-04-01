@@ -29,6 +29,7 @@ public class OrderResponse implements Serializable {
     private String note;
     private Integer orderStatus;
     private Date confirmDate; // ngày xác nhận đơn hàng
+    private Date deliveryToShipperDate; // ngày giao cho shipper
     private Date deliveryDate; // ngày giao hàng
     private Date receiveDate; // ngày nhận hàng
     private Date cancelDate; // ngày hủy đơn hàng

@@ -53,11 +53,23 @@ public class Order {
     @Column
     private String note; // ghi chú
 
+    /*
+    * 0: chờ xác nhận
+    * 1: đã xác nhận
+    * 2: đang giao hàng (đã giao cho đơn vị vận chuyển)
+    * 3: đã giao hàng
+    * 4: đã nhận hàng
+    * 5: đã hoàn thành
+    * 6: đã hủy
+    */
     @Column(nullable = false)
-    private Integer orderStatus; // trạng thái đơn hàng (0: chờ xác nhận, 1: đã xác nhận, 2: đang giao hàng, 3: đã giao hàng, 4: đã hoàn thành, 5: đã hủy)
+    private Integer orderStatus; // trạng thái đơn hàng
 
     @Column
     private Date confirmDate; // ngày xác nhận đơn hàng
+
+    @Column
+    private Date deliveryToShipperDate; // ngày giao hàng cho đơn vị vận chuyển
 
     @Column
     private Date deliveryDate; // ngày giao hàng

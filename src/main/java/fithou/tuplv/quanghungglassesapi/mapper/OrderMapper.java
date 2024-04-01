@@ -55,7 +55,6 @@ public class OrderMapper {
                 order.setCustomer(customer);
                 order.setStaff(staffRepository.findByAccountEmail(authentication.getName()).orElse(null));
             } else if (authority.getAuthority().equals("ROLE_USER")) {
-                System.out.println("vaoday");
                 order.setCustomer(customerRepository.findByAccountEmail(authentication.getName()).orElse(null));
             }
         });
