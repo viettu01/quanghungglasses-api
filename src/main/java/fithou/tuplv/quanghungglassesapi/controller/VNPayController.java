@@ -5,15 +5,15 @@ import fithou.tuplv.quanghungglassesapi.service.OrderService;
 import fithou.tuplv.quanghungglassesapi.service.impl.VNPayService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -34,8 +34,8 @@ public class VNPayController {
 
     @GetMapping("/vnpay-payment")
     public void GetMapping(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int paymentStatus = vnPayService.orderReturn(request);
-
         String orderInfo = request.getParameter("vnp_OrderInfo");
         String paymentTime = request.getParameter("vnp_PayDate");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -44,9 +44,38 @@ public class VNPayController {
 
         if (paymentStatus == 1) {
             orderService.updatePaymentStatus(Long.parseLong(orderInfo), true, sdf.parse(paymentTime));
-            response.sendRedirect("http://localhost:4200/thanh-toan-thanh-cong/" + orderInfo);
+            authentication.getAuthorities().forEach(grantedAuthority -> {
+                if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
+                    try {
+                        response.sendRedirect("http://localhost:4200/thanh-toan-thanh-cong/" + orderInfo);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    try {
+                        response.sendRedirect("http://localhost:4200/admin/order/" + orderInfo);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
             return;
         }
-        response.sendRedirect("http://localhost:4200/don-hang/" + orderInfo);
+
+        authentication.getAuthorities().forEach(grantedAuthority -> {
+            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
+                try {
+                    response.sendRedirect("http://localhost:4200/don-hang/" + orderInfo);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                try {
+                    response.sendRedirect("http://localhost:4200/admin/order/" + orderInfo);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 }
