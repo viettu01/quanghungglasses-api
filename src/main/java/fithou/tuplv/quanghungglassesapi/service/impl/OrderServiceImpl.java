@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new RuntimeException(ERROR_ORDER_CUSTOMER_PRODUCT_QUANTITY_NOT_ENOUGH);
         });
         Order order = orderMapper.convertToEntity(orderRequest);
-        if (order.getOrderStatus() == 5) {
+        if (order.getPaymentMethod() == 0 && order.getOrderStatus() == 5) {
             Date now = new Date();
             order.setCompletedDate(now);
             if (!order.getPaymentStatus()) order.setPaymentStatus(true);

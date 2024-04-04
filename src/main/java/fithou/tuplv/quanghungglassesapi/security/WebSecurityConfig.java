@@ -41,14 +41,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Không sử dụng session lưu lại trạng thái của người dùng
         http.authorizeRequests()
                 .antMatchers("/api/login", "/api/register", "/api/images/**").permitAll() // Cho phép tất cả mọi người truy cập vào địa chỉ này
-                .antMatchers("/api/admin/**").hasAnyAuthority(ROLE_ADMIN, ROLE_STAFF)
-//                .antMatchers(HttpMethod.POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN")
-//
+                .antMatchers("/api/admin/**").hasAnyAuthority(ROLE_ADMIN, ROLE_STAFF)//                .antMatchers(HttpMethod.POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN")
 //                .antMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
 //                .antMatchers(HttpMethod.POST, "/api/category/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN")
 //                .antMatchers(HttpMethod.PUT, "/api/category/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_MANAGER")
 //                .antMatchers(HttpMethod.DELETE, "/api/category/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_MANAGER")
-//
+
 //                .antMatchers(HttpMethod.GET, "/api/product/**").permitAll()
 //                .antMatchers(HttpMethod.POST, "/api/product/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_MANAGER")
 //                .antMatchers(HttpMethod.PUT, "/api/product/**").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_MANAGER")

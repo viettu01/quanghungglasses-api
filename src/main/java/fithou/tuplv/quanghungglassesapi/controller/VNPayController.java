@@ -43,7 +43,6 @@ public class VNPayController {
 //        String totalPrice = request.getParameter("vnp_Amount");
 
         if (paymentStatus == 1) {
-            orderService.updatePaymentStatus(Long.parseLong(orderInfo), true, sdf.parse(paymentTime));
             authentication.getAuthorities().forEach(grantedAuthority -> {
                 if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
                     try {
@@ -53,12 +52,14 @@ public class VNPayController {
                     }
                 } else {
                     try {
+                        orderService.update(Long.parseLong(orderInfo), 5, "");
                         response.sendRedirect("http://localhost:4200/admin/order/" + orderInfo);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
             });
+            orderService.updatePaymentStatus(Long.parseLong(orderInfo), true, sdf.parse(paymentTime));
             return;
         }
 
@@ -71,6 +72,7 @@ public class VNPayController {
                 }
             } else {
                 try {
+                    orderService.update(Long.parseLong(orderInfo), 6, "Huỷ thanh toán");
                     response.sendRedirect("http://localhost:4200/admin/order/" + orderInfo);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
