@@ -73,7 +73,7 @@ public class OrderMapper {
 
     public OrderDetails convertToEntity(OrderDetailsRequest orderDetailsRequest) {
         OrderDetails orderDetails = modelMapper.map(orderDetailsRequest, OrderDetails.class);
-        orderDetails.setPriceOriginal(orderDetails.getProductDetails().getProduct().getPrice());
+        orderDetails.setPriceOriginal(Objects.requireNonNull(productDetailsRepository.findById(orderDetailsRequest.getProductDetailsId()).orElse(null)).getProduct().getPrice());
         orderDetails.setProductDetails(productDetailsRepository.findById(orderDetailsRequest.getProductDetailsId()).orElse(null));
         return orderDetails;
     }
