@@ -26,6 +26,9 @@ public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
+    @OneToMany(mappedBy = "customer")
+    private List<Warranty> warranty;
+
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;

@@ -17,6 +17,7 @@ public class OrderDetailsResponse implements Serializable {
     private String productColor;
     private Double productPrice;
     private String productThumbnail;
+    private Double priceOriginal;
     private Double price;
     private Integer quantity;
 }

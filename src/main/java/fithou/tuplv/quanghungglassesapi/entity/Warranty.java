@@ -23,12 +23,12 @@ public class Warranty extends BaseEntity implements Serializable {
     private Boolean status; // 0: Đã hoàn thành, 1: Chưa hoàn thành
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
-    private Staff staff;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @JoinColumn(name = "staff_id", nullable = false)
+    private Staff staff;
 
     @OneToMany(mappedBy = "warranty")
     private List<WarrantyDetails> warrantyDetails;

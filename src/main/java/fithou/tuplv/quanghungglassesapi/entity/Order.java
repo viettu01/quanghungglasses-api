@@ -54,14 +54,14 @@ public class Order {
     private String note; // ghi chú
 
     /*
-    * 0: chờ xác nhận
-    * 1: đã xác nhận
-    * 2: đang giao hàng (đã giao cho đơn vị vận chuyển)
-    * 3: đã giao hàng
-    * 4: đã nhận hàng
-    * 5: đã hoàn thành
-    * 6: đã hủy
-    */
+     * 0: chờ xác nhận
+     * 1: đã xác nhận
+     * 2: đang giao hàng (đã giao cho đơn vị vận chuyển)
+     * 3: đã giao hàng
+     * 4: đã nhận hàng
+     * 5: đã hoàn thành
+     * 6: đã hủy
+     */
     @Column(nullable = false)
     private Integer orderStatus; // trạng thái đơn hàng
 
@@ -95,5 +95,5 @@ public class Order {
     private List<OrderDetails> orderDetails;
 
     @OneToMany(mappedBy = "order")
-    private List<Warranty> warranties;
+    private List<WarrantyDetails> warrantyDetails;
 }

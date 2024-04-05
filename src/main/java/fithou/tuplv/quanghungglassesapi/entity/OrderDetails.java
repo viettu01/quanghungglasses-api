@@ -18,7 +18,10 @@ public class OrderDetails {
     private Long id;
 
     @Column(nullable = false)
-    private Double price;
+    private Double priceOriginal; // Gía bán gốc
+
+    @Column(nullable = false)
+    private Double price; // Gía bán sau khi giảm giá
 
     @Column(nullable = false)
     private Integer quantity;
