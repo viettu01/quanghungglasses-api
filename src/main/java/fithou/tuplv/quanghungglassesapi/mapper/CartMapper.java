@@ -43,6 +43,7 @@ public class CartMapper {
         cartDetailsResponse.setProductColor(cartDetails.getProductDetails().getColor());
         cartDetailsResponse.setQuantityInStock(cartDetails.getProductDetails().getQuantity());
 
+        cartDetailsResponse.setProductPriceOriginal(cartDetails.getProductDetails().getProduct().getPrice());
         // Lấy giá sau khi đã giảm giá từ bảng sale và product_sale kiểm tra xem thời gian hiện tại có nằm trong thời gian sale không
         cartDetailsResponse.setProductPrice(cartDetails.getProductDetails().getProduct().getPrice());
         Date now = new Date();

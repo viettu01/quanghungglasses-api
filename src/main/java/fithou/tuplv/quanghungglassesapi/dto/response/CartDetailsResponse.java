@@ -16,6 +16,7 @@ public class CartDetailsResponse {
     private String productName;
     private String productSlug;
     private String productColor;
+    private Double productPriceOriginal;
     private Double productPrice;
     private Integer quantityInStock;
     private Integer quantity;
