@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderResponse implements Serializable {
     private Long id;
+    private Long customerId;
     private String fullname;
     private String email;
     private String address;

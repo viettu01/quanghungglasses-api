@@ -31,6 +31,7 @@ public class OrderMapper {
     // OrderMapper
     public OrderResponse convertToResponse(Order order) {
         OrderResponse orderResponse = modelMapper.map(order, OrderResponse.class);
+        orderResponse.setCustomerId(order.getCustomer().getId());
         if (Objects.nonNull(order.getCustomer().getAccount()))
             orderResponse.setEmail(order.getCustomer().getAccount().getEmail());
         orderResponse.getOrderDetails().clear();
@@ -64,6 +65,7 @@ public class OrderMapper {
     // OrderDetailsMapper
     public OrderDetailsResponse convertToResponse(OrderDetails orderDetails) {
         OrderDetailsResponse orderDetailsResponse = modelMapper.map(orderDetails, OrderDetailsResponse.class);
+        orderDetailsResponse.setProductDetailsId(orderDetails.getProductDetails().getId());
         orderDetailsResponse.setProductName(orderDetails.getProductDetails().getProduct().getName());
         orderDetailsResponse.setProductColor(orderDetails.getProductDetails().getColor());
         orderDetailsResponse.setProductPrice(orderDetails.getProductDetails().getProduct().getPrice());

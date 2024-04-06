@@ -13,6 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class OrderDetailsResponse implements Serializable {
     private Long id;
+    private Long productDetailsId;
     private String productName;
     private String productColor;
     private Double productPrice;

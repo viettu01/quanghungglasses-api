@@ -23,6 +23,9 @@ public class WarrantyDetails {
     @Column(nullable = false)
     private Integer quantity; // số lượng sản phẩm cần bảo hành
 
+    @Column(nullable = false)
+    private Double cost; // chi phí bảo hành
+
     @ManyToOne
     @JoinColumn(name = "product_details_id", nullable = false)
     private ProductDetails productDetails;

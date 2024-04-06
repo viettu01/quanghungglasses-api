@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WarrantyRepository extends JpaRepository<Warranty, Long> {
-    Page<Warranty> findByWarrantyDetailsOrderFullname(String fullname, Pageable pageable);
+    Page<Warranty> findByCustomerFullnameContaining(String fullname, Pageable pageable);
 }
