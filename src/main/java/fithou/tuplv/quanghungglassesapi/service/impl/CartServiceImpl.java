@@ -49,7 +49,7 @@ public class CartServiceImpl implements CartService {
                         Objects.requireNonNull(customerRepository.findByAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null)).getCart(),
                         cartDetailsRequest.getProductDetailsId());
         if (cartDetails.isPresent()) {
-            if (cartDetails.get().getQuantity() >= productDetails.getQuantity())
+            if ((cartDetails.get().getQuantity() + cartDetailsRequest.getQuantity()) > productDetails.getQuantity())
                 throw new RuntimeException("Số lượng sản phẩm trong giỏ hàng đã đạt giới hạn");
 
             cartDetails.get().setQuantity(cartDetails.get().getQuantity() + cartDetailsRequest.getQuantity());
