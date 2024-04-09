@@ -2,6 +2,7 @@ package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.request.CartDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.CartResponse;
+import fithou.tuplv.quanghungglassesapi.entity.Cart;
 import fithou.tuplv.quanghungglassesapi.entity.CartDetails;
 import fithou.tuplv.quanghungglassesapi.entity.ProductDetails;
 import fithou.tuplv.quanghungglassesapi.mapper.CartMapper;
@@ -34,7 +35,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponse getCartByUserEmail() {
-        return cartMapper.convertToResponse(cartRepository.findByCustomerAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+        Cart cart = cartRepository.findByCustomerAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        // sap xep lai cart details theo updated date giam dan
+        cart.getCartDetails().sort((o1, o2) -> o2.getUpdatedDate().compareTo(o1.getUpdatedDate()));
+
+        return cartMapper.convertToResponse(cart);
     }
 
     @Override

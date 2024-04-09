@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,4 +22,6 @@ public class CartDetailsResponse {
     private Double productPrice;
     private Integer quantityInStock;
     private Integer quantity;
+    private Date createdDate;
+    private Date updatedDate;
 }
