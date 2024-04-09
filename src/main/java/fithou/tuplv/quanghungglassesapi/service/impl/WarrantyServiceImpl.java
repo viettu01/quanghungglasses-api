@@ -7,6 +7,7 @@ import fithou.tuplv.quanghungglassesapi.entity.Warranty;
 import fithou.tuplv.quanghungglassesapi.entity.WarrantyDetails;
 import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.WarrantyMapper;
+import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.WarrantyDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.WarrantyRepository;
 import fithou.tuplv.quanghungglassesapi.service.WarrantyService;
@@ -24,6 +25,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_WARRANTY_NO
 public class WarrantyServiceImpl implements WarrantyService {
     final WarrantyRepository warrantyRepository;
     final WarrantyDetailsRepository warrantyDetailsRepository;
+    final ProductDetailsRepository productDetailsRepository;
     final PaginationMapper paginationMapper;
     final WarrantyMapper warrantyMapper;
 
@@ -53,6 +55,12 @@ public class WarrantyServiceImpl implements WarrantyService {
             warrantyDetails.setWarranty(warranty);
             warrantyDetailsRepository.save(warrantyDetails);
             warranty.getWarrantyDetails().add(warrantyDetails);
+            if (warrantyDetails.getWarrantyType() == 0) {
+                productDetailsRepository.findById(warrantyDetails.getProductDetails().getId()).ifPresent(productDetails -> {
+                    productDetails.setQuantity(productDetails.getQuantity() + warrantyDetails.getQuantity());
+                    productDetailsRepository.save(productDetails);
+                });
+            }
         });
         return warrantyMapper.convertToResponse(warranty);
     }
