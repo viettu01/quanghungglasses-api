@@ -55,7 +55,7 @@ public class WarrantyServiceImpl implements WarrantyService {
             warrantyDetails.setWarranty(warranty);
             warrantyDetailsRepository.save(warrantyDetails);
             warranty.getWarrantyDetails().add(warrantyDetails);
-            if (warrantyDetails.getWarrantyType() == 0) {
+            if (warranty.getStatus() && warrantyDetails.getWarrantyType() == 1) {
                 productDetailsRepository.findById(warrantyDetails.getProductDetails().getId()).ifPresent(productDetails -> {
                     productDetails.setQuantity(productDetails.getQuantity() + warrantyDetails.getQuantity());
                     productDetailsRepository.save(productDetails);
@@ -69,6 +69,16 @@ public class WarrantyServiceImpl implements WarrantyService {
     public void update(Long id, Boolean status) {
         Warranty warranty = warrantyRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_WARRANTY_NOT_FOUND));
         warranty.setStatus(status);
+        if (status) {
+            warranty.getWarrantyDetails().forEach(warrantyDetails -> {
+                if (warrantyDetails.getWarrantyType() == 1) {
+                    productDetailsRepository.findById(warrantyDetails.getProductDetails().getId()).ifPresent(productDetails -> {
+                        productDetails.setQuantity(productDetails.getQuantity() + warrantyDetails.getQuantity());
+                        productDetailsRepository.save(productDetails);
+                    });
+                }
+            });
+        }
         warrantyRepository.save(warranty);
     }
 }
