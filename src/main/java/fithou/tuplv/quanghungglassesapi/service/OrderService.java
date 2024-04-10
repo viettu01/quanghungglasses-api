@@ -10,7 +10,7 @@ import java.util.Date;
 public interface OrderService {
     PaginationDTO<OrderResponse> findByOrderCustomerFullname(String fullname, Pageable pageable);
 
-    PaginationDTO<OrderResponse> findByCustomerAccountEmail(Long id, Pageable pageable);
+    PaginationDTO<OrderResponse> findByCustomerAccountEmail(String productName, Pageable pageable);
 
     OrderResponse findById(Long id);
 

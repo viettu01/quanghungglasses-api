@@ -45,8 +45,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PaginationDTO<OrderResponse> findByCustomerAccountEmail(Long id, Pageable pageable) {
-        if (Objects.isNull(id))
+    public PaginationDTO<OrderResponse> findByCustomerAccountEmail(String productName, Pageable pageable) {
+        if (Objects.isNull(productName))
             return paginationMapper
                     .mapToPaginationDTO(orderRepository
                             .findByCustomerAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName(), pageable)
@@ -54,7 +54,8 @@ public class OrderServiceImpl implements OrderService {
                     );
         return paginationMapper
                 .mapToPaginationDTO(orderRepository
-                        .findByCustomerAccountEmailAndId(SecurityContextHolder.getContext().getAuthentication().getName(), id, pageable)
+                        .findByCustomerAccountEmailAndOrderDetails_ProductDetails_ProductNameContaining(
+                                SecurityContextHolder.getContext().getAuthentication().getName(), productName, pageable)
                         .map(orderMapper::convertToResponse)
                 );
     }
