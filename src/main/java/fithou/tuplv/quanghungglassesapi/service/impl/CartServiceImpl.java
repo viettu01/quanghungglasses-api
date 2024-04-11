@@ -84,6 +84,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public void minusProductQuantity(Long cartDetailsId) {
         CartDetails cartDetails = cartDetailsRepository.findById(cartDetailsId).orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm trong giỏ hàng"));
+        if (cartDetails.getQuantity() <= 1)
+            throw new RuntimeException("Số lượng sản phẩm trong giỏ hàng không thể nhỏ hơn 1");
         cartDetails.setQuantity(cartDetails.getQuantity() - 1);
         cartDetailsRepository.save(cartDetails);
     }
