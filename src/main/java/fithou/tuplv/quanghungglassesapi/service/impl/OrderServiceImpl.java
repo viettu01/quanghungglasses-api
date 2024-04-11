@@ -14,6 +14,7 @@ import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.service.OrderService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,15 +47,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public PaginationDTO<OrderResponse> findByCustomerAccountEmail(String productName, Pageable pageable) {
-        if (Objects.isNull(productName))
+        if (StringUtils.isBlank(productName)) {
             return paginationMapper
                     .mapToPaginationDTO(orderRepository
                             .findByCustomerAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName(), pageable)
                             .map(orderMapper::convertToResponse)
                     );
+        }
         return paginationMapper
                 .mapToPaginationDTO(orderRepository
-                        .findByCustomerAccountEmailAndOrderDetails_ProductDetails_ProductNameContaining(
+                        .findDistinctByCustomerAccountEmailAndOrderDetails_ProductDetails_ProductNameContaining(
                                 SecurityContextHolder.getContext().getAuthentication().getName(), productName, pageable)
                         .map(orderMapper::convertToResponse)
                 );

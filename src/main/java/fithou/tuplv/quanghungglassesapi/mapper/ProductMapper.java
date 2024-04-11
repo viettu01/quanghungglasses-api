@@ -53,8 +53,6 @@ public class ProductMapper {
                 productResponse.setDiscount(saleDetails.getDiscount());
                 Double priceDiscount = product.getPrice() * ((100.0 - saleDetails.getDiscount()) / 100.0);
                 productResponse.setPriceDiscount(priceDiscount);
-                System.out.println("price:" + product.getPrice());
-                System.out.println("priceDiscount: " + priceDiscount);
 //                    price = price * ((100 - saleDetails.getDiscount()) / 100);
             }
         }));
