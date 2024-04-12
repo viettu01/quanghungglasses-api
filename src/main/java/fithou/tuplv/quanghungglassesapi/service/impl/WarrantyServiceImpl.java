@@ -1,12 +1,16 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.PaginationDTO;
+import fithou.tuplv.quanghungglassesapi.dto.request.WarrantyDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.dto.request.WarrantyRequest;
 import fithou.tuplv.quanghungglassesapi.dto.response.WarrantyResponse;
+import fithou.tuplv.quanghungglassesapi.entity.Order;
+import fithou.tuplv.quanghungglassesapi.entity.OrderDetails;
 import fithou.tuplv.quanghungglassesapi.entity.Warranty;
 import fithou.tuplv.quanghungglassesapi.entity.WarrantyDetails;
 import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.WarrantyMapper;
+import fithou.tuplv.quanghungglassesapi.repository.OrderRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.WarrantyDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.WarrantyRepository;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_ORDER_NOT_FOUND;
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_WARRANTY_NOT_FOUND;
 
 @Service
@@ -25,6 +30,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_WARRANTY_NO
 public class WarrantyServiceImpl implements WarrantyService {
     final WarrantyRepository warrantyRepository;
     final WarrantyDetailsRepository warrantyDetailsRepository;
+    final OrderRepository orderRepository;
     final ProductDetailsRepository productDetailsRepository;
     final PaginationMapper paginationMapper;
     final WarrantyMapper warrantyMapper;
@@ -47,6 +53,16 @@ public class WarrantyServiceImpl implements WarrantyService {
 
     @Override
     public WarrantyResponse create(WarrantyRequest warrantyRequest) {
+        for (WarrantyDetailsRequest warrantyDetailsRequest : warrantyRequest.getWarrantyDetails()) {
+            Order order = orderRepository.findById(warrantyDetailsRequest.getOrderId()).orElseThrow(() -> new RuntimeException(ERROR_ORDER_NOT_FOUND));
+            for (OrderDetails orderDetails : order.getOrderDetails()) {
+                if (orderDetails.getProductDetails().getId().equals(warrantyDetailsRequest.getProductDetailsId())) {
+                    if (warrantyDetailsRequest.getQuantity() > orderDetails.getQuantity()) {
+                        throw new RuntimeException("Số lượng sản phẩm bảo hành không được lớn hơn số lượng sản phẩm đã mua");
+                    }
+                }
+            }
+        }
         Warranty warranty = warrantyMapper.convertToEntity(warrantyRequest);
         warrantyRepository.save(warranty);
         warranty.getWarrantyDetails().clear();
