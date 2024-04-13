@@ -128,6 +128,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse update(Long id, Integer orderStatus, String cancelReason) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_ORDER_NOT_FOUND));
+        if (order.getOrderStatus() > 0 && orderStatus == 6)
+            throw new RuntimeException("Đơn hàng đã được xác nhận không thể cập nhật");
         if (Objects.nonNull(order.getCompletedDate()))
             throw new RuntimeException("Đơn hàng đã hoàn thành không thể cập nhật");
         if (order.getOrderStatus() == 6)
