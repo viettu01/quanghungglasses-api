@@ -96,7 +96,12 @@ public class OrderServiceImpl implements OrderService {
                 throw new RuntimeException(ERROR_ORDER_CUSTOMER_PRODUCT_QUANTITY_NOT_ENOUGH);
         });
         Order order = orderMapper.convertToEntity(orderRequest);
-        if (order.getPaymentMethod() == 0 && order.getOrderStatus() == 5) {
+        if (order.getPaymentMethod() == 0
+                && SecurityContextHolder.getContext()
+                .getAuthentication().getAuthorities()
+                .stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_ADMIN) || grantedAuthority.getAuthority().equals(ROLE_STAFF))) {
+            order.setOrderStatus(5);
             Date now = new Date();
             order.setCompletedDate(now);
             if (!order.getPaymentStatus()) order.setPaymentStatus(true);
