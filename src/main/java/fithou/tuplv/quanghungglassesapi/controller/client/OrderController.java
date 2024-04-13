@@ -24,6 +24,7 @@ public class OrderController {
 
     @GetMapping({"/", ""})
     public ResponseEntity<?> getAllOrders(@RequestParam(value = "product-name", required = false) String productName,
+                                          @RequestParam(value = "order-status", required = false) Integer orderStatus,
                                           @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                           @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
                                           @RequestParam(value = "sort-direction", defaultValue = SORT_DESC, required = false) String sortDir,
@@ -32,7 +33,7 @@ public class OrderController {
         Sort sort = sortDir.equalsIgnoreCase(SORT_DESC) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        return ResponseEntity.ok().body(orderService.findByCustomerAccountEmail(productName, pageable));
+        return ResponseEntity.ok().body(orderService.findByCustomerAccountEmailAndOrderStatus(productName, orderStatus, pageable));
     }
 
     @GetMapping("/{id}")

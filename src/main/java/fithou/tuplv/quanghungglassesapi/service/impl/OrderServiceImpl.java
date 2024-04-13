@@ -14,7 +14,7 @@ import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.service.OrderService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,11 +46,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PaginationDTO<OrderResponse> findByCustomerAccountEmail(String productName, Pageable pageable) {
-        if (StringUtils.isBlank(productName)) {
+    public PaginationDTO<OrderResponse> findByCustomerAccountEmailAndOrderStatus(String productName, Integer orderStatus, Pageable pageable) {
+        if (ObjectUtils.isNotEmpty(orderStatus)) {
+            if (orderStatus >= 3 && orderStatus <= 5) {
+                return paginationMapper
+                        .mapToPaginationDTO(orderRepository
+                                .findDistinctByCustomerAccountEmailAndOrderStatusGreaterThanEqualAndOrderStatusIsLessThanEqualAndOrderDetails_ProductDetails_ProductNameContaining(
+                                        SecurityContextHolder.getContext().getAuthentication().getName(), orderStatus, 5, productName, pageable)
+                                .map(orderMapper::convertToResponse)
+                        );
+            }
             return paginationMapper
                     .mapToPaginationDTO(orderRepository
-                            .findByCustomerAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName(), pageable)
+                            .findDistinctByCustomerAccountEmailAndOrderStatusAndOrderDetails_ProductDetails_ProductNameContaining(
+                                    SecurityContextHolder.getContext().getAuthentication().getName(), orderStatus, productName, pageable)
                             .map(orderMapper::convertToResponse)
                     );
         }

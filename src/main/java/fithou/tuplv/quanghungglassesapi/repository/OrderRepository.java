@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findDistinctByCustomerAccountEmailAndOrderDetails_ProductDetails_ProductNameContaining(String email, String productName, Pageable pageable);
 
-    Page<Order> findByFullnameContaining(String fullname, Pageable pageable);
+    Page<Order> findDistinctByCustomerAccountEmailAndOrderStatusAndOrderDetails_ProductDetails_ProductNameContaining(String email, Integer orderStatus, String productName, Pageable pageable);
 
-    Page<Order> findByCustomerAccountEmail(String email, Pageable pageable);
+    Page<Order> findDistinctByCustomerAccountEmailAndOrderStatusGreaterThanEqualAndOrderStatusIsLessThanEqualAndOrderDetails_ProductDetails_ProductNameContaining(String email, Integer orderStatus, Integer orderStatusLessThan, String productName, Pageable pageable);
+
+    Page<Order> findByFullnameContaining(String fullname, Pageable pageable);
 }
