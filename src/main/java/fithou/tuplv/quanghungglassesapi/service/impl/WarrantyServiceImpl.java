@@ -71,7 +71,7 @@ public class WarrantyServiceImpl implements WarrantyService {
             warrantyDetails.setWarranty(warranty);
             warrantyDetailsRepository.save(warrantyDetails);
             warranty.getWarrantyDetails().add(warrantyDetails);
-            if (warranty.getStatus() && warrantyDetails.getWarrantyType() == 1) {
+            if (warranty.getStatus() && (warrantyDetails.getWarrantyType() == 1 || warrantyDetails.getWarrantyType() == 2)) {
                 productDetailsRepository.findById(warrantyDetails.getProductDetails().getId()).ifPresent(productDetails -> {
                     productDetails.setQuantity(productDetails.getQuantity() + warrantyDetails.getQuantity());
                     productDetailsRepository.save(productDetails);
