@@ -35,6 +35,7 @@ public class OrderResponse implements Serializable {
     private Date receiveDate; // ngày nhận hàng
     private Date cancelDate; // ngày hủy đơn hàng
     private String cancelReason; // lý do hủy đơn hàng
+    private Double totalMoney;
 
     private List<OrderDetailsResponse> orderDetails = new ArrayList<>();
 }

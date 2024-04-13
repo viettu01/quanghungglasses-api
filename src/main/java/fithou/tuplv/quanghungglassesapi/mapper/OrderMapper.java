@@ -36,6 +36,8 @@ public class OrderMapper {
             orderResponse.setEmail(order.getCustomer().getAccount().getEmail());
         orderResponse.getOrderDetails().clear();
         order.getOrderDetails().forEach(orderDetails -> orderResponse.getOrderDetails().add(convertToResponse(orderDetails)));
+        // Tính tổng tiền
+        orderResponse.setTotalMoney(order.getOrderDetails().stream().mapToDouble(orderDetails -> orderDetails.getQuantity() * orderDetails.getPrice()).sum());
         return orderResponse;
     }
 
