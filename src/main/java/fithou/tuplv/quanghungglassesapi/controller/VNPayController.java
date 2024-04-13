@@ -3,7 +3,6 @@ package fithou.tuplv.quanghungglassesapi.controller;
 import fithou.tuplv.quanghungglassesapi.dto.request.VnPaymentRequest;
 import fithou.tuplv.quanghungglassesapi.service.OrderService;
 import fithou.tuplv.quanghungglassesapi.service.impl.VNPayService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,15 +17,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/payment/vnpay")
-@CrossOrigin(origins = "http://localhost:4200")
-@AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class VNPayController {
     private final VNPayService vnPayService;
     private final OrderService orderService;
+    private Authentication authentication;
+
+    public VNPayController(VNPayService vnPayService, OrderService orderService) {
+        this.vnPayService = vnPayService;
+        this.orderService = orderService;
+    }
 
     @PostMapping("/create-payment")
     public ResponseEntity<?> createPayment(@ModelAttribute VnPaymentRequest vnPaymentRequest,
                                            HttpServletRequest request) {
+        authentication = SecurityContextHolder.getContext().getAuthentication();
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         String vnpayUrl = vnPayService.createPayment(vnPaymentRequest.getAmount(), vnPaymentRequest.getOrderInfo(), baseUrl);
         return ResponseEntity.ok().body(Map.of("redirectUrl", vnpayUrl));
@@ -34,7 +39,6 @@ public class VNPayController {
 
     @GetMapping("/vnpay-payment")
     public void GetMapping(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int paymentStatus = vnPayService.orderReturn(request);
         String orderInfo = request.getParameter("vnp_OrderInfo");
         String paymentTime = request.getParameter("vnp_PayDate");
@@ -44,13 +48,14 @@ public class VNPayController {
 
         if (paymentStatus == 1) {
             authentication.getAuthorities().forEach(grantedAuthority -> {
+                System.out.println(grantedAuthority.getAuthority());
                 if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
                     try {
                         response.sendRedirect("http://localhost:4200/thanh-toan-thanh-cong/" + orderInfo);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                } else {
+                } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN") || grantedAuthority.getAuthority().equals("ROLE_STAFF")) {
                     try {
                         orderService.update(Long.parseLong(orderInfo), 5, "");
                         response.sendRedirect("http://localhost:4200/admin/order/" + orderInfo);

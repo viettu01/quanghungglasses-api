@@ -51,7 +51,7 @@ public class CartMapper {
         List<Sale> salesExists = saleRepository.findByStartDateBetweenOrEndDateBetweenOrStartDateLessThanEqualAndEndDateGreaterThanEqual(now, now, now, now, now, now);
         salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails -> {
             if (saleDetails.getProduct().getId().equals(cartDetails.getProductDetails().getProduct().getId())) {
-                Double priceDiscount = saleDetails.getProduct().getPrice() * ((100 - saleDetails.getDiscount()) / 100);
+                Double priceDiscount = saleDetails.getProduct().getPrice() * ((100.0 - saleDetails.getDiscount()) / 100.0);
                 cartDetailsResponse.setProductPrice(priceDiscount);
             }
         }));

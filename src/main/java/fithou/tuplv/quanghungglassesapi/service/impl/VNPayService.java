@@ -13,7 +13,7 @@ import static fithou.tuplv.quanghungglassesapi.config.VNPayConfig.*;
 
 @Service
 public class VNPayService {
-    public String createPayment(int amount, Long orderId, String urlReturn) {
+    public String createPayment(Integer amount, Long orderId, String urlReturn) {
 
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
         String vnp_IpAddr = "127.0.0.1";
