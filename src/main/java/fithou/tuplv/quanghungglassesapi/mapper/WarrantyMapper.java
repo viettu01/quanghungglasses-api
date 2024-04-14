@@ -16,6 +16,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import static fithou.tuplv.quanghungglassesapi.utils.Constants.ERROR_CUSTOMER_NOT_FOUND;
+
 @Component
 @AllArgsConstructor
 public class WarrantyMapper {
@@ -27,7 +29,7 @@ public class WarrantyMapper {
 
     public Warranty convertToEntity(WarrantyRequest warrantyRequest) {
         Warranty warranty = modelMapper.map(warrantyRequest, Warranty.class);
-        warranty.setCustomer(customerRepository.findByPhone(warrantyRequest.getCustomerPhone()).orElse(null));
+        warranty.setCustomer(customerRepository.findByPhone(warrantyRequest.getCustomerPhone()).orElseThrow(() -> new RuntimeException(ERROR_CUSTOMER_NOT_FOUND)));
         warranty.setStaff(staffRepository.findByAccountEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null));
         warranty.getWarrantyDetails().clear();
         return warranty;

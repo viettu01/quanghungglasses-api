@@ -60,6 +60,8 @@ public class WarrantyServiceImpl implements WarrantyService {
                     if (warrantyDetailsRequest.getQuantity() > orderDetails.getQuantity()) {
                         throw new RuntimeException("Số lượng sản phẩm bảo hành không được lớn hơn số lượng sản phẩm đã mua");
                     }
+                } else {
+                    throw new RuntimeException("Sản phẩm bảo hành không thuộc đơn hàng");
                 }
             }
         }

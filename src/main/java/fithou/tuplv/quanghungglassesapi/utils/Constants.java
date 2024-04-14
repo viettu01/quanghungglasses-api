@@ -84,6 +84,8 @@ public class Constants {
 
     public static final String ERROR_WARRANTY_NOT_FOUND = "Phiếu bảo hành không tồn tại";
 
+    public static final String ERROR_CUSTOMER_NOT_FOUND = "Khách hàng không tồn tại";
+
     public static final String DIR_FILE_BANNER = "banners";
     public static final String DIR_FILE_PRODUCT = "products";
     public static final String DIR_FILE_STAFF = "staffs";
