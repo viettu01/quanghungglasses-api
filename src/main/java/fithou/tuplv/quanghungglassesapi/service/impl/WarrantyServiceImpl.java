@@ -84,6 +84,8 @@ public class WarrantyServiceImpl implements WarrantyService {
     @Override
     public void update(Long id, Boolean status) {
         Warranty warranty = warrantyRepository.findById(id).orElseThrow(() -> new RuntimeException(ERROR_WARRANTY_NOT_FOUND));
+        if (warranty.getStatus()) throw new RuntimeException("Phiếu bảo hành đã xử lý không thể cập nhật");
+
         warranty.setStatus(status);
         if (status) {
             warranty.getWarrantyDetails().forEach(warrantyDetails -> {
