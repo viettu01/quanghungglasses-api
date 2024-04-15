@@ -64,6 +64,15 @@ public class WarrantyServiceImpl implements WarrantyService {
                     throw new RuntimeException("Sản phẩm bảo hành không thuộc đơn hàng");
                 }
             }
+//            for (WarrantyDetails warrantyDetails : order.getWarrantyDetails()) {
+//                if (warrantyDetails.getProductDetails().getId().equals(warrantyDetailsRequest.getProductDetailsId())) {
+//                    if (warrantyDetails.getWarrantyType() == 1 || warrantyDetails.getWarrantyType() == 2) {
+//                        if (warrantyDetailsRequest.getQuantity() > warrantyDetails.getQuantity()) {
+//                            throw new RuntimeException("Số lượng sản phẩm bảo hành không được lớn hơn số lượng sản phẩm đã bảo hành");
+//                        }
+//                    }
+//                }
+//            }
         }
         Warranty warranty = warrantyMapper.convertToEntity(warrantyRequest);
         warrantyRepository.save(warranty);

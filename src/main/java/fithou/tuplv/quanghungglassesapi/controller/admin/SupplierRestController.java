@@ -24,7 +24,7 @@ public class SupplierRestController {
     final SupplierService supplierService;
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
@@ -38,6 +38,7 @@ public class SupplierRestController {
     }
 
     @PostMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody SupplierRequest supplierRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -52,6 +53,7 @@ public class SupplierRestController {
     }
 
     @PutMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody SupplierRequest supplierRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -66,6 +68,7 @@ public class SupplierRestController {
     }
 
     @DeleteMapping({"/{id}"})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             supplierService.deleteById(id);

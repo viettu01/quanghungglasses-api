@@ -4,6 +4,7 @@ import fithou.tuplv.quanghungglassesapi.dto.request.CartDetailsRequest;
 import fithou.tuplv.quanghungglassesapi.service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,13 @@ public class CartController {
     final CartService cartService;
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> getCartByUserId() {
         return ResponseEntity.ok(cartService.getCartByUserEmail());
     }
 
     @PostMapping("/add-product-to-cart")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> addProductToCart(@Valid @RequestBody CartDetailsRequest cartDetailsRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -38,6 +41,7 @@ public class CartController {
     }
 
     @PutMapping("/update-product-quantity")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> updateProductQuantity(@RequestBody CartDetailsRequest cartDetailsRequest) {
         try {
             cartService.updateProductQuantity(cartDetailsRequest);
@@ -48,6 +52,7 @@ public class CartController {
     }
 
     @PutMapping("/plus-product-quantity/{cartDetailsId}")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> plusProductQuantity(@PathVariable Long cartDetailsId) {
         try {
             cartService.plusProductQuantity(cartDetailsId);
@@ -58,6 +63,7 @@ public class CartController {
     }
 
     @PutMapping("/minus-product-quantity/{cartDetailsId}")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> minusProductQuantity(@PathVariable Long cartDetailsId) {
         try {
             cartService.minusProductQuantity(cartDetailsId);
@@ -68,6 +74,7 @@ public class CartController {
     }
 
     @DeleteMapping("/delete-cart-details/{cartDetailsIds}")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> deleteCartDetails(@PathVariable Long cartDetailsIds) {
         try {
             cartService.deleteCartDetails(cartDetailsIds);

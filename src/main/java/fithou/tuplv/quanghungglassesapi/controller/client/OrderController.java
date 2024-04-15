@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class OrderController {
     final OrderService orderService;
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> getAllOrders(@RequestParam(value = "product-name", required = false) String productName,
                                           @RequestParam(value = "order-status", required = false) Integer orderStatus,
                                           @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
@@ -37,6 +39,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(orderService.findById(id));
@@ -46,6 +49,7 @@ public class OrderController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> create(@Valid @ModelAttribute OrderRequest orderRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -60,6 +64,7 @@ public class OrderController {
     }
 
     @PutMapping("")
+    @PreAuthorize("hasRole('USRER')")
     public ResponseEntity<?> update(@ModelAttribute OrderRequest orderRequest) {
         try {
             return ResponseEntity.ok().body(orderService.update(orderRequest.getId(), orderRequest.getOrderStatus(), orderRequest.getCancelReason()));

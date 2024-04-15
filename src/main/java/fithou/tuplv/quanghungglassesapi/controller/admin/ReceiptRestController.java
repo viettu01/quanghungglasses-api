@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class ReceiptRestController {
     final ReceiptService receiptService;
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getAll(@RequestParam(value = "supplier-name", defaultValue = "", required = false) String supplierName,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
@@ -36,6 +38,7 @@ public class ReceiptRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(receiptService.findById(id));
@@ -45,6 +48,7 @@ public class ReceiptRestController {
     }
 
     @PostMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> create(@Valid @RequestBody ReceiptRequest receiptRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -59,6 +63,7 @@ public class ReceiptRestController {
     }
 
     @PutMapping({"/{id}/{status}"})
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> update(@PathVariable Long id, @PathVariable Boolean status) {
         try {
             return ResponseEntity.ok().body(receiptService.updateStatus(id, status));

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class ProductRestController {
     final ProductService productService;
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
@@ -39,6 +41,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(productService.findById(id));
@@ -48,6 +51,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/details/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getProductDetailsById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(productService.findProductDetailsById(id));
@@ -57,6 +61,7 @@ public class ProductRestController {
     }
 
     @PostMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @ModelAttribute ProductRequest productRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -72,6 +77,7 @@ public class ProductRestController {
     }
 
     @PutMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @ModelAttribute ProductRequest productRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -88,6 +94,7 @@ public class ProductRestController {
     }
 
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateStatus(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(productService.updateStatus(id));
@@ -97,6 +104,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/count")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> countByStatus(@RequestParam Boolean status) {
         HashMap<String, String> map = new HashMap<>();
         map.put("status", status.toString());
@@ -105,11 +113,13 @@ public class ProductRestController {
     }
 
     @GetMapping("/count-all")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> countAll() {
         return ResponseEntity.ok().body(Map.of("totalElements", productService.countAll()));
     }
 
     @DeleteMapping({"/{id}"})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             productService.deleteById(id);
@@ -120,6 +130,7 @@ public class ProductRestController {
     }
 
     @DeleteMapping("/{id}/images/**")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteImage(HttpServletRequest request, @PathVariable Long id) {
         String path = request.getRequestURI().substring(request.getContextPath().length() + "/api/admin/product/".length() + id.toString().length() + "/images/".length());
         try {
@@ -132,6 +143,7 @@ public class ProductRestController {
     }
 
     @DeleteMapping("/details/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProductDetails(@PathVariable Long id) {
         try {
             productService.deleteProductDetailsById(id);

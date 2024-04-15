@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class OrderRestController {
     final OrderService orderService;
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getAllOrders(@RequestParam(value = "fullname", defaultValue = "", required = false) String fullname,
                                           @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                           @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
@@ -36,6 +38,7 @@ public class OrderRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(orderService.findById(id));
@@ -45,6 +48,7 @@ public class OrderRestController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> create(@Valid @ModelAttribute OrderRequest orderRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -68,6 +72,7 @@ public class OrderRestController {
 //    }
 
     @PutMapping("")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> update(@ModelAttribute OrderRequest orderRequest) {
         try {
             return ResponseEntity.ok().body(orderService.update(orderRequest.getId(), orderRequest.getOrderStatus(), orderRequest.getCancelReason()));

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class CategoryRestController {
     final CategoryService categoryService;
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "", required = false) String name,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
@@ -36,6 +38,7 @@ public class CategoryRestController {
     }
 
     @GetMapping("/{slug}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<?> getBySlug(@PathVariable String slug) {
         try {
             return ResponseEntity.ok().body(categoryService.findBySlug(slug));
@@ -45,6 +48,7 @@ public class CategoryRestController {
     }
 
     @PostMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody CategoryRequest categoryRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -59,6 +63,7 @@ public class CategoryRestController {
     }
 
     @PutMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody CategoryRequest categoryRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -73,6 +78,7 @@ public class CategoryRestController {
     }
 
     @DeleteMapping({"/{id}"})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             categoryService.deleteById(id);

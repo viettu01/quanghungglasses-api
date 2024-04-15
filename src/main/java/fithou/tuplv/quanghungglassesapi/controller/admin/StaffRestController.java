@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class StaffRestController {
     final AuthenticationManager authenticationManager;
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAll(@RequestParam(value = "fullname", defaultValue = "", required = false) String fullname,
                                     @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
                                     @RequestParam(value = "page-number", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
@@ -38,6 +40,7 @@ public class StaffRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(staffService.findById(id));
@@ -47,6 +50,7 @@ public class StaffRestController {
     }
 
     @PostMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @ModelAttribute StaffRequest staffRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -61,6 +65,7 @@ public class StaffRestController {
     }
 
     @PutMapping({"/", ""})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @ModelAttribute StaffRequest staffRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -75,6 +80,7 @@ public class StaffRestController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             staffService.deleteById(id);

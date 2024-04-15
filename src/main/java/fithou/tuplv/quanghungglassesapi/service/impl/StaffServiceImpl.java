@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.Date;
+
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @Service
@@ -78,6 +80,9 @@ public class StaffServiceImpl implements StaffService {
     public StaffResponse create(StaffRequest staffRequest) {
         if (staffRepository.existsByPhone(staffRequest.getPhone()))
             throw new RuntimeException(ERROR_PHONE_ALREADY_EXISTS);
+        // kiem tra nhan vien có du 18 tuoi chua
+        if (new Date().getTime() - staffRequest.getBirthday().getTime() < 18L * 365 * 24 * 60 * 60 * 1000)
+            throw new RuntimeException("Nhân viên chưa đủ 18 tuổi");
         Staff staff = userMapper.convertToEntity(staffRequest);
         if (staffRequest.getAccount() != null) {
 //            if (accountRepository.existsByEmail(staffRequest.getAccount().getEmail()))
