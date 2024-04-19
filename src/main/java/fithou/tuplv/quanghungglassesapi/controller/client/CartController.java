@@ -20,13 +20,13 @@ public class CartController {
     final CartService cartService;
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getCartByUserId() {
         return ResponseEntity.ok(cartService.getCartByUserEmail());
     }
 
     @PostMapping("/add-product-to-cart")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> addProductToCart(@Valid @RequestBody CartDetailsRequest cartDetailsRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -41,7 +41,7 @@ public class CartController {
     }
 
     @PutMapping("/update-product-quantity")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateProductQuantity(@RequestBody CartDetailsRequest cartDetailsRequest) {
         try {
             cartService.updateProductQuantity(cartDetailsRequest);
@@ -52,7 +52,7 @@ public class CartController {
     }
 
     @PutMapping("/plus-product-quantity/{cartDetailsId}")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> plusProductQuantity(@PathVariable Long cartDetailsId) {
         try {
             cartService.plusProductQuantity(cartDetailsId);
@@ -63,7 +63,7 @@ public class CartController {
     }
 
     @PutMapping("/minus-product-quantity/{cartDetailsId}")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> minusProductQuantity(@PathVariable Long cartDetailsId) {
         try {
             cartService.minusProductQuantity(cartDetailsId);
@@ -74,7 +74,7 @@ public class CartController {
     }
 
     @DeleteMapping("/delete-cart-details/{cartDetailsIds}")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteCartDetails(@PathVariable Long cartDetailsIds) {
         try {
             cartService.deleteCartDetails(cartDetailsIds);

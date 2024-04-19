@@ -24,7 +24,7 @@ public class OrderController {
     final OrderService orderService;
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getAllOrders(@RequestParam(value = "product-name", required = false) String productName,
                                           @RequestParam(value = "order-status", required = false) Integer orderStatus,
                                           @RequestParam(value = "page-size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(orderService.findById(id));
@@ -49,7 +49,7 @@ public class OrderController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> create(@Valid @ModelAttribute OrderRequest orderRequest, BindingResult result) {
         if (result.hasErrors()) {
             HashMap<String, String> errors = new HashMap<>();
@@ -64,7 +64,7 @@ public class OrderController {
     }
 
     @PutMapping("")
-    @PreAuthorize("hasRole('USRER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> update(@ModelAttribute OrderRequest orderRequest) {
         try {
             return ResponseEntity.ok().body(orderService.update(orderRequest.getId(), orderRequest.getOrderStatus(), orderRequest.getCancelReason()));
