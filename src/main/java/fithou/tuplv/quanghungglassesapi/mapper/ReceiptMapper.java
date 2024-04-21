@@ -34,6 +34,7 @@ public class ReceiptMapper {
         receiptResponse.setTotalMoney(receipt.getReceiptDetails().stream().mapToDouble(receiptDetails -> receiptDetails.getQuantity() * receiptDetails.getPrice()).sum());
         receiptResponse.setReceiptDetails(receipt.getReceiptDetails().stream().map(receiptDetails -> {
             ReceiptDetailsResponse receiptDetailsResponse = modelMapper.map(receiptDetails, ReceiptDetailsResponse.class);
+            receiptDetailsResponse.setProductId(receiptDetails.getProductDetails().getId());
             receiptDetailsResponse.setProductName(receiptDetails.getProductDetails().getProduct().getName());
             receiptDetailsResponse.setProductColor(receiptDetails.getProductDetails().getColor());
             return receiptDetailsResponse;
