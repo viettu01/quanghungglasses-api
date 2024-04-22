@@ -60,7 +60,11 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public byte[] exportReceiptReport(Integer year) {
-        return new byte[0];
+        try {
+            return exportService.createOutputFile(writeExcelReceipt(getReceiptReport(year)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private List<ReceiptReport> getReceiptReportByMonthInYear(List<ReceiptResponse> receiptResponses, Integer year) {
@@ -156,7 +160,7 @@ public class ReportServiceImpl implements ReportService {
             int index = 1;
             for (ProductReport item : orderReport.getProducts()) {
                 Row row = sheet.createRow(rowIndex);
-                writeBookOrder(index, item, row, workbook);
+                writeBookProductReport(index, item, row, workbook);
                 index++;
                 rowIndex++;
             }
@@ -165,7 +169,35 @@ public class ReportServiceImpl implements ReportService {
         return workbook;
     }
 
-    private void writeBookOrder(int index, ProductReport productReport, Row row, Workbook workbook) {
+    private Workbook writeExcelReceipt(List<ReceiptReport> receiptReports) throws IOException {
+        // Create Workbook
+        Workbook workbook = exportService.getWorkbookTemplate("static/reports/BaoCaoNhapHang.xlsx");
+        int sheetIndex = 0;
+        for (ReceiptReport receiptReport : receiptReports) {
+            Sheet sheet = workbook.getSheetAt(sheetIndex);
+
+            Row titleRow = sheet.getRow(0);
+            Cell cell = titleRow.getCell(0);
+            String cellValue = cell.getStringCellValue();
+            if (cellValue.contains("[month]")) {
+                cellValue = cellValue.replace("[month]", receiptReport.getMonth().toString());
+            }
+            cell.setCellValue(cellValue);
+
+            int rowIndex = 2;
+            int index = 1;
+            for (ProductReport item : receiptReport.getProducts()) {
+                Row row = sheet.createRow(rowIndex);
+                writeBookProductReport(index, item, row, workbook);
+                index++;
+                rowIndex++;
+            }
+            sheetIndex++;
+        }
+        return workbook;
+    }
+
+    private void writeBookProductReport(int index, ProductReport productReport, Row row, Workbook workbook) {
         Cell cell = row.createCell(0);
         cell.setCellValue(index);
         cell.setCellStyle(exportService.getCellStyleDataCenter(workbook));
@@ -190,6 +222,4 @@ public class ReportServiceImpl implements ReportService {
         cell.setCellValue(productReport.getTotalMoney());
         cell.setCellStyle(exportService.getCellStyleDataRight(workbook));
     }
-
-
 }
