@@ -63,7 +63,7 @@ public class ReportServiceImpl implements ReportService {
                     .filter(receiptResponse -> receiptResponse.getUpdatedDate().getMonth() == finalI)
                     .collect(Collectors.toList());
             receiptReport.setTotalQuantityReceipt(receiptResponsesByMonth.stream().mapToInt(receiptResponse -> receiptResponse.getReceiptDetails().stream().mapToInt(ReceiptDetailsResponse::getQuantity).sum()).sum());
-            receiptReport.setTotalMoneyReceiptTotal(receiptResponsesByMonth.stream().mapToDouble(receiptResponse -> receiptResponse.getReceiptDetails().stream().mapToDouble(receiptDetailsResponse -> receiptDetailsResponse.getQuantity() * receiptDetailsResponse.getPrice()).sum()).sum());
+            receiptReport.setTotalMoneyReceipt(receiptResponsesByMonth.stream().mapToDouble(receiptResponse -> receiptResponse.getReceiptDetails().stream().mapToDouble(receiptDetailsResponse -> receiptDetailsResponse.getQuantity() * receiptDetailsResponse.getPrice()).sum()).sum());
             for (ReceiptResponse receiptResponse : receiptResponsesByMonth) {
                 for (ReceiptDetailsResponse receiptDetailsResponse : receiptResponse.getReceiptDetails()) {
                     ProductReport productReport = new ProductReport();
@@ -99,8 +99,8 @@ public class ReportServiceImpl implements ReportService {
                     .stream()
                     .filter(saleResponse -> saleResponse.getCompletedDate().getMonth() == finalI)
                     .collect(Collectors.toList());
-            orderReport.setQuantityOrderTotal(orderResponsesByMonth.stream().mapToInt(saleResponse -> saleResponse.getOrderDetails().stream().mapToInt(OrderDetailsResponse::getQuantity).sum()).sum());
-            orderReport.setTotalMoneyOrderTotal(orderResponsesByMonth.stream().mapToDouble(saleResponse -> saleResponse.getOrderDetails().stream().mapToDouble(orderDetailsResponse -> orderDetailsResponse.getQuantity() * orderDetailsResponse.getPrice()).sum()).sum());
+            orderReport.setTotalQuantityOrder(orderResponsesByMonth.stream().mapToInt(saleResponse -> saleResponse.getOrderDetails().stream().mapToInt(OrderDetailsResponse::getQuantity).sum()).sum());
+            orderReport.setTotalMoneyOrder(orderResponsesByMonth.stream().mapToDouble(saleResponse -> saleResponse.getOrderDetails().stream().mapToDouble(orderDetailsResponse -> orderDetailsResponse.getQuantity() * orderDetailsResponse.getPrice()).sum()).sum());
             for (OrderResponse receiptResponse : orderResponsesByMonth) {
                 for (OrderDetailsResponse orderDetailsResponse : receiptResponse.getOrderDetails()) {
                     ProductReport productReport = new ProductReport();
