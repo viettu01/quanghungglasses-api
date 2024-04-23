@@ -18,4 +18,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByFullnameContaining(String fullname, Pageable pageable);
 
     List<Order> findAllByCompletedDateBetweenAndOrderStatus(Date from, Date to, Integer status);
+
+    List<Order> findAllByCreatedDateBetween(Date from, Date to);
 }

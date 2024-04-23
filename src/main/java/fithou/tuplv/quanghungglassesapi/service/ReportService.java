@@ -1,7 +1,6 @@
 package fithou.tuplv.quanghungglassesapi.service;
 
-import fithou.tuplv.quanghungglassesapi.dto.response.OrderReport;
-import fithou.tuplv.quanghungglassesapi.dto.response.ReceiptReport;
+import fithou.tuplv.quanghungglassesapi.dto.response.*;
 
 import java.util.List;
 
@@ -13,4 +12,8 @@ public interface ReportService {
     byte[] exportOrderReport(Integer year);
 
     byte[] exportReceiptReport(Integer year);
+
+    DashboardResponse getDashboard();
+
+    List<CartReport> getAllCart();
 }

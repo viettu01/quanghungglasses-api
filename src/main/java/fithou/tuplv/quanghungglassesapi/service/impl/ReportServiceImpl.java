@@ -1,9 +1,15 @@
 package fithou.tuplv.quanghungglassesapi.service.impl;
 
 import fithou.tuplv.quanghungglassesapi.dto.response.*;
+import fithou.tuplv.quanghungglassesapi.entity.CartDetails;
+import fithou.tuplv.quanghungglassesapi.entity.Order;
+import fithou.tuplv.quanghungglassesapi.entity.OrderDetails;
+import fithou.tuplv.quanghungglassesapi.mapper.CartMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.OrderMapper;
 import fithou.tuplv.quanghungglassesapi.mapper.ReceiptMapper;
+import fithou.tuplv.quanghungglassesapi.repository.CartDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.OrderRepository;
+import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ReceiptRepository;
 import fithou.tuplv.quanghungglassesapi.service.ReportService;
 import lombok.AllArgsConstructor;
@@ -17,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,22 +34,31 @@ public class ReportServiceImpl implements ReportService {
     final ReceiptRepository receiptRepository;
     final ReceiptMapper receiptMapper;
     final OrderMapper orderMapper;
+    final CartMapper cartMapper;
     final ExportService exportService;
+    final ProductDetailsRepository productDetailsRepository;
+    final CartDetailsRepository cartDetailsRepository;
 
     @Override
     public List<OrderReport> getOrderReport(Integer year) {
-        Date from = new Date(year - 1900, Calendar.JANUARY, 1);
-        Date to = new Date(year - 1900, Calendar.DECEMBER, 31);
-        List<OrderResponse> orderResponses = orderRepository.findAllByCompletedDateBetweenAndOrderStatus(from, to, 5)
+        Calendar from = Calendar.getInstance();
+        from.set(year, Calendar.JANUARY, 1);
+        Calendar to = Calendar.getInstance();
+        to.set(year, Calendar.DECEMBER, 31);
+        List<OrderResponse> orderResponses = orderRepository
+                .findAllByCompletedDateBetweenAndOrderStatus(from.getTime(), to.getTime(), 5)
                 .stream().map(orderMapper::convertToResponse).collect(Collectors.toList());
         return getOrderReportByMonthInYear(orderResponses, year);
     }
 
     @Override
     public List<ReceiptReport> getReceiptReport(Integer year) {
-        Date from = new Date(year - 1900, Calendar.JANUARY, 1);
-        Date to = new Date(year - 1900, Calendar.DECEMBER, 31);
-        List<ReceiptResponse> receiptResponses = receiptRepository.findAllByUpdatedDateBetweenAndStatus(from, to, true)
+        Calendar from = Calendar.getInstance();
+        from.set(year, Calendar.JANUARY, 1);
+        Calendar to = Calendar.getInstance();
+        to.set(year, Calendar.DECEMBER, 31);
+        List<ReceiptResponse> receiptResponses = receiptRepository
+                .findAllByUpdatedDateBetweenAndStatus(from.getTime(), to.getTime(), true)
                 .stream().map(receiptMapper::convertToResponse).collect(Collectors.toList());
         return getReceiptReportByMonthInYear(receiptResponses, year);
     }
@@ -221,5 +235,48 @@ public class ReportServiceImpl implements ReportService {
         cell = row.createCell(5);
         cell.setCellValue(productReport.getTotalMoney());
         cell.setCellStyle(exportService.getCellStyleDataRight(workbook));
+    }
+
+    @Override
+    public DashboardResponse getDashboard() {
+        DashboardResponse dashboardResponse = new DashboardResponse();
+        Calendar from = Calendar.getInstance();
+        from.set(Calendar.HOUR_OF_DAY, 0);
+        from.set(Calendar.MINUTE, 0);
+        from.set(Calendar.SECOND, 0);
+        Calendar to = Calendar.getInstance();
+        to.set(Calendar.HOUR_OF_DAY, 23);
+        to.set(Calendar.MINUTE, 59);
+        to.set(Calendar.SECOND, 59);
+
+        List<Order> orders = orderRepository.findAllByCreatedDateBetween(from.getTime(), to.getTime());
+        dashboardResponse.setTotalOrderInDay((long) orders.size());
+        dashboardResponse.setTotalOrderOnHold(orders.stream().filter(order -> order.getOrderStatus() == 0).count());
+        dashboardResponse.setTotalOrderCompleted(orders.stream().filter(order -> order.getOrderStatus() == 5).count());
+        dashboardResponse.setTotalProductOutOfStock(productDetailsRepository.findAll().stream().filter(productDetails -> productDetails.getQuantity() == 0).count());
+        dashboardResponse.setTotalProductSold(orders.stream().mapToLong(order -> order.getOrderDetails().stream().mapToLong(OrderDetails::getQuantity).sum()).sum());
+        dashboardResponse.setTotalCustomerNew(orders.stream().map(Order::getCustomer).distinct().count());
+        return dashboardResponse;
+    }
+
+    @Override
+    public List<CartReport> getAllCart() {
+        List<CartReport> cartReports = new ArrayList<>();
+        List<CartDetails> cartDetails = cartDetailsRepository.findAll();
+        for (CartDetails cartDetail: cartDetails) {
+            CartReport cartReport = new CartReport();
+            cartReport.setProductDetailsId(cartDetail.getProductDetails().getId());
+            cartReport.setProductThumbnails(cartDetail.getProductDetails().getProduct().getThumbnail());
+            cartReport.setProductName(cartDetail.getProductDetails().getProduct().getName());
+            cartReport.setProductColor(cartDetail.getProductDetails().getColor());
+            cartReport.setTotalQuantityInStock(cartDetail.getProductDetails().getQuantity());
+            cartReport.setTotalQuantityInCart(cartDetail.getQuantity());
+            cartReports.add(cartReport);
+        }
+        cartReports = new ArrayList<>(cartReports.stream().collect(Collectors.toMap(CartReport::getProductDetailsId, cartReport -> cartReport, (cartReport, cartReport2) -> {
+            cartReport.setTotalQuantityInCart(cartReport.getTotalQuantityInCart() + cartReport2.getTotalQuantityInCart());
+            return cartReport;
+        })).values());
+        return cartReports;
     }
 }
