@@ -43,8 +43,14 @@ public class ReportServiceImpl implements ReportService {
     public List<OrderReport> getOrderReport(Integer year) {
         Calendar from = Calendar.getInstance();
         from.set(year, Calendar.JANUARY, 1);
+        from.set(Calendar.HOUR_OF_DAY, 0);
+        from.set(Calendar.MINUTE, 0);
+        from.set(Calendar.SECOND, 0);
         Calendar to = Calendar.getInstance();
         to.set(year, Calendar.DECEMBER, 31);
+        to.set(Calendar.HOUR_OF_DAY, 23);
+        to.set(Calendar.MINUTE, 59);
+        to.set(Calendar.SECOND, 59);
         List<OrderResponse> orderResponses = orderRepository
                 .findAllByCompletedDateBetweenAndOrderStatus(from.getTime(), to.getTime(), 5)
                 .stream().map(orderMapper::convertToResponse).collect(Collectors.toList());
@@ -55,8 +61,14 @@ public class ReportServiceImpl implements ReportService {
     public List<ReceiptReport> getReceiptReport(Integer year) {
         Calendar from = Calendar.getInstance();
         from.set(year, Calendar.JANUARY, 1);
+        from.set(Calendar.HOUR_OF_DAY, 0);
+        from.set(Calendar.MINUTE, 0);
+        from.set(Calendar.SECOND, 0);
         Calendar to = Calendar.getInstance();
         to.set(year, Calendar.DECEMBER, 31);
+        to.set(Calendar.HOUR_OF_DAY, 23);
+        to.set(Calendar.MINUTE, 59);
+        to.set(Calendar.SECOND, 59);
         List<ReceiptResponse> receiptResponses = receiptRepository
                 .findAllByUpdatedDateBetweenAndStatus(from.getTime(), to.getTime(), true)
                 .stream().map(receiptMapper::convertToResponse).collect(Collectors.toList());
@@ -251,10 +263,11 @@ public class ReportServiceImpl implements ReportService {
 
         List<Order> orders = orderRepository.findAllByCreatedDateBetween(from.getTime(), to.getTime());
         dashboardResponse.setTotalOrderInDay((long) orders.size());
-        dashboardResponse.setTotalOrderOnHold(orders.stream().filter(order -> order.getOrderStatus() == 0).count());
-        dashboardResponse.setTotalOrderCompleted(orders.stream().filter(order -> order.getOrderStatus() == 5).count());
+        List<Order> allOrder = orderRepository.findAll();
+        dashboardResponse.setTotalOrderOnHold(allOrder.stream().filter(order -> order.getOrderStatus() == 0).count());
+        dashboardResponse.setTotalOrderCompleted(allOrder.stream().filter(order -> order.getOrderStatus() == 5).count());
         dashboardResponse.setTotalProductOutOfStock(productDetailsRepository.findAll().stream().filter(productDetails -> productDetails.getQuantity() == 0).count());
-        dashboardResponse.setTotalProductSold(orders.stream().mapToLong(order -> order.getOrderDetails().stream().mapToLong(OrderDetails::getQuantity).sum()).sum());
+        dashboardResponse.setTotalProductSold(allOrder.stream().mapToLong(order -> order.getOrderDetails().stream().mapToLong(OrderDetails::getQuantity).sum()).sum());
         dashboardResponse.setTotalCustomerNew(orders.stream().map(Order::getCustomer).distinct().count());
         return dashboardResponse;
     }
