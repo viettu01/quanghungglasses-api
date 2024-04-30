@@ -194,7 +194,7 @@ public class ReportServiceImpl implements ReportService {
             Row row = sheet.createRow(rowIndex);
             sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 4));
             Cell cell1 = row.createCell(0);
-            cell1.setCellValue("Tổng cộng");
+            cell1.setCellValue("Tổng doanh thu:");
             cell1.setCellStyle(exportService.getCellStyleDataRight(workbook));
 
             Cell cell5 = row.createCell(5);
@@ -231,7 +231,7 @@ public class ReportServiceImpl implements ReportService {
             Row row = sheet.createRow(rowIndex);
             sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 4));
             Cell cell1 = row.createCell(0);
-            cell1.setCellValue("Tổng cộng");
+            cell1.setCellValue("Tổng tiền nhập:");
             cell1.setCellStyle(exportService.getCellStyleDataRight(workbook));
 
             Cell cell5 = row.createCell(5);
