@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -190,6 +191,15 @@ public class ReportServiceImpl implements ReportService {
                 index++;
                 rowIndex++;
             }
+            Row row = sheet.createRow(rowIndex);
+            sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 4));
+            Cell cell1 = row.createCell(0);
+            cell1.setCellValue("Tổng cộng");
+            cell1.setCellStyle(exportService.getCellStyleDataRight(workbook));
+
+            Cell cell5 = row.createCell(5);
+            cell5.setCellValue(orderReport.getTotalMoneyOrder());
+            cell5.setCellStyle(exportService.getCellStyleDataRight(workbook));
             sheetIndex++;
         }
         return workbook;
@@ -218,6 +228,16 @@ public class ReportServiceImpl implements ReportService {
                 index++;
                 rowIndex++;
             }
+            Row row = sheet.createRow(rowIndex);
+            sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 4));
+            Cell cell1 = row.createCell(0);
+            cell1.setCellValue("Tổng cộng");
+            cell1.setCellStyle(exportService.getCellStyleDataRight(workbook));
+
+            Cell cell5 = row.createCell(5);
+            cell5.setCellValue(receiptReport.getTotalMoneyReceipt());
+            cell5.setCellStyle(exportService.getCellStyleDataRight(workbook));
+
             sheetIndex++;
         }
         return workbook;
@@ -276,7 +296,7 @@ public class ReportServiceImpl implements ReportService {
     public List<CartReport> getAllCart() {
         List<CartReport> cartReports = new ArrayList<>();
         List<CartDetails> cartDetails = cartDetailsRepository.findAll();
-        for (CartDetails cartDetail: cartDetails) {
+        for (CartDetails cartDetail : cartDetails) {
             CartReport cartReport = new CartReport();
             cartReport.setProductDetailsId(cartDetail.getProductDetails().getId());
             cartReport.setProductThumbnails(cartDetail.getProductDetails().getProduct().getThumbnail());
