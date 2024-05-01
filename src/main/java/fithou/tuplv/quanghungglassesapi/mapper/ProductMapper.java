@@ -42,6 +42,8 @@ public class ProductMapper {
         productResponse.setShapeName(product.getShape().getName());
         productResponse.setBrandId(product.getBrand().getId());
         productResponse.setBrandName(product.getBrand().getName());
+        // tong tat ca so luong cua chi tiet san pham
+        productResponse.setQuantity(product.getProductDetails().stream().mapToInt(ProductDetails::getQuantity).sum());
 
         // Lấy giá sau khi đã giảm giá từ bảng sale và product_sale kiểm tra xem thời gian hiện tại có nằm trong thời gian sale không
 //        double price = product.getPrice();
