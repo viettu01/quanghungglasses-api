@@ -126,7 +126,7 @@ class AccountServiceImplTest {
     @Test
     void changePasswordSuccess() {
         ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
-        changePasswordRequest.setEmail("adminquanghung@gmail.com");
+//        changePasswordRequest.setEmail("adminquanghung@gmail.com");
         changePasswordRequest.setOldPassword("123");
         changePasswordRequest.setNewPassword("1234");
         changePasswordRequest.setConfirmPassword("1234");
@@ -136,7 +136,7 @@ class AccountServiceImplTest {
     @Test
     void changePasswordWithOldPasswordInvalid() {
         ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
-        changePasswordRequest.setEmail("adminquanghung@gmail.com");
+//        changePasswordRequest.setEmail("adminquanghung@gmail.com");
         changePasswordRequest.setOldPassword("123");
         changePasswordRequest.setNewPassword("1234");
         changePasswordRequest.setConfirmPassword("1234");
