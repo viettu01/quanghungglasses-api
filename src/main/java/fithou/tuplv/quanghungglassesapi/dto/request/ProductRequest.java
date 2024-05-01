@@ -43,7 +43,7 @@ public class ProductRequest implements Serializable {
 //    @NotBlank(message = "Ảnh sản phẩm không được để trống")
 //    private String thumbnail;
 
-    @FileMaxSizeAndIsImage(max = 1024 * 1024)
+    @FileMaxSizeAndIsImage(max = 2 * 1024 * 1024)
     private MultipartFile thumbnailFile;
 
     @NotBlank(message = "Mô tả sản phẩm không được để trống")

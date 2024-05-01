@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Calendar;
 import java.util.Collections;
 
 import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
@@ -60,6 +61,9 @@ public class QuangHungGlassesApiApplication {
 
                 StaffRequest staffRequest = new StaffRequest();
                 staffRequest.setFullname("Chủ cửa hàng");
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(2001, Calendar.OCTOBER, 14);
+                staffRequest.setBirthday(calendar.getTime());
                 staffRequest.setPhone("0096871026");
                 staffRequest.setGender("Nam");
                 staffRequest.setStatus(true);
@@ -100,6 +104,10 @@ public class QuangHungGlassesApiApplication {
                 materialService.create(new MaterialRequest(null, "Kim loại Titan"));
             if (!materialService.existsByName("Kim loại Thép không gỉ"))
                 materialService.create(new MaterialRequest(null, "Kim loại Thép không gỉ"));
+            if (!materialService.existsByName("Da"))
+                materialService.create(new MaterialRequest(null, "Da"));
+            if (!materialService.existsByName("Polycarbonate"))
+                materialService.create(new MaterialRequest(null, "Polycarbonate"));
             // endregion
             // region Origin
             if (!originService.existsByName("Việt Nam"))
