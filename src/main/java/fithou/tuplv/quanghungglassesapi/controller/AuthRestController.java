@@ -25,7 +25,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class AuthRestController {
     final AccountService accountService;

@@ -20,7 +20,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/admin/warranty")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class WarrantyRestController {
     final WarrantyService warrantyService;
 

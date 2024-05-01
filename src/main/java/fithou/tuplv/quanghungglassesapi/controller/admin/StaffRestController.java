@@ -19,7 +19,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @RestController
 @RequestMapping("/api/admin/staff")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class StaffRestController {
     final StaffService staffService;

@@ -18,7 +18,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @RestController
 @RequestMapping("/api/admin/origin")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class OriginRestController {
     final OriginService originService;

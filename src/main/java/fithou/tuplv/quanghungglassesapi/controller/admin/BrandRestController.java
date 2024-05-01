@@ -18,7 +18,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 
 @RestController
 @RequestMapping("/api/admin/brand")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class BrandRestController {
     final BrandService brandService;

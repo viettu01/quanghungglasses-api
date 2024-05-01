@@ -19,7 +19,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/admin/orders")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class OrderRestController {
     final OrderService orderService;
 

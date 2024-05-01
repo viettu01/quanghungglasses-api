@@ -20,7 +20,7 @@ import static fithou.tuplv.quanghungglassesapi.utils.Constants.SORT_DESC;
 
 @RestController
 @RequestMapping("/api/admin/banner")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class BannerRestController {
     final BannerService bannerService;
