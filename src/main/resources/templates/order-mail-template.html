@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Thông tin đơn hàng</h1>
+            <p>Xin chào <span th:text="${order.fullname}"></span>,</p>
+            <p>Cảm ơn bạn đã đặt hàng. Chúng tôi đã nhận được yêu cầu đặt hàng của bạn và đang xử lý.</p>
+            <p>Chi tiết đơn hàng:</p>
+            <table cellpadding="5" border="1" cellspacing="0" >
+                <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Sản phẩm</th>
+                    <th>Màu sắc</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="orderDetail, index : ${order.orderDetails}">
+                    <td th:text="${index.index + 1}" style="text-align: center;"></td>
+                    <td th:text="${orderDetail.productName}"></td>
+                    <td th:text="${orderDetail.productColor}"></td>
+                    <td th:text="${orderDetail.quantity}" style="text-align: center;"></td>
+                    <td th:text="${#numbers.formatDecimal(orderDetail.price, 0, 'COMMA', 0, 'POINT')}"></td>
+                    <td th:text="${#numbers.formatDecimal((orderDetail.price * orderDetail.quantity), 0, 'COMMA', 0, 'POINT')}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5" class="text-end">Tổng tiền</td>
+                    <td th:text="${#numbers.formatDecimal(order.totalMoney, 0, 'COMMA', 0, 'POINT')}"></td>
+                </tr>
+                </tfoot>
+            </table>
+            <p>Trân trọng,</p>
+            <p>Quang Hưng Glasses</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

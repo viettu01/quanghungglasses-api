@@ -15,5 +15,6 @@ public class WarrantyDetailsRequest {
     private Long productDetailsId;
     private Integer quantity; // số lượng sản phẩm cần bảo hành
     private Double cost; // chi phí bảo hành
+    private String note; // ghi chú
     private Integer warrantyType; // 0: Đổi, 1: Sửa
 }

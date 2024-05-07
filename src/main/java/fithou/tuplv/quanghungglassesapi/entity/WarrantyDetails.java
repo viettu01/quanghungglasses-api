@@ -26,6 +26,9 @@ public class WarrantyDetails {
     @Column(nullable = false)
     private Double cost; // chi phí bảo hành
 
+    @Column
+    private String note; // ghi chú
+
     @ManyToOne
     @JoinColumn(name = "product_details_id", nullable = false)
     private ProductDetails productDetails;

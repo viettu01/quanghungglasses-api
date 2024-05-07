@@ -11,6 +11,7 @@ import fithou.tuplv.quanghungglassesapi.mapper.PaginationMapper;
 import fithou.tuplv.quanghungglassesapi.repository.OrderDetailsRepository;
 import fithou.tuplv.quanghungglassesapi.repository.OrderRepository;
 import fithou.tuplv.quanghungglassesapi.repository.ProductDetailsRepository;
+import fithou.tuplv.quanghungglassesapi.service.EmailService;
 import fithou.tuplv.quanghungglassesapi.service.OrderService;
 import fithou.tuplv.quanghungglassesapi.service.StorageService;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
     final PaginationMapper paginationMapper;
     final StorageService storageService;
     final VNPayService vnPayService;
+    final EmailService emailService;
 
     @Override
     public PaginationDTO<OrderResponse> findByOrderCustomerFullname(String fullname, Pageable pageable) {
@@ -121,6 +123,14 @@ public class OrderServiceImpl implements OrderService {
             orderDetailsRepository.save(orderDetails);
             order.getOrderDetails().add(orderDetails);
         });
+
+        // Gui email xac nhan don hang
+        try {
+            if (order.getPaymentMethod() == 0) // thanh toan khi nhan hang
+                emailService.sendEmailOrderSuccess(orderMapper.convertToResponse(order));
+        } catch (Exception e) {
+            throw new RuntimeException("Không thể gửi email xác nhận đơn hàng");
+        }
 
         // Cap nhat lai so luong san pham
         order.getOrderDetails().forEach(orderDetails -> {

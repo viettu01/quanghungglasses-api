@@ -53,8 +53,9 @@ public class ProductMapper {
         salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails -> {
             if (saleDetails.getProduct().getId().equals(product.getId())) {
                 productResponse.setDiscount(saleDetails.getDiscount());
-                Double priceDiscount = product.getPrice() * ((100.0 - saleDetails.getDiscount()) / 100.0);
+                Double priceDiscount = (double) Math.round(product.getPrice() * ((100.0 - saleDetails.getDiscount()) / 100.0));
                 productResponse.setPriceDiscount(priceDiscount);
+
 //                    price = price * ((100 - saleDetails.getDiscount()) / 100);
             }
         }));
@@ -94,7 +95,7 @@ public class ProductMapper {
         salesExists.forEach(sale -> sale.getSaleDetails().forEach(saleDetails -> {
             if (saleDetails.getProduct().getId().equals(productDetails.getProduct().getId())) {
                 productDetailsResponse.setDiscount(saleDetails.getDiscount());
-                Double priceDiscount = productDetails.getProduct().getPrice() * ((100 - saleDetails.getDiscount()) / 100);
+                Double priceDiscount = (double) Math.round(productDetails.getProduct().getPrice() * ((100.0 - saleDetails.getDiscount()) / 100.0));
                 productDetailsResponse.setPriceDiscount(priceDiscount);
 //                    price = price * ((100 - saleDetails.getDiscount()) / 100);
             }
